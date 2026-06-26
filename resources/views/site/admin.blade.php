@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260626-financeiro-grafico" />
+    <link rel="stylesheet" href="/css/style.css?v=20260626-resumo-clicavel" />
   </head>
   <body>
     <header class="topo">
@@ -123,7 +123,7 @@
           <h2>Resumo do painel</h2>
 
           <div class="dashboard-grid dashboard-resumo-grid">
-            <article class="dashboard-card resumo-card resumo-card-total">
+            <article class="dashboard-card resumo-card resumo-card-total resumo-card-clicavel ativo" data-resumo-card="estoque" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M5 16h14l-1.8-5.2A3 3 0 0 0 14.4 9H9.6a3 3 0 0 0-2.8 1.8z" /><path d="M6 16v2M18 16v2" /></svg>
@@ -134,7 +134,7 @@
               <span>Total de veículos</span>
               <p>Cadastrados no painel</p>
             </article>
-            <article class="dashboard-card dashboard-ok resumo-card resumo-card-disponiveis">
+            <article class="dashboard-card dashboard-ok resumo-card resumo-card-disponiveis resumo-card-clicavel" data-resumo-card="disponiveis" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M7 12l3 3 7-7" /><path d="M5 5h14v14H5z" /></svg>
@@ -145,7 +145,7 @@
               <span>Disponíveis</span>
               <p>Prontos para negociação</p>
             </article>
-            <article class="dashboard-card dashboard-alerta resumo-card resumo-card-reservados">
+            <article class="dashboard-card dashboard-alerta resumo-card resumo-card-reservados resumo-card-clicavel" data-resumo-card="reservados" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M8 4h8v4H8z" /><path d="M6 8h12v12H6z" /><path d="M9 13h6" /></svg>
@@ -156,7 +156,7 @@
               <span>Reservados</span>
               <p>Em tratativa com cliente</p>
             </article>
-            <article class="dashboard-card dashboard-vendido resumo-card resumo-card-vendidos">
+            <article class="dashboard-card dashboard-vendido resumo-card resumo-card-vendidos resumo-card-clicavel" data-resumo-card="vendidos" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M12 3v18" /><path d="M16 7.5c0-1.4-1.8-2.5-4-2.5s-4 1.1-4 2.5 1.8 2.5 4 2.5 4 1.1 4 2.5-1.8 2.5-4 2.5-4-1.1-4-2.5" /></svg>
@@ -167,7 +167,7 @@
               <span>Vendidos</span>
               <p>Fechados no estoque</p>
             </article>
-            <article class="dashboard-card resumo-card resumo-card-ofertas">
+            <article class="dashboard-card resumo-card resumo-card-ofertas resumo-card-clicavel" data-resumo-card="ofertas" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M4 17l5-5 4 4 7-9" /><path d="M20 7v6h-6" /></svg>
@@ -178,7 +178,7 @@
               <span>Ofertas ativas</span>
               <p>Destaques comerciais</p>
             </article>
-            <article class="dashboard-card resumo-card resumo-card-depoimentos">
+            <article class="dashboard-card resumo-card resumo-card-depoimentos resumo-card-clicavel" data-resumo-card="depoimentos" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M7 5h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H9l-5 3V8a3 3 0 0 1 3-3z" /><path d="M8 10h8M8 14h5" /></svg>
@@ -189,7 +189,7 @@
               <span>Depoimentos</span>
               <p>Clientes publicados</p>
             </article>
-            <article class="dashboard-card resumo-card resumo-card-parcerias">
+            <article class="dashboard-card resumo-card resumo-card-parcerias resumo-card-clicavel" data-resumo-card="parcerias" role="button" tabindex="0" aria-controls="resumo-detalhes-lista">
               <div class="resumo-card-topo">
                 <span class="resumo-card-icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M5 12h4l2 7 4-14 2 7h2" /></svg>
@@ -201,6 +201,20 @@
               <p>Bancos exibidos no site</p>
             </article>
           </div>
+
+          <section class="resumo-detalhes-card" aria-live="polite">
+            <div class="resumo-detalhes-topo">
+              <div>
+                <span class="admin-eyebrow" id="resumo-detalhes-etiqueta">Estoque</span>
+                <h3 id="resumo-detalhes-titulo">Veículos cadastrados</h3>
+                <p id="resumo-detalhes-texto">Clique nos cards acima para conferir os dados filtrados.</p>
+              </div>
+              <button type="button" class="btn-cancelar btn-visivel" id="resumo-detalhes-acao">
+                Abrir módulo
+              </button>
+            </div>
+            <div class="resumo-detalhes-lista" id="resumo-detalhes-lista"></div>
+          </section>
 
           <div class="dashboard-acoes">
             <button type="button" class="btn-primary" data-admin-atalho="veiculos">
@@ -1793,7 +1807,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260626-financeiro-grafico"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260626-resumo-clicavel"></script>
   </body>
 </html>
 

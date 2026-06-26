@@ -33,6 +33,12 @@ const btnLogout = document.getElementById("btn-logout");
 const adminTabs = document.querySelectorAll("[data-admin-tab]");
 const adminPanels = document.querySelectorAll("[data-admin-panel]");
 const adminAtalhos = document.querySelectorAll("[data-admin-atalho]");
+const resumoCards = document.querySelectorAll("[data-resumo-card]");
+const resumoDetalhesEtiqueta = document.getElementById("resumo-detalhes-etiqueta");
+const resumoDetalhesTitulo = document.getElementById("resumo-detalhes-titulo");
+const resumoDetalhesTexto = document.getElementById("resumo-detalhes-texto");
+const resumoDetalhesLista = document.getElementById("resumo-detalhes-lista");
+const resumoDetalhesAcao = document.getElementById("resumo-detalhes-acao");
 const btnAbrirNotificacoes = document.getElementById("abrir-notificacoes");
 const painelNotificacoes = document.getElementById("painel-notificacoes");
 const contadorNotificacoes = document.getElementById("notificacoes-contador");
@@ -184,6 +190,7 @@ let vendedoresAdmin = carregarVendedores();
 let leadsAdmin = carregarLeadsAdmin();
 let historicoVeiculosAdmin = carregarHistoricoVeiculos();
 let solicitacoesFinanciamentoAdmin = [];
+let resumoDetalheAtual = "estoque";
 let vendaPendenteId = null;
 let clienteModalId = null;
 let paginaVeiculos = 1;
@@ -1146,6 +1153,220 @@ function listarResumo(container, itens, vazio) {
       "</span></div>";
 }
 
+function resumoVeiculoItem(carro) {
+  return (
+    '<article class="resumo-detalhe-item">' +
+    '<img src="' +
+    escaparAtributo(carro.imagem || "") +
+    '" alt="' +
+    escaparAtributo(carro.nome || "Veículo") +
+    '">' +
+    "<div>" +
+    "<h4>" +
+    escaparHTML(carro.nome || "Veículo não informado") +
+    "</h4>" +
+    "<p>" +
+    escaparHTML(textoCarro(carro)) +
+    "</p>" +
+    '<div class="resumo-detalhe-meta">' +
+    "<span>" +
+    escaparHTML(carro.status || "Sem status") +
+    "</span>" +
+    "<span>" +
+    escaparHTML(carro.preco || "R$ 0") +
+    "</span>" +
+    (carro.oferta ? "<span>Oferta ativa</span>" : "") +
+    "</div>" +
+    "</div>" +
+    "</article>"
+  );
+}
+
+function resumoTextoLimitado(texto, limite) {
+  const valor = String(texto || "").trim();
+
+  if (valor.length <= limite) return valor;
+
+  return valor.slice(0, limite - 3).trim() + "...";
+}
+
+function resumoDepoimentoItem(depoimento) {
+  return (
+    '<article class="resumo-detalhe-item resumo-detalhe-item-simples">' +
+    '<div class="resumo-detalhe-avatar">' +
+    escaparHTML(String(depoimento.cliente || "D").slice(0, 1).toUpperCase()) +
+    "</div>" +
+    "<div>" +
+    "<h4>" +
+    escaparHTML(depoimento.cliente || "Cliente não informado") +
+    "</h4>" +
+    "<p>" +
+    escaparHTML(depoimento.veiculo || "Veículo não informado") +
+    "</p>" +
+    '<div class="resumo-detalhe-meta"><span>' +
+    escaparHTML(resumoTextoLimitado(depoimento.texto, 80) || "Sem texto publicado") +
+    "</span></div>" +
+    "</div>" +
+    "</article>"
+  );
+}
+
+function resumoParceriaItem(parceria) {
+  return (
+    '<article class="resumo-detalhe-item resumo-detalhe-item-simples">' +
+    '<div class="resumo-detalhe-avatar resumo-detalhe-avatar-verde">' +
+    escaparHTML(String(parceria.nome || "P").slice(0, 1).toUpperCase()) +
+    "</div>" +
+    "<div>" +
+    "<h4>" +
+    escaparHTML(parceria.nome || "Parceria não informada") +
+    "</h4>" +
+    '<div class="resumo-detalhe-meta"><span>' +
+    (parceria.ativo ? "Visível no site" : "Oculta") +
+    "</span></div>" +
+    "</div>" +
+    "</article>"
+  );
+}
+
+function dadosResumoCard(tipo) {
+  const grupos = {
+    estoque: {
+      etiqueta: "Estoque",
+      titulo: "Todos os veículos cadastrados",
+      texto: "Visão rápida dos veículos registrados no painel.",
+      aba: "veiculos",
+      status: "",
+      itens: carrosAdmin,
+      vazio: "Nenhum veículo cadastrado ainda.",
+      render: resumoVeiculoItem,
+    },
+    disponiveis: {
+      etiqueta: "Prontos",
+      titulo: "Veículos disponíveis",
+      texto: "Carros prontos para negociação com clientes.",
+      aba: "veiculos",
+      status: "Disponível",
+      itens: carrosAdmin.filter(function (carro) {
+        return carro.status === "Disponível";
+      }),
+      vazio: "Nenhum veículo disponível agora.",
+      render: resumoVeiculoItem,
+    },
+    reservados: {
+      etiqueta: "Atenção",
+      titulo: "Veículos reservados",
+      texto: "Carros em tratativa ou aguardando decisão do cliente.",
+      aba: "veiculos",
+      status: "Reservado",
+      itens: carrosAdmin.filter(function (carro) {
+        return carro.status === "Reservado";
+      }),
+      vazio: "Nenhum veículo reservado agora.",
+      render: resumoVeiculoItem,
+    },
+    vendidos: {
+      etiqueta: "Vendas",
+      titulo: "Veículos vendidos",
+      texto: "Histórico rápido dos veículos fechados.",
+      aba: "veiculos",
+      status: "Vendido",
+      itens: carrosAdmin.filter(function (carro) {
+        return carro.status === "Vendido";
+      }),
+      vazio: "Nenhum veículo vendido registrado.",
+      render: resumoVeiculoItem,
+    },
+    ofertas: {
+      etiqueta: "Campanhas",
+      titulo: "Ofertas ativas",
+      texto: "Veículos destacados comercialmente no site.",
+      aba: "veiculos",
+      status: "",
+      itens: carrosAdmin.filter(function (carro) {
+        return carro.oferta && carro.status !== "Vendido";
+      }),
+      vazio: "Nenhuma oferta ativa no momento.",
+      render: resumoVeiculoItem,
+    },
+    depoimentos: {
+      etiqueta: "Prova social",
+      titulo: "Depoimentos cadastrados",
+      texto: "Clientes e entregas publicados como prova social.",
+      aba: "depoimentos",
+      itens: depoimentosAdmin,
+      vazio: "Nenhum depoimento cadastrado ainda.",
+      render: resumoDepoimentoItem,
+    },
+    parcerias: {
+      etiqueta: "Crédito",
+      titulo: "Parcerias visíveis",
+      texto: "Bancos e parceiros exibidos no site.",
+      aba: "parcerias",
+      itens: parceriasAdmin.filter(function (parceria) {
+        return parceria.ativo;
+      }),
+      vazio: "Nenhuma parceria visível agora.",
+      render: resumoParceriaItem,
+    },
+  };
+
+  return grupos[tipo] || grupos.estoque;
+}
+
+function renderizarResumoDetalhes() {
+  if (!resumoDetalhesLista) return;
+
+  const dados = dadosResumoCard(resumoDetalheAtual);
+  const limite = 6;
+  const itens = dados.itens.slice(0, limite);
+
+  resumoCards.forEach(function (card) {
+    const ativo = card.dataset.resumoCard === resumoDetalheAtual;
+    card.classList.toggle("ativo", ativo);
+    card.setAttribute("aria-pressed", ativo ? "true" : "false");
+  });
+
+  if (resumoDetalhesEtiqueta) resumoDetalhesEtiqueta.textContent = dados.etiqueta;
+  if (resumoDetalhesTitulo) resumoDetalhesTitulo.textContent = dados.titulo;
+  if (resumoDetalhesTexto) {
+    resumoDetalhesTexto.textContent =
+      dados.texto +
+      " Mostrando " +
+      Math.min(dados.itens.length, limite) +
+      " de " +
+      dados.itens.length +
+      ".";
+  }
+  if (resumoDetalhesAcao) {
+    resumoDetalhesAcao.textContent = "Abrir " + dados.aba;
+    resumoDetalhesAcao.dataset.resumoAbrir = resumoDetalheAtual;
+  }
+
+  resumoDetalhesLista.innerHTML = itens.length
+    ? itens.map(dados.render).join("")
+    : '<p class="sem-resultados">' + escaparHTML(dados.vazio) + "</p>";
+}
+
+function abrirModuloResumoAtual() {
+  const dados = dadosResumoCard(resumoDetalheAtual);
+
+  if (dados.aba === "veiculos") {
+    if (statusAdminCarros) statusAdminCarros.value = dados.status || "";
+    if (buscaAdminCarros) buscaAdminCarros.value = "";
+    paginaVeiculos = 1;
+    abrirAbaAdmin("veiculos");
+    renderizarAdmin();
+
+    if (listaAdmin) {
+      listaAdmin.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    return;
+  }
+
+  abrirAbaAdmin(dados.aba);
+}
+
 function renderizarDashboard() {
   const disponiveis = carrosAdmin.filter(function (carro) {
     return carro.status === "Disponível";
@@ -1170,6 +1391,7 @@ function renderizarDashboard() {
   atualizarDashboardTexto("dash-ofertas", ofertas);
   atualizarDashboardTexto("dash-depoimentos", depoimentosAdmin.length);
   atualizarDashboardTexto("dash-parcerias", parceriasVisiveis);
+  renderizarResumoDetalhes();
   renderizarNotificacoes();
 
   const mesAtual = new Date().toISOString().slice(0, 7);
@@ -5573,6 +5795,29 @@ adminAtalhos.forEach(function (atalho) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 });
+
+resumoCards.forEach(function (card) {
+  function selecionarCardResumo() {
+    resumoDetalheAtual = card.dataset.resumoCard || "estoque";
+    renderizarResumoDetalhes();
+
+    if (resumoDetalhesLista) {
+      resumoDetalhesLista.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
+  card.addEventListener("click", selecionarCardResumo);
+  card.addEventListener("keydown", function (evento) {
+    if (evento.key === "Enter" || evento.key === " ") {
+      evento.preventDefault();
+      selecionarCardResumo();
+    }
+  });
+});
+
+if (resumoDetalhesAcao) {
+  resumoDetalhesAcao.addEventListener("click", abrirModuloResumoAtual);
+}
 
 financeiroMenuBtns.forEach(function (botao) {
   botao.addEventListener("click", function () {
