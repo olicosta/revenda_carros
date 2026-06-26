@@ -1,0 +1,336 @@
+/* Detalhes premium - 3M Veículos */
+
+.detalhes {
+    padding: clamp(28px, 5vh, 58px) 0 76px;
+    background:
+        radial-gradient(circle at 10% 8%, rgba(var(--gold-rgb), 0.12), transparent 28%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.detalhe-card {
+    align-items: start;
+    border: 1px solid rgba(var(--secondary-rgb), 0.08);
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.9)),
+        #fff;
+    box-shadow: 0 28px 70px rgba(var(--secondary-rgb), 0.13);
+}
+
+.galeria-principal {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #0b1f3a;
+    box-shadow: 0 24px 52px rgba(var(--secondary-rgb), 0.18);
+}
+
+.detalhe-img {
+    border-radius: 0;
+    aspect-ratio: 16 / 10;
+}
+
+.galeria-btn,
+.galeria-contador,
+.galeria-full {
+    backdrop-filter: blur(10px);
+}
+
+.galeria-full {
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--secondary);
+}
+
+.galeria-miniaturas {
+    grid-auto-columns: 110px;
+    padding: 4px 2px 10px;
+}
+
+.miniatura {
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 18px rgba(var(--secondary-rgb), 0.08);
+}
+
+.miniatura img {
+    height: 72px;
+}
+
+.detalhe-info {
+    gap: 14px;
+}
+
+.detalhe-badges {
+    order: -1;
+}
+
+.detalhe-resumo,
+.detalhe-bloco {
+    border-color: rgba(var(--secondary-rgb), 0.1);
+    border-radius: 20px;
+    box-shadow: 0 16px 40px rgba(var(--secondary-rgb), 0.07);
+}
+
+.detalhe-resumo {
+    border-top: 0;
+    background:
+        linear-gradient(135deg, rgba(var(--gold-rgb), 0.13), transparent 34%),
+        #fff;
+}
+
+.detalhe-info h2 {
+    letter-spacing: -0.04em;
+}
+
+.detalhe-meta {
+    font-weight: 800;
+}
+
+.detalhe-confiança {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 0;
+}
+
+.detalhe-confiança span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(var(--success-rgb), 0.09);
+    color: #166534;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.detalhe-confiança span::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+}
+
+.detalhe-preco-box {
+    margin: 16px 0;
+    border: 1px solid rgba(var(--gold-rgb), 0.3);
+    border-radius: 18px;
+    background:
+        linear-gradient(135deg, rgba(var(--gold-rgb), 0.17), rgba(var(--secondary-rgb), 0.04)),
+        #fff;
+}
+
+.detalhe-info h3 {
+    color: var(--secondary);
+    letter-spacing: -0.045em;
+}
+
+.detalhe-ficha-card {
+    border-radius: 20px;
+}
+
+.detalhe-ficha-toggle {
+    padding: 18px 20px;
+}
+
+.detalhe-specs {
+    gap: 10px;
+    padding: 14px;
+    border-radius: 0;
+    background: #f8fafc;
+}
+
+.detalhe-specs span {
+    min-height: 68px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(var(--secondary-rgb), 0.07);
+}
+
+.detalhe-bloco-acoes {
+    position: sticky;
+    top: calc(var(--header-offset) + 14px);
+}
+
+.detalhe-acoes-principais {
+    grid-template-columns: 1fr;
+}
+
+.detalhe-acoes-secundarias {
+    grid-template-columns: 1fr 1fr;
+}
+
+.detalhe-acoes a,
+.detalhe-acoes button,
+.detalhe-acoes span {
+    border-radius: 13px;
+}
+
+.detalhe-acoes-principais .btn-whatsapp,
+.detalhe-acoes-principais .btn-financiar-detalhe {
+    min-height: 52px;
+    font-size: 16px;
+}
+
+.detalhe-voltar {
+    color: var(--secondary);
+}
+
+.relacionados > h3 {
+    letter-spacing: -0.03em;
+}
+
+.detalhe-cta-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .detalhe-card {
+        grid-template-columns: 1fr;
+    }
+
+    .detalhe-bloco-acoes {
+        position: static;
+    }
+}
+
+@media (max-width: 650px) {
+    .detalhes {
+        padding: 18px 0 104px;
+    }
+
+    .detalhe-card {
+        padding: 12px;
+        border-radius: 22px;
+        box-shadow: 0 18px 44px rgba(var(--secondary-rgb), 0.12);
+    }
+
+    .galeria-principal {
+        border-radius: 18px;
+    }
+
+    .detalhe-img {
+        aspect-ratio: 16 / 11;
+    }
+
+    .galeria-full {
+        display: none;
+    }
+
+    .galeria-contador {
+        right: 12px;
+        bottom: 12px;
+        padding: 7px 10px;
+    }
+
+    .galeria-miniaturas {
+        grid-auto-columns: 84px;
+        gap: 8px;
+    }
+
+    .miniatura img {
+        height: 58px;
+    }
+
+    .detalhe-resumo,
+    .detalhe-bloco {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .detalhe-info h2 {
+        font-size: 28px;
+    }
+
+    .detalhe-info h3 {
+        font-size: 31px;
+    }
+
+    .detalhe-confiança {
+        gap: 6px;
+    }
+
+    .detalhe-confiança span {
+        padding: 7px 9px;
+        font-size: 11px;
+    }
+
+    .detalhe-ficha-card {
+        padding: 0;
+    }
+
+    .detalhe-ficha-toggle {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    .detalhe-specs {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .detalhe-acoes-principais,
+    .detalhe-acoes-secundarias {
+        grid-template-columns: 1fr;
+    }
+
+    .detalhe-acoes-principais .btn-whatsapp {
+        display: none;
+    }
+
+    .detalhe-cta-mobile {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        left: 12px;
+        z-index: 120;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid rgba(var(--gold-rgb), 0.26);
+        border-radius: 20px;
+        background: rgba(7, 18, 37, 0.96);
+        box-shadow: 0 20px 58px rgba(0, 0, 0, 0.38);
+        backdrop-filter: blur(14px);
+    }
+
+    .detalhe-cta-mobile span {
+        display: block;
+        color: rgba(255, 255, 255, 0.64);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .detalhe-cta-mobile strong {
+        display: block;
+        margin-top: 2px;
+        color: #fff;
+        font-size: 22px;
+        line-height: 1.05;
+    }
+
+    .detalhe-cta-mobile .btn-whatsapp,
+    .detalhe-cta-mobile .btn-indisponivel {
+        min-height: 46px;
+        margin: 0;
+        padding: 10px 15px;
+        border-radius: 14px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 390px) {
+    .detalhe-cta-mobile {
+        grid-template-columns: 1fr;
+    }
+
+    .detalhe-cta-mobile .btn-whatsapp,
+    .detalhe-cta-mobile .btn-indisponivel {
+        width: 100%;
+    }
+}
