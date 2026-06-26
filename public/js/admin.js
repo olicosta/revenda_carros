@@ -56,6 +56,10 @@ const formSaidaFinanceira = document.getElementById("form-saida-financeira");
 const listaSaidasFinanceiras = document.getElementById("lista-saidas-financeiras");
 const resumoSaidasFinanceiras = document.getElementById("fin-resumo-saidas");
 const listaAlertasFinanceiros = document.getElementById("lista-alertas-financeiros");
+const graficoPizzaFinanceiro = document.getElementById("fin-grafico-pizza");
+const graficoCentroFinanceiro = document.getElementById("fin-grafico-centro");
+const graficoLegendaFinanceiro = document.getElementById("fin-grafico-legenda");
+const graficoResumoFinanceiro = document.getElementById("fin-grafico-resumo");
 const formVendedor = document.getElementById("form-vendedor");
 const listaVendedoresAdmin = document.getElementById("lista-vendedores-admin");
 const listaComissoesVendedores = document.getElementById("lista-comissoes-vendedores");
@@ -2802,6 +2806,91 @@ function alterarStatusCarro(id, status) {
   renderizarAdmin();
 }
 
+function renderizarGraficoFinanceiro(dados) {
+  if (!graficoPizzaFinanceiro || !graficoLegendaFinanceiro) return;
+
+  const itens = [
+    {
+      nome: "Receita recebida",
+      valor: Math.max(0, Number(dados.caixaRecebido) || 0),
+      cor: "#2563eb",
+    },
+    {
+      nome: "Trocas",
+      valor: Math.max(0, Number(dados.trocas) || 0),
+      cor: "#f97316",
+    },
+    {
+      nome: "Saídas",
+      valor: Math.max(0, Number(dados.saidas) || 0),
+      cor: "#ef4444",
+    },
+    {
+      nome: "A receber",
+      valor: Math.max(0, Number(dados.aReceber) || 0),
+      cor: "#eab308",
+    },
+  ];
+  const total = itens.reduce(function (soma, item) {
+    return soma + item.valor;
+  }, 0);
+
+  if (!total) {
+    graficoPizzaFinanceiro.style.background =
+      "conic-gradient(#e2e8f0 0deg 360deg)";
+    if (graficoCentroFinanceiro) graficoCentroFinanceiro.textContent = "R$ 0";
+    if (graficoResumoFinanceiro) {
+      graficoResumoFinanceiro.textContent =
+        "Sem movimentação suficiente para montar o gráfico deste período.";
+    }
+    graficoLegendaFinanceiro.innerHTML =
+      '<p class="sem-resultados">Sem dados financeiros no período.</p>';
+    return;
+  }
+
+  let anguloAtual = 0;
+  const fatias = itens
+    .filter(function (item) {
+      return item.valor > 0;
+    })
+    .map(function (item) {
+      const graus = (item.valor / total) * 360;
+      const fatia =
+        item.cor + " " + anguloAtual + "deg " + (anguloAtual + graus) + "deg";
+      anguloAtual += graus;
+      return fatia;
+    });
+
+  graficoPizzaFinanceiro.style.background =
+    "conic-gradient(" + fatias.join(", ") + ")";
+  if (graficoCentroFinanceiro) {
+    graficoCentroFinanceiro.textContent = formatarMoeda(total);
+  }
+  if (graficoResumoFinanceiro) {
+    graficoResumoFinanceiro.textContent =
+      "Total movimentado no gráfico: " + formatarMoeda(total) + ".";
+  }
+  graficoLegendaFinanceiro.innerHTML = itens
+    .map(function (item) {
+      const percentual = total ? (item.valor / total) * 100 : 0;
+
+      return (
+        '<div class="financeiro-legenda-item">' +
+        '<span style="--legenda-cor:' +
+        item.cor +
+        '"></span>' +
+        "<div><strong>" +
+        escaparHTML(item.nome) +
+        "</strong><small>" +
+        formatarMoeda(item.valor) +
+        " · " +
+        formatarPercentual(percentual) +
+        "%</small></div></div>"
+      );
+    })
+    .join("");
+}
+
 function renderizarFinanceiro() {
   if (!listaFinanceiro) return;
 
@@ -2883,6 +2972,12 @@ function renderizarFinanceiro() {
   aplicarCorMetricaFinanceira("fin-caixa-recebido", "entradaCaixa", totalCaixaRecebido);
   aplicarCorMetricaFinanceira("fin-total-trocas", "valorTrocas", totalTrocas);
   aplicarCorMetricaFinanceira("fin-saldo-receber", "saldoReceber", totalSaldoReceber);
+  renderizarGraficoFinanceiro({
+    caixaRecebido: totalCaixaRecebido,
+    trocas: totalTrocas,
+    saidas: totalSaidas,
+    aReceber: totalSaldoReceber,
+  });
 
   if (listaCaixaFinanceiro) {
     listaCaixaFinanceiro.innerHTML =

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260625-clientes-pipeline-topo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260626-financeiro-grafico" />
   </head>
   <body>
     <header class="topo">
@@ -704,6 +704,25 @@
                 <small id="fin-saidas-qtd">0 gasto(s) no período</small>
               </article>
             </div>
+
+            <section class="financeiro-grafico-card">
+              <div class="financeiro-grafico-info">
+                <span class="admin-eyebrow">Composição do período</span>
+                <h3>Distribuição financeira</h3>
+                <p id="fin-grafico-resumo">Receitas, custos, saídas e valores pendentes no período.</p>
+              </div>
+              <div class="financeiro-grafico-conteudo">
+                <div
+                  class="financeiro-pizza"
+                  id="fin-grafico-pizza"
+                  role="img"
+                  aria-label="Gráfico de pizza da composição financeira"
+                >
+                  <span id="fin-grafico-centro">R$ 0</span>
+                </div>
+                <div class="financeiro-grafico-legenda" id="fin-grafico-legenda"></div>
+              </div>
+            </section>
 
             <div class="financeiro-kpis financeiro-kpis-secundarios">
               <article class="dashboard-card financeiro-kpi-card financeiro-cor-estoque">
@@ -1774,7 +1793,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260625-clientes-pipeline-topo"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260626-financeiro-grafico"></script>
   </body>
 </html>
 
