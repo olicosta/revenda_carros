@@ -162,6 +162,7 @@ const btnExportarRecebiveis = document.getElementById("exportar-recebiveis");
 const btnExportarClientes = document.getElementById("exportar-clientes");
 const btnExportarHistorico = document.getElementById("exportar-historico");
 const selectPerfilAdmin = document.getElementById("perfil-admin");
+const metaAdminRole = document.querySelector('meta[name="admin-role"]');
 
 let imagemBase64 = "";
 let galeriaUploadBase64 = [];
@@ -1846,11 +1847,19 @@ function abrirAbaAdmin(nomeAba) {
 
 function abasPermitidasPerfil(perfil) {
   if (perfil === "vendedor") {
-    return ["resumo", "veiculos", "clientes", "vendedores", "sistema"];
+    return ["resumo", "clientes", "sistema"];
+  }
+
+  if (perfil === "financeiro") {
+    return ["resumo", "financeiro", "vendedores", "relatorios", "sistema"];
+  }
+
+  if (perfil === "estoque") {
+    return ["resumo", "veiculos", "relatorios", "sistema"];
   }
 
   if (perfil === "marketing") {
-    return ["resumo", "instagram", "depoimentos", "visitas", "sistema"];
+    return ["resumo", "loja", "instagram", "depoimentos", "parcerias", "visitas", "sistema"];
   }
 
   return [
@@ -1870,7 +1879,7 @@ function abasPermitidasPerfil(perfil) {
 }
 
 function aplicarPerfilAdmin() {
-  const perfil = localStorage.getItem("adminPerfilAtual") || "gestor";
+  const perfil = (metaAdminRole && metaAdminRole.content) || "gestor";
   const permitidas = abasPermitidasPerfil(perfil);
 
   if (selectPerfilAdmin) {
@@ -5450,10 +5459,7 @@ adminTabs.forEach(function (tab) {
 });
 
 if (selectPerfilAdmin) {
-  selectPerfilAdmin.addEventListener("change", function () {
-    localStorage.setItem("adminPerfilAtual", selectPerfilAdmin.value);
-    aplicarPerfilAdmin();
-  });
+  selectPerfilAdmin.addEventListener("change", aplicarPerfilAdmin);
 }
 
 adminAtalhos.forEach(function (atalho) {

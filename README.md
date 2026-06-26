@@ -39,6 +39,7 @@ Em ambiente local, o seeder cria um usuário conforme as variáveis do `.env`:
 
 ```env
 ADMIN_USERNAME=admin
+ADMIN_ROLE=gestor
 ADMIN_PASSWORD=1234
 ```
 
@@ -62,6 +63,7 @@ DB_USERNAME=usuario
 DB_PASSWORD=senha
 
 ADMIN_USERNAME=admin
+ADMIN_ROLE=gestor
 ADMIN_PASSWORD=troque-por-uma-senha-forte
 ```
 
@@ -142,10 +144,27 @@ Antes de publicar:
 - use `APP_DEBUG=false`;
 - defina `APP_URL` com o domínio real;
 - troque a senha padrão do admin;
+- use `ADMIN_ROLE=gestor` apenas para usuários que podem acessar todo o painel;
 - use banco com usuário/senha próprios;
 - mantenha `.env`, `vendor`, `node_modules`, banco SQLite e caches fora do Git;
 - configure HTTPS na hospedagem;
 - garanta permissão de escrita em `storage` e `bootstrap/cache`.
+
+## Perfis de acesso
+
+O campo `role` do usuário controla as permissões reais no backend:
+
+- `gestor`: acesso total;
+- `vendedor`: clientes, atendimentos e comunicações;
+- `financeiro`: financeiro, vendedores, vendas e financiamentos;
+- `estoque`: veículos e histórico operacional;
+- `marketing`: loja, depoimentos, parcerias e analytics.
+
+O usuário criado pelo seeder usa `ADMIN_ROLE`. Para ambientes simples, mantenha:
+
+```env
+ADMIN_ROLE=gestor
+```
 
 ## Testes
 

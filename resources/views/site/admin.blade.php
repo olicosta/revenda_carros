@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260625-clientes-pipeline-topo" />
   </head>
@@ -1501,15 +1502,16 @@
 
           <div class="admin-form">
             <p class="admin-ajuda">
-              Use o perfil para limitar visualmente as áreas do painel neste navegador.
-              Para segurança completa por usuário, o próximo passo é conectar um backend.
+              Este é o perfil real do usuário logado. O gestor acessa tudo; os demais perfis veem apenas as áreas autorizadas.
             </p>
             <div class="form-grid">
               <label>
                 Perfil atual
-                <select id="perfil-admin">
+                <select id="perfil-admin" disabled>
                   <option value="gestor">Gestor</option>
                   <option value="vendedor">Vendedor</option>
+                  <option value="financeiro">Financeiro</option>
+                  <option value="estoque">Estoque</option>
                   <option value="marketing">Marketing</option>
                 </select>
               </label>

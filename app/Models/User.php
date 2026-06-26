@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
+        'role',
         'email',
         'password',
     ];
@@ -46,5 +47,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function hasPanelRole(string ...$roles): bool
+    {
+        return $this->role === 'gestor' || in_array($this->role, $roles, true);
     }
 }
