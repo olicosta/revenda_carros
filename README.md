@@ -1,57 +1,187 @@
 # 3M Veículos
 
-Aplicação de catálogo e gestão de revenda de veículos em Laravel 12.
+Sistema Laravel para catálogo público e painel administrativo de uma revenda de veículos.
 
-O painel inclui estoque, vendas, financeiro, clientes, histórico operacional,
-conteúdo institucional e analytics básico das visitas.
+O projeto inclui estoque, clientes/CRM, propostas, financiamento, vendedores, financeiro, depoimentos, parcerias, analytics básico, área do cliente e gestão de imagens.
 
 ## Requisitos
 
 - PHP 8.2+
 - Composer
-- Node.js e npm
+- Node.js 20+ e npm
+- MySQL/MariaDB em produção
+- Extensões PHP comuns do Laravel: `mbstring`, `openssl`, `pdo`, `tokenizer`, `xml`, `ctype`, `json`, `fileinfo`
 
-## Instalação
+## Instalação local
+
+Na pasta do projeto Laravel:
 
 ```powershell
 composer install
+npm install
 Copy-Item .env.example .env
 php artisan key:generate
-php artisan migrate
-php artisan db:seed
+php artisan migrate --seed
 php artisan storage:link
-npm install
 npm run build
 php artisan serve
 ```
 
-Configure o banco no `.env` (o ambiente atual usa MySQL). Acesse
-`http://127.0.0.1:8000`.
+Acesse:
 
-Para melhor desempenho após concluir alterações:
-
-```powershell
-php artisan optimize
+```text
+http://127.0.0.1:8000
 ```
 
-Ao alterar rotas ou variáveis do `.env`, limpe os caches antes de continuar:
+## Login administrativo
 
-```powershell
-php artisan optimize:clear
+Em ambiente local, o seeder cria um usuário conforme as variáveis do `.env`:
+
+```env
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=1234
 ```
 
-Para converter imagens Base64 de instalações anteriores:
+Em produção, altere obrigatoriamente `ADMIN_PASSWORD` para uma senha forte com pelo menos 12 caracteres antes de rodar `php artisan db:seed`.
+
+## Configuração do `.env`
+
+Copie `.env.example` para `.env` e ajuste:
+
+```env
+APP_NAME="3M Veículos"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://seudominio.com.br
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=revenda_carros
+DB_USERNAME=usuario
+DB_PASSWORD=senha
+
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=troque-por-uma-senha-forte
+```
+
+Nunca suba o arquivo `.env` para o Git.
+
+## Banco e dados iniciais
+
+Para criar as tabelas:
+
+```powershell
+php artisan migrate
+```
+
+Para popular dados de demonstração e usuário admin:
+
+```powershell
+php artisan db:seed
+```
+
+Para recriar tudo em ambiente local:
+
+```powershell
+php artisan migrate:fresh --seed
+```
+
+## Imagens e uploads
+
+Crie o link público do storage:
+
+```powershell
+php artisan storage:link
+```
+
+O sistema valida imagens enviadas em base64, limita tamanho e salva arquivos em `storage/app/public`.
+
+Para migrar imagens antigas em base64:
 
 ```powershell
 php artisan media:migrate-base64
 ```
 
-## Testes e estilo
+## Build dos assets
+
+Ambiente local:
+
+```powershell
+npm run dev
+```
+
+Produção:
+
+```powershell
+npm run build
+```
+
+## Otimização para produção
+
+Depois de configurar `.env`, banco e assets:
+
+```powershell
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Se alterar `.env`, rotas ou views, limpe e regenere caches:
+
+```powershell
+php artisan optimize:clear
+```
+
+## Segurança básica
+
+Antes de publicar:
+
+- use `APP_ENV=production`;
+- use `APP_DEBUG=false`;
+- defina `APP_URL` com o domínio real;
+- troque a senha padrão do admin;
+- use banco com usuário/senha próprios;
+- mantenha `.env`, `vendor`, `node_modules`, banco SQLite e caches fora do Git;
+- configure HTTPS na hospedagem;
+- garanta permissão de escrita em `storage` e `bootstrap/cache`.
+
+## Testes
 
 ```powershell
 php artisan test
 vendor\bin\pint --test
 ```
 
-Consulte [MIGRATION_STATUS.md](MIGRATION_STATUS.md) para o estado atual da
-migração e as próximas etapas.
+Para corrigir estilo automaticamente:
+
+```powershell
+vendor\bin\pint
+```
+
+## Deploy sugerido
+
+No servidor:
+
+```bash
+git clone https://github.com/olicosta/revenda_carros.git
+cd revenda_carros
+composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed --force
+php artisan storage:link
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Configure o document root da hospedagem para a pasta `public`.
+
+## Observações
+
+- O projeto foi migrado para Laravel e mantém compatibilidade com rotas antigas como `/index.html`, `/carros.html` e `/admin.html`.
+- Consulte [MIGRATION_STATUS.md](MIGRATION_STATUS.md) para histórico da migração.

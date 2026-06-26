@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             $username = Str::lower((string) $request->input('username', 'visitante'));
 
-            return Limit::perMinute(20)
+            return Limit::perMinute(8)
                 ->by($username.'|'.$request->ip())
                 ->response(function (Request $request, array $headers) {
                     return back()
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('customer-login', function (Request $request) {
             $cpf = preg_replace('/\D/', '', (string) $request->input('cpf', 'visitante'));
 
-            return Limit::perMinute(20)
+            return Limit::perMinute(12)
                 ->by($cpf.'|'.$request->ip())
                 ->response(function (Request $request, array $headers) {
                     return back()

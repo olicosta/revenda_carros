@@ -68,6 +68,11 @@ class AuthenticatedSessionController extends Controller
 
     public function updateCredentials(Request $request): JsonResponse
     {
+        $request->merge([
+            'current_username' => str($request->input('current_username', ''))->trim()->lower()->toString(),
+            'username' => str($request->input('username', ''))->trim()->lower()->toString(),
+        ]);
+
         $user = $request->user();
         $validated = $request->validate([
             'current_username' => ['required', 'string'],

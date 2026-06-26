@@ -72,4 +72,36 @@ class ImageStorage
             $values
         ));
     }
+
+    public function deletePublicUrl(?string $url): void
+    {
+        $path = $this->publicUrlToPath($url);
+
+        if ($path !== null) {
+            Storage::disk('public')->delete($path);
+        }
+    }
+
+    public function deletePublicUrls(array $urls): void
+    {
+        $paths = array_values(array_filter(array_map(
+            fn (mixed $url) => $this->publicUrlToPath(is_string($url) ? $url : null),
+            $urls
+        )));
+
+        if ($paths !== []) {
+            Storage::disk('public')->delete($paths);
+        }
+    }
+
+    private function publicUrlToPath(?string $url): ?string
+    {
+        if (! is_string($url) || ! str_starts_with($url, '/storage/')) {
+            return null;
+        }
+
+        $path = ltrim(substr($url, strlen('/storage/')), '/');
+
+        return str_contains($path, '..') ? null : $path;
+    }
 }

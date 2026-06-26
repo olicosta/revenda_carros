@@ -89,21 +89,25 @@ class VehicleController extends Controller
 
     public function update(Request $request, Vehicle $vehicle): JsonResponse
     {
+        $oldImages = $this->vehicleImages($vehicle);
         $payload = $this->prepareVehicleImages($this->validateVehicle($request, $vehicle));
         DB::transaction(function () use ($vehicle, $payload) {
             $vehicle->update($this->toAttributes($payload));
             $this->syncSaleForVehicle($vehicle, $payload);
         });
+        $this->deleteUnusedImages($oldImages, $this->vehicleImages($vehicle->refresh()));
 
-        return response()->json(['data' => $this->toLegacy($vehicle->refresh())]);
+        return response()->json(['data' => $this->toLegacy($vehicle)]);
     }
 
     public function destroy(Vehicle $vehicle): JsonResponse
     {
+        $oldImages = $this->vehicleImages($vehicle);
         DB::transaction(function () use ($vehicle) {
             Sale::query()->where('vehicle_id', $vehicle->id)->delete();
             $vehicle->delete();
         });
+        $this->imageStorage->deletePublicUrls($oldImages);
 
         return response()->json(status: 204);
     }
@@ -114,6 +118,11 @@ class VehicleController extends Controller
             'vehicles' => ['present', 'array'],
             'vehicles.*' => ['required', 'array'],
         ]);
+
+        $oldImages = Vehicle::query()
+            ->get()
+            ->flatMap(fn (Vehicle $vehicle) => $this->vehicleImages($vehicle))
+            ->all();
 
         $vehicles = DB::transaction(function () use ($validated) {
             $ids = [];
@@ -152,6 +161,11 @@ class VehicleController extends Controller
                 ->map(fn (Vehicle $vehicle) => $this->toLegacy($vehicle))
                 ->values();
         });
+        $newImages = Vehicle::query()
+            ->get()
+            ->flatMap(fn (Vehicle $vehicle) => $this->vehicleImages($vehicle))
+            ->all();
+        $this->deleteUnusedImages($oldImages, $newImages);
 
         return response()->json(['data' => $vehicles]);
     }
@@ -171,7 +185,8 @@ class VehicleController extends Controller
             'status' => ['nullable', 'string', 'max:50'],
             'preco' => ['nullable'],
             'imagem' => ['nullable', 'string'],
-            'galeria' => ['nullable', 'array'],
+            'galeria' => ['nullable', 'array', 'max:12'],
+            'galeria.*' => ['nullable', 'string'],
             'opcionais' => ['nullable', 'array'],
         ]);
 
@@ -373,5 +388,22 @@ class VehicleController extends Controller
                 'metadata' => $legacy,
             ]
         );
+    }
+
+    private function vehicleImages(Vehicle $vehicle): array
+    {
+        return array_values(array_filter(array_merge(
+            [$vehicle->cover_image_path],
+            is_array($vehicle->gallery) ? $vehicle->gallery : []
+        )));
+    }
+
+    private function deleteUnusedImages(array $oldImages, array $currentImages): void
+    {
+        $unused = array_values(array_diff(array_unique($oldImages), array_unique($currentImages)));
+
+        if ($unused !== []) {
+            $this->imageStorage->deletePublicUrls($unused);
+        }
     }
 }
