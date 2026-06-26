@@ -66,6 +66,12 @@ const graficoPizzaFinanceiro = document.getElementById("fin-grafico-pizza");
 const graficoCentroFinanceiro = document.getElementById("fin-grafico-centro");
 const graficoLegendaFinanceiro = document.getElementById("fin-grafico-legenda");
 const graficoResumoFinanceiro = document.getElementById("fin-grafico-resumo");
+const formNotaFiscal = document.getElementById("form-nota-fiscal");
+const listaNotasFiscais = document.getElementById("lista-notas-fiscais");
+const selectNotaFiscalVeiculo = document.getElementById("nf-veiculo");
+const filtroNotaFiscalStatus = document.getElementById("nf-filtro-status");
+const btnNotaFiscalCancelar = document.getElementById("nf-cancelar");
+const btnGerarNotasPendentes = document.getElementById("nf-gerar-pendencias");
 const formVendedor = document.getElementById("form-vendedor");
 const listaVendedoresAdmin = document.getElementById("lista-vendedores-admin");
 const listaComissoesVendedores = document.getElementById("lista-comissoes-vendedores");
@@ -190,6 +196,7 @@ let vendedoresAdmin = carregarVendedores();
 let leadsAdmin = carregarLeadsAdmin();
 let historicoVeiculosAdmin = carregarHistoricoVeiculos();
 let solicitacoesFinanciamentoAdmin = [];
+let notasFiscaisAdmin = carregarNotasFiscais();
 let resumoDetalheAtual = "estoque";
 let vendaPendenteId = null;
 let clienteModalId = null;
@@ -821,6 +828,20 @@ function salvarSaidasFinanceiras() {
     saidasFinanceiras
   );
   snapshotSaidasFinanceiras = copiarListaAdmin(saidasFinanceiras);
+}
+
+function carregarNotasFiscais() {
+  try {
+    const salvas = JSON.parse(localStorage.getItem("notasFiscais"));
+    return Array.isArray(salvas) ? salvas : [];
+  } catch (error) {
+    localStorage.removeItem("notasFiscais");
+    return [];
+  }
+}
+
+function salvarNotasFiscais() {
+  localStorage.setItem("notasFiscais", JSON.stringify(notasFiscaisAdmin));
 }
 
 function carregarVendedores() {
@@ -2570,6 +2591,7 @@ function removerFotoGaleria(index) {
 function renderizarAdmin() {
   renderizarDashboard();
   renderizarFinanceiro();
+  renderizarNotasFiscais();
   renderizarVendedores();
   preencherVendedoresLead();
   renderizarClientes();
@@ -3111,6 +3133,281 @@ function renderizarGraficoFinanceiro(dados) {
       );
     })
     .join("");
+}
+
+function vendasSemNotaFiscal() {
+  return carrosAdmin.filter(function (carro) {
+    return (
+      carro.status === "Vendido" &&
+      !notasFiscaisAdmin.some(function (nota) {
+        return Number(nota.veiculoId) === Number(carro.id);
+      })
+    );
+  });
+}
+
+function preencherSelectNotasFiscais() {
+  if (!selectNotaFiscalVeiculo) return;
+
+  const selecionado = selectNotaFiscalVeiculo.value;
+  const vendidos = carrosAdmin.filter(function (carro) {
+    return carro.status === "Vendido";
+  });
+
+  selectNotaFiscalVeiculo.innerHTML =
+    '<option value="">Nota manual / sem venda vinculada</option>' +
+    vendidos
+      .map(function (carro) {
+        const valor = Number(carro.valorVenda) || precoNumero(carro.preco);
+
+        return (
+          '<option value="' +
+          escaparAtributo(carro.id) +
+          '">' +
+          escaparHTML(carro.nome) +
+          " · " +
+          escaparHTML(formatarMoeda(valor)) +
+          "</option>"
+        );
+      })
+      .join("");
+
+  selectNotaFiscalVeiculo.value = selecionado;
+}
+
+function preencherNotaComVenda() {
+  if (!selectNotaFiscalVeiculo || !selectNotaFiscalVeiculo.value) return;
+
+  const carro = carrosAdmin.find(function (item) {
+    return Number(item.id) === Number(selectNotaFiscalVeiculo.value);
+  });
+
+  if (!carro) return;
+
+  document.getElementById("nf-descricao").value = carro.nome || "";
+  document.getElementById("nf-valor").value = formatarCampoMoedaValor(
+    Number(carro.valorVenda) || precoNumero(carro.preco)
+  );
+
+  if (!document.getElementById("nf-data").value && carro.dataVenda) {
+    document.getElementById("nf-data").value = carro.dataVenda;
+  }
+}
+
+function montarNotaFiscal(idExistente) {
+  return {
+    id: idExistente
+      ? Number(idExistente)
+      : gerarIdUnico([notasFiscaisAdmin, carrosAdmin, saidasFinanceiras]),
+    veiculoId: document.getElementById("nf-veiculo").value
+      ? Number(document.getElementById("nf-veiculo").value)
+      : null,
+    status: document.getElementById("nf-status").value || "Pendente",
+    tipo: document.getElementById("nf-tipo").value || "NF-e",
+    cliente: document.getElementById("nf-cliente").value.trim(),
+    documento: document.getElementById("nf-documento").value.trim(),
+    descricao: document.getElementById("nf-descricao").value.trim(),
+    valor: numeroFinanceiro("nf-valor"),
+    dataEmissao: document.getElementById("nf-data").value,
+    numero: document.getElementById("nf-numero").value.trim(),
+    serie: document.getElementById("nf-serie").value.trim(),
+    chave: document.getElementById("nf-chave").value.trim(),
+    pdf: document.getElementById("nf-pdf").value.trim(),
+    xml: document.getElementById("nf-xml").value.trim(),
+    observacao: document.getElementById("nf-observacao").value.trim(),
+    atualizadoEm: new Date().toISOString(),
+  };
+}
+
+function limparFormularioNotaFiscal() {
+  if (!formNotaFiscal) return;
+
+  formNotaFiscal.reset();
+  document.getElementById("nf-id").value = "";
+  document.getElementById("nf-status").value = "Pendente";
+  document.getElementById("nf-tipo").value = "NF-e";
+  document.getElementById("nf-form-titulo").textContent = "Cadastrar nota fiscal";
+}
+
+function notaFiscalPorVenda(carro) {
+  return {
+    id: gerarIdUnico([notasFiscaisAdmin, carrosAdmin, saidasFinanceiras]),
+    veiculoId: Number(carro.id),
+    status: "Pendente",
+    tipo: "NF-e",
+    cliente: "",
+    documento: "",
+    descricao: carro.nome || "Venda de veículo",
+    valor: Number(carro.valorVenda) || precoNumero(carro.preco),
+    dataEmissao: carro.dataVenda || "",
+    numero: "",
+    serie: "",
+    chave: "",
+    pdf: "",
+    xml: "",
+    observacao: "Pendência criada automaticamente a partir da venda.",
+    atualizadoEm: new Date().toISOString(),
+  };
+}
+
+function renderizarNotasFiscais() {
+  if (!listaNotasFiscais) return;
+
+  preencherSelectNotasFiscais();
+
+  const filtro = filtroNotaFiscalStatus ? filtroNotaFiscalStatus.value : "";
+  const notasFiltradas = notasFiscaisAdmin
+    .filter(function (nota) {
+      return !filtro || nota.status === filtro;
+    })
+    .sort(function (a, b) {
+      return String(b.dataEmissao || b.atualizadoEm || "").localeCompare(
+        String(a.dataEmissao || a.atualizadoEm || "")
+      );
+    });
+
+  const pendentes = notasFiscaisAdmin.filter(function (nota) {
+    return nota.status === "Pendente";
+  }).length;
+  const emitidas = notasFiscaisAdmin.filter(function (nota) {
+    return nota.status === "Emitida";
+  });
+  const canceladas = notasFiscaisAdmin.filter(function (nota) {
+    return nota.status === "Cancelada";
+  }).length;
+  const totalEmitido = emitidas.reduce(function (total, nota) {
+    return total + (Number(nota.valor) || 0);
+  }, 0);
+
+  atualizarDashboardTexto("nf-pendentes", pendentes);
+  atualizarDashboardTexto("nf-emitidas", emitidas.length);
+  atualizarDashboardTexto("nf-canceladas", canceladas);
+  atualizarDashboardTexto("nf-total-emitido", formatarMoeda(totalEmitido) + " em notas");
+  atualizarDashboardTexto(
+    "nf-resumo",
+    filtro
+      ? "Mostrando notas com status " + filtro.toLowerCase() + "."
+      : "Mostrando todas as notas fiscais."
+  );
+
+  if (!notasFiltradas.length) {
+    listaNotasFiscais.innerHTML =
+      '<p class="sem-resultados">Nenhuma nota fiscal encontrada.</p>';
+    return;
+  }
+
+  listaNotasFiscais.innerHTML = notasFiltradas
+    .map(function (nota) {
+      const carro = carrosAdmin.find(function (item) {
+        return Number(item.id) === Number(nota.veiculoId);
+      });
+      const classeStatus = "nf-status-" + normalizarTextoAdmin(nota.status || "pendente");
+
+      return (
+        '<article class="admin-item admin-item-nota-fiscal">' +
+        '<div class="nota-fiscal-status ' +
+        classeStatus +
+        '">' +
+        escaparHTML(nota.status || "Pendente") +
+        "</div>" +
+        '<div class="nota-fiscal-info">' +
+        "<h4>" +
+        escaparHTML(nota.descricao || (carro && carro.nome) || "Nota fiscal") +
+        "</h4>" +
+        "<p>" +
+        escaparHTML(nota.cliente || "Cliente não informado") +
+        (nota.documento ? " · " + escaparHTML(nota.documento) : "") +
+        "</p>" +
+        '<div class="financeiro-item-meta">' +
+        "<span>" +
+        escaparHTML(nota.tipo || "NF-e") +
+        "</span>" +
+        "<span>" +
+        escaparHTML(nota.dataEmissao ? formatarDataBR(nota.dataEmissao) : "Sem emissão") +
+        "</span>" +
+        "<span>" +
+        escaparHTML(formatarMoeda(Number(nota.valor) || 0)) +
+        "</span>" +
+        (nota.numero ? "<span>Nº " + escaparHTML(nota.numero) + "</span>" : "") +
+        (carro ? "<span>Venda: " + escaparHTML(carro.nome) + "</span>" : "") +
+        "</div>" +
+        (nota.chave
+          ? '<p class="nota-fiscal-chave">Chave: ' + escaparHTML(nota.chave) + "</p>"
+          : "") +
+        (nota.observacao ? "<p>" + escaparHTML(nota.observacao) + "</p>" : "") +
+        "</div>" +
+        '<div class="admin-acoes">' +
+        (nota.pdf
+          ? '<a class="btn-editar" href="' + escaparAtributo(nota.pdf) + '" target="_blank" rel="noopener">PDF</a>'
+          : "") +
+        (nota.xml
+          ? '<a class="btn-editar" href="' + escaparAtributo(nota.xml) + '" target="_blank" rel="noopener">XML</a>'
+          : "") +
+        '<button type="button" class="btn-editar" onclick="editarNotaFiscal(' +
+        Number(nota.id) +
+        ')">Editar</button>' +
+        '<button type="button" class="btn-excluir" onclick="excluirNotaFiscal(' +
+        Number(nota.id) +
+        ')">Excluir</button>' +
+        "</div>" +
+        "</article>"
+      );
+    })
+    .join("");
+}
+
+function editarNotaFiscal(id) {
+  const nota = notasFiscaisAdmin.find(function (item) {
+    return Number(item.id) === Number(id);
+  });
+
+  if (!nota) return;
+
+  document.getElementById("nf-id").value = nota.id;
+  document.getElementById("nf-veiculo").value = nota.veiculoId || "";
+  document.getElementById("nf-status").value = nota.status || "Pendente";
+  document.getElementById("nf-tipo").value = nota.tipo || "NF-e";
+  document.getElementById("nf-cliente").value = nota.cliente || "";
+  document.getElementById("nf-documento").value = nota.documento || "";
+  document.getElementById("nf-descricao").value = nota.descricao || "";
+  document.getElementById("nf-valor").value = formatarCampoMoedaValor(Number(nota.valor) || 0);
+  document.getElementById("nf-data").value = nota.dataEmissao || "";
+  document.getElementById("nf-numero").value = nota.numero || "";
+  document.getElementById("nf-serie").value = nota.serie || "";
+  document.getElementById("nf-chave").value = nota.chave || "";
+  document.getElementById("nf-pdf").value = nota.pdf || "";
+  document.getElementById("nf-xml").value = nota.xml || "";
+  document.getElementById("nf-observacao").value = nota.observacao || "";
+  document.getElementById("nf-form-titulo").textContent = "Editar nota fiscal";
+
+  if (formNotaFiscal) {
+    formNotaFiscal.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function excluirNotaFiscal(id) {
+  if (!window.confirm("Excluir esta nota fiscal do controle interno?")) return;
+
+  notasFiscaisAdmin = notasFiscaisAdmin.filter(function (nota) {
+    return Number(nota.id) !== Number(id);
+  });
+  salvarNotasFiscais();
+  renderizarNotasFiscais();
+}
+
+function gerarNotasPendentesDasVendas() {
+  const pendentes = vendasSemNotaFiscal();
+
+  if (!pendentes.length) {
+    renderizarNotasFiscais();
+    return;
+  }
+
+  pendentes.forEach(function (carro) {
+    notasFiscaisAdmin.push(notaFiscalPorVenda(carro));
+  });
+  salvarNotasFiscais();
+  renderizarNotasFiscais();
 }
 
 function renderizarFinanceiro() {
@@ -5724,6 +6021,48 @@ if (formSaidaFinanceira) {
   });
 }
 
+if (selectNotaFiscalVeiculo) {
+  selectNotaFiscalVeiculo.addEventListener("change", preencherNotaComVenda);
+}
+
+if (filtroNotaFiscalStatus) {
+  filtroNotaFiscalStatus.addEventListener("change", renderizarNotasFiscais);
+}
+
+if (btnNotaFiscalCancelar) {
+  btnNotaFiscalCancelar.addEventListener("click", limparFormularioNotaFiscal);
+}
+
+if (btnGerarNotasPendentes) {
+  btnGerarNotasPendentes.addEventListener("click", gerarNotasPendentesDasVendas);
+}
+
+if (formNotaFiscal) {
+  formNotaFiscal.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("nf-id").value;
+    const nota = montarNotaFiscal(id);
+
+    if (!nota.cliente || !nota.descricao || !nota.valor) {
+      alert("Preencha cliente, descrição e valor da nota.");
+      return;
+    }
+
+    if (id) {
+      notasFiscaisAdmin = notasFiscaisAdmin.map(function (item) {
+        return Number(item.id) === Number(id) ? nota : item;
+      });
+    } else {
+      notasFiscaisAdmin.push(nota);
+    }
+
+    salvarNotasFiscais();
+    limparFormularioNotaFiscal();
+    renderizarNotasFiscais();
+  });
+}
+
 if (btnLimparFinanceiro) {
   btnLimparFinanceiro.addEventListener("click", function () {
     filtroFinanceiroMes.value = "";
@@ -5844,6 +6183,7 @@ btnExportarBackup.addEventListener("click", function () {
     homeConteudo: carregarConteudoHome(),
     analyticsSite: carregarAnalyticsSite(),
     saidasFinanceiras: saidasFinanceiras,
+    notasFiscais: notasFiscaisAdmin,
     vendedores: vendedoresAdmin,
     leadsClientes: leadsAdmin,
     historicoVeiculos: historicoVeiculosAdmin,
@@ -6151,6 +6491,10 @@ inputImportarBackup.addEventListener("change", async function () {
         saidasFinanceiras = backup.saidasFinanceiras;
         salvarSaidasFinanceiras();
       }
+      if (Array.isArray(backup.notasFiscais)) {
+        notasFiscaisAdmin = backup.notasFiscais;
+        salvarNotasFiscais();
+      }
       if (Array.isArray(backup.vendedores)) {
         vendedoresAdmin = backup.vendedores;
         salvarVendedores();
@@ -6172,6 +6516,7 @@ inputImportarBackup.addEventListener("change", async function () {
       renderizarDepoimentosAdmin();
       renderizarParceriasAdmin();
       renderizarFinanceiro();
+      renderizarNotasFiscais();
       renderizarAnalyticsAdmin();
       preencherCarrosInstagram();
       renderizarInstagram();
@@ -6197,6 +6542,7 @@ carregarSolicitacoesFinanciamento();
 renderizarDepoimentosAdmin();
 renderizarParceriasAdmin();
 renderizarFinanceiro();
+renderizarNotasFiscais();
 renderizarAnalyticsAdmin();
 preencherCarrosInstagram();
 renderizarInstagram();

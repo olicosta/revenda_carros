@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260626-resumo-clicavel" />
+    <link rel="stylesheet" href="/css/style.css?v=20260626-notas-fiscais" />
   </head>
   <body>
     <header class="topo">
@@ -681,6 +681,7 @@
             <button type="button" class="financeiro-menu-btn ativo" data-finance-view-target="resumo">Resumo</button>
             <button type="button" class="financeiro-menu-btn" data-finance-view-target="saidas">Saídas</button>
             <button type="button" class="financeiro-menu-btn" data-finance-view-target="entradas">Entradas</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="notas">Notas fiscais</button>
           </div>
 
           <div class="financeiro-view ativo" data-finance-view="resumo">
@@ -911,6 +912,146 @@
                 </div>
 
                 <div id="lista-financeiro" class="admin-lista financeiro-lista"></div>
+              </section>
+            </div>
+          </div>
+
+          <div class="financeiro-view" data-finance-view="notas">
+            <div class="financeiro-kpis financeiro-kpis-notas">
+              <article class="dashboard-card financeiro-kpi-card financeiro-cor-receber">
+                <div class="financeiro-kpi-topo">
+                  <span class="financeiro-kpi-icone">!</span>
+                  <span>Notas pendentes</span>
+                </div>
+                <strong id="nf-pendentes">0</strong>
+                <small>Vendas aguardando emissão</small>
+              </article>
+              <article class="dashboard-card dashboard-ok financeiro-kpi-card financeiro-cor-caixa">
+                <div class="financeiro-kpi-topo">
+                  <span class="financeiro-kpi-icone">✓</span>
+                  <span>Notas emitidas</span>
+                </div>
+                <strong id="nf-emitidas">0</strong>
+                <small id="nf-total-emitido">R$ 0 em notas</small>
+              </article>
+              <article class="dashboard-card dashboard-vendido financeiro-kpi-card financeiro-cor-saida">
+                <div class="financeiro-kpi-topo">
+                  <span class="financeiro-kpi-icone">×</span>
+                  <span>Canceladas</span>
+                </div>
+                <strong id="nf-canceladas">0</strong>
+                <small>Controle interno</small>
+              </article>
+            </div>
+
+            <div class="financeiro-notas-grid">
+              <form id="form-nota-fiscal" class="admin-form financeiro-saida-form financeiro-nota-form">
+                <input type="hidden" id="nf-id" />
+                <span class="admin-eyebrow">Fiscal</span>
+                <h3 id="nf-form-titulo">Cadastrar nota fiscal</h3>
+                <p class="form-ajuda">
+                  Controle interno de NF-e/NFC-e. A emissão oficial depende de certificado digital e integração fiscal.
+                </p>
+
+                <div class="form-grid">
+                  <label>
+                    Venda vinculada
+                    <select id="nf-veiculo">
+                      <option value="">Nota manual / sem venda vinculada</option>
+                    </select>
+                  </label>
+                  <label>
+                    Status
+                    <select id="nf-status">
+                      <option value="Pendente">Pendente</option>
+                      <option value="Emitida">Emitida</option>
+                      <option value="Cancelada">Cancelada</option>
+                    </select>
+                  </label>
+                  <label>
+                    Tipo
+                    <select id="nf-tipo">
+                      <option value="NF-e">NF-e</option>
+                      <option value="NFC-e">NFC-e</option>
+                      <option value="NFS-e">NFS-e</option>
+                      <option value="Recibo">Recibo interno</option>
+                    </select>
+                  </label>
+                  <label>
+                    Cliente
+                    <input type="text" id="nf-cliente" placeholder="Nome do cliente" required />
+                  </label>
+                  <label>
+                    CPF/CNPJ
+                    <input type="text" id="nf-documento" placeholder="000.000.000-00" />
+                  </label>
+                  <label>
+                    Veículo/descrição
+                    <input type="text" id="nf-descricao" placeholder="Veículo vendido ou serviço" required />
+                  </label>
+                  <label>
+                    Valor
+                    <input type="text" id="nf-valor" placeholder="R$ 0" required />
+                  </label>
+                  <label>
+                    Data de emissão
+                    <input type="date" id="nf-data" />
+                  </label>
+                  <label>
+                    Número da nota
+                    <input type="text" id="nf-numero" placeholder="Ex: 000123" />
+                  </label>
+                  <label>
+                    Série
+                    <input type="text" id="nf-serie" placeholder="Ex: 1" />
+                  </label>
+                  <label class="campo-largo">
+                    Chave de acesso
+                    <input type="text" id="nf-chave" placeholder="44 dígitos da chave de acesso" />
+                  </label>
+                  <label>
+                    Link PDF/DANFE
+                    <input type="url" id="nf-pdf" placeholder="https://..." />
+                  </label>
+                  <label>
+                    Link XML
+                    <input type="url" id="nf-xml" placeholder="https://..." />
+                  </label>
+                </div>
+
+                <textarea id="nf-observacao" rows="3" placeholder="Observações internas sobre a nota"></textarea>
+
+                <div class="admin-form-acoes">
+                  <button type="submit" class="btn-primary">Salvar nota</button>
+                  <button type="button" class="btn-cancelar btn-visivel" id="nf-cancelar">Limpar</button>
+                </div>
+              </form>
+
+              <section class="financeiro-relatorio financeiro-notas-card">
+                <div class="financeiro-relatorio-topo">
+                  <div>
+                    <span class="admin-eyebrow">Notas fiscais</span>
+                    <h3>Controle de emissão</h3>
+                  </div>
+                  <p id="nf-resumo">Mostrando todas as notas.</p>
+                </div>
+
+                <div class="financeiro-toolbar financeiro-notas-toolbar">
+                  <label>
+                    Status
+                    <select id="nf-filtro-status">
+                      <option value="">Todos os status</option>
+                      <option value="Pendente">Pendentes</option>
+                      <option value="Emitida">Emitidas</option>
+                      <option value="Cancelada">Canceladas</option>
+                    </select>
+                  </label>
+                  <button type="button" class="btn-cancelar btn-visivel" id="nf-gerar-pendencias">
+                    Criar pendências das vendas
+                  </button>
+                </div>
+
+                <div id="lista-notas-fiscais" class="admin-lista financeiro-lista financeiro-lista-notas"></div>
               </section>
             </div>
           </div>
@@ -1807,7 +1948,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260626-resumo-clicavel"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260626-notas-fiscais"></script>
   </body>
 </html>
 

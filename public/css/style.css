@@ -5699,6 +5699,81 @@ body:has(.admin) .pagina-titulo p {
   gap: 18px;
 }
 
+.financeiro-kpis-notas {
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
+  margin-bottom: 18px;
+}
+
+.financeiro-notas-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.78fr) minmax(0, 1.22fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.financeiro-nota-form .form-ajuda {
+  margin: -4px 0 14px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.financeiro-notas-toolbar {
+  margin: 0 0 14px;
+  padding: 12px;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  align-items: end;
+  box-shadow: none;
+}
+
+.financeiro-lista-notas {
+  gap: 12px;
+}
+
+.admin-item-nota-fiscal {
+  grid-template-columns: 112px minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.nota-fiscal-status {
+  width: 96px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #a16207;
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.nf-status-emitida {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.nf-status-cancelada {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.nota-fiscal-info {
+  min-width: 0;
+}
+
+.nota-fiscal-info h4 {
+  margin-bottom: 4px;
+}
+
+.nota-fiscal-chave {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
 .financeiro-operacao-grid {
   display: grid;
   grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
@@ -5850,7 +5925,9 @@ body:has(.admin) .pagina-titulo p {
 @media (max-width: 1180px) {
   .financeiro-kpis-principais,
   .financeiro-kpis-secundarios,
+  .financeiro-kpis-notas,
   .financeiro-operacao-grid,
+  .financeiro-notas-grid,
   .financeiro-resumo-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -5873,9 +5950,27 @@ body:has(.admin) .pagina-titulo p {
   .financeiro-menu,
   .financeiro-kpis-principais,
   .financeiro-kpis-secundarios,
+  .financeiro-kpis-notas,
   .financeiro-operacao-grid,
+  .financeiro-notas-grid,
   .financeiro-resumo-grid {
     grid-template-columns: 1fr;
+  }
+
+  .financeiro-notas-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .financeiro-notas-toolbar .btn-cancelar {
+    width: 100%;
+  }
+
+  .admin-item-nota-fiscal {
+    grid-template-columns: 1fr;
+  }
+
+  .nota-fiscal-status {
+    width: 100%;
   }
 
   .financeiro-grafico-card {
