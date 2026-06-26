@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260626-notas-fiscais" />
+    <link rel="stylesheet" href="/css/style.css?v=20260626-notas-clientes" />
   </head>
   <body>
     <header class="topo">
@@ -979,11 +979,20 @@
                   </label>
                   <label>
                     Cliente
-                    <input type="text" id="nf-cliente" placeholder="Nome do cliente" required />
+                    <input type="text" id="nf-cliente" list="nf-clientes-sugestoes" placeholder="Nome do cliente" required />
+                    <datalist id="nf-clientes-sugestoes"></datalist>
                   </label>
                   <label>
                     CPF/CNPJ
                     <input type="text" id="nf-documento" placeholder="000.000.000-00" />
+                  </label>
+                  <label>
+                    WhatsApp
+                    <input type="text" id="nf-whatsapp" placeholder="(00) 00000-0000" />
+                  </label>
+                  <label>
+                    E-mail
+                    <input type="email" id="nf-email" placeholder="cliente@email.com" />
                   </label>
                   <label>
                     Veículo/descrição
@@ -1004,6 +1013,18 @@
                   <label>
                     Série
                     <input type="text" id="nf-serie" placeholder="Ex: 1" />
+                  </label>
+                  <label>
+                    CEP
+                    <input type="text" id="nf-cep" placeholder="00000-000" />
+                  </label>
+                  <label>
+                    Cidade/UF
+                    <input type="text" id="nf-cidade-uf" placeholder="Cidade / UF" />
+                  </label>
+                  <label class="campo-largo">
+                    Endereço fiscal
+                    <input type="text" id="nf-endereco" placeholder="Rua, número, bairro e complemento" />
                   </label>
                   <label class="campo-largo">
                     Chave de acesso
@@ -1948,7 +1969,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260626-notas-fiscais"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260626-notas-clientes"></script>
   </body>
 </html>
 

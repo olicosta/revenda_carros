@@ -69,6 +69,8 @@ const graficoResumoFinanceiro = document.getElementById("fin-grafico-resumo");
 const formNotaFiscal = document.getElementById("form-nota-fiscal");
 const listaNotasFiscais = document.getElementById("lista-notas-fiscais");
 const selectNotaFiscalVeiculo = document.getElementById("nf-veiculo");
+const inputNotaFiscalCliente = document.getElementById("nf-cliente");
+const datalistNotaFiscalClientes = document.getElementById("nf-clientes-sugestoes");
 const filtroNotaFiscalStatus = document.getElementById("nf-filtro-status");
 const btnNotaFiscalCancelar = document.getElementById("nf-cancelar");
 const btnGerarNotasPendentes = document.getElementById("nf-gerar-pendencias");
@@ -3175,6 +3177,91 @@ function preencherSelectNotasFiscais() {
   selectNotaFiscalVeiculo.value = selecionado;
 }
 
+function enderecoFiscalCliente(lead) {
+  return [
+    lead.endereco,
+    lead.numero,
+    lead.bairro,
+    lead.complemento,
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
+function cidadeUfCliente(lead) {
+  return [lead.cidade, lead.estado].filter(Boolean).join(" / ");
+}
+
+function preencherSugestoesClientesNotaFiscal() {
+  if (!datalistNotaFiscalClientes) return;
+
+  datalistNotaFiscalClientes.innerHTML = leadsAdmin
+    .filter(function (lead) {
+      return lead.nome;
+    })
+    .map(function (lead) {
+      return (
+        '<option value="' +
+        escaparAtributo(lead.nome) +
+        '">' +
+        escaparHTML([lead.cpf, lead.whatsapp, lead.cidade].filter(Boolean).join(" · ")) +
+        "</option>"
+      );
+    })
+    .join("");
+}
+
+function encontrarClienteNotaFiscal(texto) {
+  const termo = normalizarTextoAdmin(texto);
+  const numeros = String(texto || "").replace(/\D/g, "");
+
+  if (termo.length < 3) return null;
+
+  const exato = leadsAdmin.find(function (lead) {
+    return normalizarTextoAdmin(lead.nome || "") === termo;
+  });
+
+  if (exato) return exato;
+
+  const porCpf = leadsAdmin.find(function (lead) {
+    return (
+      lead.cpf &&
+      (normalizarTextoAdmin(lead.cpf) === termo ||
+        (numeros && String(lead.cpf).replace(/\D/g, "") === numeros))
+    );
+  });
+
+  if (porCpf) return porCpf;
+
+  const encontrados = leadsAdmin.filter(function (lead) {
+    return normalizarTextoAdmin(lead.nome || "").includes(termo);
+  });
+
+  return encontrados.length === 1 ? encontrados[0] : null;
+}
+
+function preencherNotaComCliente(lead) {
+  if (!lead) return;
+
+  document.getElementById("nf-cliente").value = lead.nome || "";
+  document.getElementById("nf-documento").value = lead.cpf || "";
+  document.getElementById("nf-whatsapp").value = lead.whatsapp || "";
+  document.getElementById("nf-email").value = lead.email || "";
+  document.getElementById("nf-cep").value = lead.cep || "";
+  document.getElementById("nf-endereco").value = enderecoFiscalCliente(lead);
+  document.getElementById("nf-cidade-uf").value = cidadeUfCliente(lead);
+
+  if (!document.getElementById("nf-descricao").value && lead.veiculoNome) {
+    document.getElementById("nf-descricao").value = lead.veiculoNome;
+  }
+}
+
+function preencherNotaComClienteDigitado() {
+  if (!inputNotaFiscalCliente) return;
+
+  preencherNotaComCliente(encontrarClienteNotaFiscal(inputNotaFiscalCliente.value));
+}
+
 function preencherNotaComVenda() {
   if (!selectNotaFiscalVeiculo || !selectNotaFiscalVeiculo.value) return;
 
@@ -3206,11 +3293,16 @@ function montarNotaFiscal(idExistente) {
     tipo: document.getElementById("nf-tipo").value || "NF-e",
     cliente: document.getElementById("nf-cliente").value.trim(),
     documento: document.getElementById("nf-documento").value.trim(),
+    whatsapp: document.getElementById("nf-whatsapp").value.trim(),
+    email: document.getElementById("nf-email").value.trim(),
     descricao: document.getElementById("nf-descricao").value.trim(),
     valor: numeroFinanceiro("nf-valor"),
     dataEmissao: document.getElementById("nf-data").value,
     numero: document.getElementById("nf-numero").value.trim(),
     serie: document.getElementById("nf-serie").value.trim(),
+    cep: document.getElementById("nf-cep").value.trim(),
+    endereco: document.getElementById("nf-endereco").value.trim(),
+    cidadeUf: document.getElementById("nf-cidade-uf").value.trim(),
     chave: document.getElementById("nf-chave").value.trim(),
     pdf: document.getElementById("nf-pdf").value.trim(),
     xml: document.getElementById("nf-xml").value.trim(),
@@ -3254,6 +3346,7 @@ function renderizarNotasFiscais() {
   if (!listaNotasFiscais) return;
 
   preencherSelectNotasFiscais();
+  preencherSugestoesClientesNotaFiscal();
 
   const filtro = filtroNotaFiscalStatus ? filtroNotaFiscalStatus.value : "";
   const notasFiltradas = notasFiscaisAdmin
@@ -3330,7 +3423,14 @@ function renderizarNotasFiscais() {
         "</span>" +
         (nota.numero ? "<span>Nº " + escaparHTML(nota.numero) + "</span>" : "") +
         (carro ? "<span>Venda: " + escaparHTML(carro.nome) + "</span>" : "") +
+        (nota.whatsapp ? "<span>WhatsApp: " + escaparHTML(nota.whatsapp) + "</span>" : "") +
+        (nota.email ? "<span>E-mail: " + escaparHTML(nota.email) + "</span>" : "") +
         "</div>" +
+        (nota.endereco || nota.cidadeUf
+          ? '<p class="nota-fiscal-endereco">' +
+            escaparHTML([nota.endereco, nota.cidadeUf, nota.cep].filter(Boolean).join(" · ")) +
+            "</p>"
+          : "") +
         (nota.chave
           ? '<p class="nota-fiscal-chave">Chave: ' + escaparHTML(nota.chave) + "</p>"
           : "") +
@@ -3369,11 +3469,16 @@ function editarNotaFiscal(id) {
   document.getElementById("nf-tipo").value = nota.tipo || "NF-e";
   document.getElementById("nf-cliente").value = nota.cliente || "";
   document.getElementById("nf-documento").value = nota.documento || "";
+  document.getElementById("nf-whatsapp").value = nota.whatsapp || "";
+  document.getElementById("nf-email").value = nota.email || "";
   document.getElementById("nf-descricao").value = nota.descricao || "";
   document.getElementById("nf-valor").value = formatarCampoMoedaValor(Number(nota.valor) || 0);
   document.getElementById("nf-data").value = nota.dataEmissao || "";
   document.getElementById("nf-numero").value = nota.numero || "";
   document.getElementById("nf-serie").value = nota.serie || "";
+  document.getElementById("nf-cep").value = nota.cep || "";
+  document.getElementById("nf-endereco").value = nota.endereco || "";
+  document.getElementById("nf-cidade-uf").value = nota.cidadeUf || "";
   document.getElementById("nf-chave").value = nota.chave || "";
   document.getElementById("nf-pdf").value = nota.pdf || "";
   document.getElementById("nf-xml").value = nota.xml || "";
@@ -6023,6 +6128,43 @@ if (formSaidaFinanceira) {
 
 if (selectNotaFiscalVeiculo) {
   selectNotaFiscalVeiculo.addEventListener("change", preencherNotaComVenda);
+}
+
+if (inputNotaFiscalCliente) {
+  inputNotaFiscalCliente.addEventListener("input", preencherNotaComClienteDigitado);
+  inputNotaFiscalCliente.addEventListener("change", preencherNotaComClienteDigitado);
+  inputNotaFiscalCliente.addEventListener("blur", preencherNotaComClienteDigitado);
+}
+
+const inputNotaFiscalDocumento = document.getElementById("nf-documento");
+if (inputNotaFiscalDocumento) {
+  inputNotaFiscalDocumento.addEventListener("input", function () {
+    const numeros = inputNotaFiscalDocumento.value.replace(/\D/g, "").slice(0, 14);
+
+    if (numeros.length <= 11) {
+      inputNotaFiscalDocumento.value = numeros
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      return;
+    }
+
+    inputNotaFiscalDocumento.value = numeros
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1/$2")
+      .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+  });
+}
+
+const inputNotaFiscalWhatsapp = document.getElementById("nf-whatsapp");
+if (inputNotaFiscalWhatsapp) {
+  inputNotaFiscalWhatsapp.addEventListener("input", function () {
+    const numeros = inputNotaFiscalWhatsapp.value.replace(/\D/g, "").slice(0, 11);
+    inputNotaFiscalWhatsapp.value = numeros
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+  });
 }
 
 if (filtroNotaFiscalStatus) {
