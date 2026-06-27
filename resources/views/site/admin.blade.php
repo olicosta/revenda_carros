@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260627-mensagem-aniversario-loja" />
+    <link rel="stylesheet" href="/css/style.css?v=20260627-vendedor-foto-home" />
   </head>
   <body>
     <header class="topo">
@@ -1104,6 +1104,11 @@
                 individual.
               </p>
             </div>
+            <div class="financeiro-cabecalho-acoes">
+              <button type="button" class="btn-primary" id="vendedores-topo-novo-vendedor">
+                + Cadastrar novo vendedor
+              </button>
+            </div>
           </div>
 
           <div class="financeiro-kpis">
@@ -1124,13 +1129,29 @@
             </article>
           </div>
 
-          <div class="financeiro-saidas-grid">
+          <div class="financeiro-saidas-grid vendedores-layout-grid">
+            <div class="vendedores-lateral">
+              <section class="vendedor-destaque-admin" id="vendedor-destaque-admin">
+                <div class="vendedor-destaque-foto vendedor-destaque-foto-placeholder">3M</div>
+                <div>
+                  <span class="admin-eyebrow">Vendedor do mês</span>
+                  <h3>Equipe 3M Veículos</h3>
+                  <p>Assim que houver vendas no período, o destaque aparece aqui.</p>
+                </div>
+              </section>
+
             <form id="form-vendedor" class="admin-form financeiro-saida-form">
               <input type="hidden" id="vendedor-id" />
               <span class="admin-eyebrow">Cadastro</span>
               <h3 id="vendedor-form-titulo">Cadastrar vendedor</h3>
 
               <div class="form-grid">
+                <label class="vendedor-foto-campo">
+                  Foto do vendedor
+                  <input type="file" id="vendedor-foto-file" accept="image/*" />
+                  <img id="vendedor-foto-preview" alt="Prévia da foto do vendedor" />
+                  <small>Essa foto aparece no destaque do vendedor do mês.</small>
+                </label>
                 <label>
                   Nome
                   <input type="text" id="vendedor-nome" placeholder="Nome do vendedor" required />
@@ -1172,6 +1193,7 @@
                 </button>
               </div>
             </form>
+            </div>
 
             <section class="financeiro-relatorio comissoes-relatorio">
               <div class="financeiro-relatorio-topo">
@@ -1996,8 +2018,8 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260627-mensagem-aniversario-loja"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260627-vendedor-foto-home"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260627-vendedor-foto-home"></script>
   </body>
 </html>
 

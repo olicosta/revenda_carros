@@ -74,8 +74,7 @@ class VehicleController extends Controller
                     ->map(fn (Seller $seller) => [
                         'id' => $seller->id,
                         'nome' => $seller->name,
-                        'whatsapp' => $seller->phone ?? '',
-                        'email' => $seller->email ?? '',
+                        'foto' => $seller->metadata['foto'] ?? '',
                         'ativo' => $seller->status === 'Ativo',
                     ])
                     ->values(),

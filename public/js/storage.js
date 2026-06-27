@@ -361,6 +361,7 @@ function normalizarVendedorPublico(vendedor) {
     nome: vendedor.nome || vendedor.name || "Vendedor 3M",
     whatsapp: vendedor.whatsapp || vendedor.phone || "",
     email: vendedor.email || "",
+    foto: vendedor.foto || vendedor.image || vendedor.imagem || "",
     ativo: vendedor.ativo !== false && vendedor.active !== false && vendedor.status !== "Inativo",
   };
 }
@@ -373,7 +374,7 @@ function carregarVendedoresPublicos() {
   if (respostaApi && Array.isArray(respostaApi.data)) {
     localStorage.setItem("vendedoresPublicos", JSON.stringify(respostaApi.data));
     return respostaApi.data.map(normalizarVendedorPublico).filter(function (vendedor) {
-      return vendedor.ativo && vendedor.whatsapp;
+      return vendedor.ativo;
     });
   }
 
@@ -382,7 +383,7 @@ function carregarVendedoresPublicos() {
 
     if (Array.isArray(salvos)) {
       return salvos.map(normalizarVendedorPublico).filter(function (vendedor) {
-        return vendedor.ativo && vendedor.whatsapp;
+        return vendedor.ativo;
       });
     }
   } catch (error) {
@@ -394,7 +395,7 @@ function carregarVendedoresPublicos() {
 
     if (Array.isArray(vendedoresPainel)) {
       return vendedoresPainel.map(normalizarVendedorPublico).filter(function (vendedor) {
-        return vendedor.ativo && vendedor.whatsapp;
+        return vendedor.ativo;
       });
     }
   } catch (error) {

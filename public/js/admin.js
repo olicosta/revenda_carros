@@ -77,6 +77,10 @@ const btnGerarNotasPendentes = document.getElementById("nf-gerar-pendencias");
 const formVendedor = document.getElementById("form-vendedor");
 const listaVendedoresAdmin = document.getElementById("lista-vendedores-admin");
 const listaComissoesVendedores = document.getElementById("lista-comissoes-vendedores");
+const btnVendedoresTopoNovo = document.getElementById("vendedores-topo-novo-vendedor");
+const vendedorDestaqueAdmin = document.getElementById("vendedor-destaque-admin");
+const inputVendedorFoto = document.getElementById("vendedor-foto-file");
+const previewVendedorFoto = document.getElementById("vendedor-foto-preview");
 const btnVendedorCancelar = document.getElementById("btn-vendedor-cancelar");
 const btnVendedorSalvar = document.getElementById("btn-vendedor-salvar");
 const tituloFormVendedor = document.getElementById("vendedor-form-titulo");
@@ -190,6 +194,7 @@ const metaAdminRole = document.querySelector('meta[name="admin-role"]');
 let imagemBase64 = "";
 let galeriaUploadBase64 = [];
 let imagemDepoimentoBase64 = "";
+let vendedorFotoBase64 = "";
 let logoLojaBase64 = "";
 let snapshotSaidasFinanceiras = [];
 let snapshotVendedores = [];
@@ -393,6 +398,7 @@ const cadastrosRecolhiveis = [
   {
     formId: "form-vendedor",
     label: "Cadastrar novo vendedor",
+    hideTrigger: true,
   },
   {
     formId: "form-depoimento",
@@ -3904,7 +3910,7 @@ function renderizarVendedores() {
   const destaque = resumo
     .slice()
     .sort(function (a, b) {
-      return b.comissao - a.comissao;
+      return b.vendas.length - a.vendas.length || b.comissao - a.comissao;
     })[0];
 
   atualizarDashboardTexto("vend-total-ativos", vendedoresAtivos.length);
@@ -3929,6 +3935,8 @@ function renderizarVendedores() {
       ? "Comissões de " + mes.split("-").reverse().join("/") + "."
       : "Usa o mesmo filtro de mês do financeiro.";
   }
+
+  renderizarVendedorDestaqueAdmin(destaque);
 
   const vendedoresComVenda = resumo
     .filter(function (item) {
@@ -3959,7 +3967,10 @@ function renderizarVendedores() {
           const idVendedor = Number(vendedor.id) || 0;
 
           return (
-            '<article class="admin-item admin-item-simples">' +
+            '<article class="admin-item admin-item-simples admin-item-vendedor">' +
+            '<div class="vendedor-lista-avatar">' +
+            fotoOuIniciaisVendedor(vendedor) +
+            "</div>" +
             "<div>" +
             "<h4>" +
             escaparHTML(vendedor.nome) +
@@ -3988,6 +3999,64 @@ function renderizarVendedores() {
         })
         .join("")
     : '<p class="sem-resultados">Nenhum vendedor cadastrado.</p>';
+}
+
+function fotoOuIniciaisVendedor(vendedor) {
+  if (vendedor && vendedor.foto) {
+    return (
+      '<img src="' +
+      escaparAtributo(vendedor.foto) +
+      '" alt="Foto de ' +
+      escaparAtributo(vendedor.nome || "vendedor") +
+      '">'
+    );
+  }
+
+  return '<span>' + escaparHTML(iniciaisNome(vendedor && vendedor.nome)) + "</span>";
+}
+
+function iniciaisNome(nome) {
+  return String(nome || "3M")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(function (parte) {
+      return parte.slice(0, 1).toUpperCase();
+    })
+    .join("");
+}
+
+function renderizarVendedorDestaqueAdmin(destaque) {
+  if (!vendedorDestaqueAdmin) return;
+
+  const temDestaque = destaque && destaque.vendas.length > 0;
+  const vendedor = temDestaque ? destaque.vendedor : vendedoresAdmin.find(function (item) {
+    return item.ativo !== false;
+  });
+
+  if (!vendedor) {
+    vendedorDestaqueAdmin.innerHTML =
+      '<div class="vendedor-destaque-foto vendedor-destaque-foto-placeholder">3M</div>' +
+      '<div><span class="admin-eyebrow">Vendedor do mês</span>' +
+      '<h3>Equipe 3M Veículos</h3>' +
+      '<p>Cadastre vendedores e vincule vendas para mostrar o destaque aqui.</p></div>';
+    return;
+  }
+
+  vendedorDestaqueAdmin.innerHTML =
+    '<div class="vendedor-destaque-foto">' +
+    fotoOuIniciaisVendedor(vendedor) +
+    "</div>" +
+    '<div><span class="admin-eyebrow">' +
+    (temDestaque ? "Vendedor do mês" : "Equipe comercial") +
+    "</span><h3>" +
+    escaparHTML(vendedor.nome) +
+    "</h3><p>" +
+    (temDestaque
+      ? "Destaque do período selecionado nas vendas registradas."
+      : "Primeiro vendedor ativo cadastrado. O destaque muda conforme as vendas.")
+    +
+    "</p></div>";
 }
 
 function vendasHistoricoComissoes() {
@@ -5172,6 +5241,11 @@ function limparFormularioVendedor() {
   if (!formVendedor) return;
 
   formVendedor.reset();
+  vendedorFotoBase64 = "";
+  if (previewVendedorFoto) {
+    previewVendedorFoto.src = "";
+    previewVendedorFoto.style.display = "none";
+  }
   document.getElementById("vendedor-id").value = "";
   document.getElementById("vendedor-ativo").checked = true;
   btnVendedorSalvar.textContent = "Salvar vendedor";
@@ -5189,6 +5263,11 @@ function editarVendedor(id) {
   document.getElementById("vendedor-id").value = vendedor.id;
   document.getElementById("vendedor-nome").value = vendedor.nome;
   document.getElementById("vendedor-whatsapp").value = vendedor.whatsapp || "";
+  vendedorFotoBase64 = "";
+  if (previewVendedorFoto) {
+    previewVendedorFoto.src = vendedor.foto || "";
+    previewVendedorFoto.style.display = vendedor.foto ? "block" : "none";
+  }
   document.getElementById("vendedor-comissao-padrao").value =
     formatarCampoMoedaValor(vendedor.comissaoPadrao);
   document.getElementById("vendedor-comissao-tipo").value =
@@ -5581,6 +5660,20 @@ if (inputDepoimentoFile) {
   });
 }
 
+if (inputVendedorFoto) {
+  inputVendedorFoto.addEventListener("change", function () {
+    const file = inputVendedorFoto.files[0];
+
+    if (file) {
+      reduzirImagem(file, function (base64) {
+        vendedorFotoBase64 = base64;
+        previewVendedorFoto.src = base64;
+        previewVendedorFoto.style.display = "block";
+      });
+    }
+  });
+}
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -5638,12 +5731,18 @@ if (formVendedor) {
     e.preventDefault();
 
     const idExistente = document.getElementById("vendedor-id").value;
+    const vendedorAnterior = idExistente ? vendedorPorId(idExistente) : null;
     const vendedor = {
       id: idExistente
         ? Number(idExistente)
         : gerarIdUnico([vendedoresAdmin, carrosAdmin, depoimentosAdmin, parceriasAdmin]),
       nome: document.getElementById("vendedor-nome").value.trim(),
       whatsapp: document.getElementById("vendedor-whatsapp").value.trim(),
+      foto:
+        vendedorFotoBase64 ||
+        (previewVendedorFoto && previewVendedorFoto.getAttribute("src")) ||
+        (vendedorAnterior && vendedorAnterior.foto) ||
+        "",
       comissaoPadrao: numeroFinanceiro("vendedor-comissao-padrao"),
       comissaoTipo: document.getElementById("vendedor-comissao-tipo").value,
       comissaoPercentualPadrao: numeroPercentual("vendedor-comissao-percentual"),
@@ -5681,6 +5780,13 @@ if (formVendedor) {
 
 if (btnVendedorCancelar) {
   btnVendedorCancelar.addEventListener("click", limparFormularioVendedor);
+}
+
+if (btnVendedoresTopoNovo) {
+  btnVendedoresTopoNovo.addEventListener("click", function () {
+    limparFormularioVendedor();
+    abrirCadastroAdmin("form-vendedor");
+  });
 }
 
 if (formLead) {

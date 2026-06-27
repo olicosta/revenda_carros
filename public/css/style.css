@@ -1763,7 +1763,7 @@ body.sistema-modal-aberto {
 
 .vendedor-mes-card {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 18px;
   padding: 18px;
@@ -1787,6 +1787,14 @@ body.sistema-modal-aberto {
   font-size: 20px;
   font-weight: 950;
   box-shadow: 0 14px 28px rgba(var(--gold-rgb), 0.24);
+  overflow: hidden;
+}
+
+.vendedor-mes-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .vendedor-mes-card span {
@@ -1808,100 +1816,6 @@ body.sistema-modal-aberto {
   color: #53657d;
   font-weight: 800;
   line-height: 1.4;
-}
-
-.home-vendedores-contato {
-  margin-top: 18px;
-}
-
-.vendedores-contato-card {
-  padding: clamp(18px, 2.4vw, 26px);
-  border: 1px solid #dbe4ef;
-  border-radius: 24px;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(var(--success-rgb), 0.12), transparent 34%),
-    linear-gradient(135deg, #ffffff, #f8fafc);
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
-}
-
-.vendedores-contato-topo {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-.vendedores-contato-topo span {
-  color: var(--success);
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.vendedores-contato-topo h3 {
-  margin: 4px 0 0;
-  color: #07152f;
-  font-size: clamp(22px, 2.2vw, 30px);
-}
-
-.vendedores-contato-topo p {
-  max-width: 430px;
-  margin: 0;
-  color: #53657d;
-  font-weight: 800;
-}
-
-.vendedores-contato-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-  gap: 12px;
-}
-
-.vendedor-contato-item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid #e5edf6;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.78);
-}
-
-.vendedor-contato-avatar {
-  width: 52px;
-  height: 52px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--success), #22c55e);
-  color: white;
-  font-size: 16px;
-  font-weight: 950;
-  box-shadow: 0 14px 24px rgba(var(--success-rgb), 0.2);
-}
-
-.vendedor-contato-item strong {
-  display: block;
-  color: #07152f;
-  font-size: 17px;
-  line-height: 1.2;
-}
-
-.vendedor-contato-item span {
-  display: block;
-  margin-top: 3px;
-  color: #65758d;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.vendedor-contato-item .btn-whatsapp {
-  grid-column: 1 / -1;
-  min-height: 42px;
 }
 
 .destaques {
@@ -3871,6 +3785,10 @@ body.sistema-modal-aberto {
   grid-template-columns: 1fr auto;
 }
 
+.admin-item-vendedor {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
 .admin-eyebrow {
   display: inline-block;
   color: var(--gold);
@@ -4025,6 +3943,96 @@ body.sistema-modal-aberto {
 
 #form-vendedor .form-grid {
   grid-template-columns: 1fr;
+}
+
+.vendedores-layout-grid {
+  grid-template-columns: minmax(300px, 0.86fr) minmax(0, 1.14fr);
+}
+
+.vendedores-lateral {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.vendedor-destaque-admin {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid rgba(var(--gold-rgb), 0.38);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(var(--gold-rgb), 0.2), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f8fafc);
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.08);
+}
+
+.vendedor-destaque-admin h3 {
+  margin: 4px 0;
+  color: #07152f;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.1;
+}
+
+.vendedor-destaque-admin p {
+  margin: 0;
+  color: #64748b;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.vendedor-destaque-foto,
+.vendedor-lista-avatar {
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gold), #facc15);
+  color: #07152f;
+  font-weight: 950;
+}
+
+.vendedor-destaque-foto {
+  width: 92px;
+  height: 92px;
+  border-radius: 28px;
+  font-size: 24px;
+  box-shadow: 0 16px 34px rgba(var(--gold-rgb), 0.28);
+}
+
+.vendedor-destaque-foto img,
+.vendedor-lista-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.vendedor-lista-avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.vendedor-foto-campo {
+  align-items: start;
+}
+
+.vendedor-foto-campo img {
+  display: none;
+  width: 92px;
+  height: 92px;
+  border-radius: 22px;
+  object-fit: cover;
+  border: 1px solid #dbe4ef;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.vendedores-lateral .cadastro-recolhivel:not(.aberto) {
+  display: none;
 }
 
 .financeiro-controles label {
@@ -7952,14 +7960,6 @@ body:has(.admin) .pagina-titulo p {
     width: 100%;
   }
 
-  .vendedores-contato-topo {
-    display: grid;
-    text-align: center;
-  }
-
-  .vendedores-contato-topo p {
-    margin-inline: auto;
-  }
 }
 
 @media (max-width: 650px) {

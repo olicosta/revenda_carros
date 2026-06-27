@@ -8,7 +8,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260627-contato-vendedores" />
+    <link rel="stylesheet" href="/css/style.css?v=20260627-vendedor-foto-home" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260625-card-beneficios-fix" />
   </head>
 
@@ -123,7 +123,6 @@
         <div class="home-veiculos-grid" id="home-veiculos-grid"></div>
 
         <div class="home-vendedor-mes" id="home-vendedor-mes"></div>
-        <div class="home-vendedores-contato" id="home-vendedores-contato"></div>
       </div>
     </section>
 
@@ -247,8 +246,8 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260627-contato-vendedores"></script>
-    <script data-site-script data-src="/js/home.js?v=20260627-contato-vendedores"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260627-vendedor-foto-home"></script>
+    <script data-site-script data-src="/js/home.js?v=20260627-vendedor-foto-home"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

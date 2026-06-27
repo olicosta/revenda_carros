@@ -48,7 +48,6 @@ const depoimentosPrev = document.getElementById("depoimentos-prev");
 const depoimentosNext = document.getElementById("depoimentos-next");
 const homeVeiculosGrid = document.getElementById("home-veiculos-grid");
 const homeVendedorMes = document.getElementById("home-vendedor-mes");
-const homeVendedoresContato = document.getElementById("home-vendedores-contato");
 const listaParceriasHome = document.getElementById("lista-parcerias-home");
 
 const logosBancos = {
@@ -177,6 +176,20 @@ function iniciaisNome(nome) {
     .join("");
 }
 
+function montarFotoVendedorHome(vendedor, nome) {
+  if (vendedor && vendedor.foto) {
+    return (
+      '<img src="' +
+      escaparAtributo(vendedor.foto) +
+      '" alt="Foto de ' +
+      escaparAtributo(nome || vendedor.nome || "vendedor") +
+      '">'
+    );
+  }
+
+  return escaparHTML(iniciaisNome(nome || (vendedor && vendedor.nome)));
+}
+
 function renderizarVendedorMesHome() {
   if (!homeVendedorMes) return;
 
@@ -207,15 +220,19 @@ function renderizarVendedorMesHome() {
   const vendedorContato = destaque ? buscarVendedorPublicoPorNome(destaque.nome) : null;
 
   if (!destaque) {
+    const vendedorAtivo = carregarVendedoresPublicos()[0];
+    const nomeFallback = vendedorAtivo ? vendedorAtivo.nome : "Equipe 3M";
+
     homeVendedorMes.innerHTML =
       '<article class="vendedor-mes-card vendedor-mes-card-vazio">' +
-      '<div class="vendedor-mes-avatar">3M</div>' +
+      '<div class="vendedor-mes-avatar">' +
+      montarFotoVendedorHome(vendedorAtivo, nomeFallback) +
+      "</div>" +
       '<div><span>Atendimento em destaque</span>' +
-      '<h3>Equipe pronta para ajudar</h3>' +
-      '<p>Fale com a 3M Veículos para encontrar o carro ideal ou iniciar uma negociação.</p></div>' +
-      '<a href="' +
-      escaparAtributo(criarLinkWhatsApp("Olá! Gostaria de falar com a equipe da 3M Veículos.")) +
-      '" class="btn-whatsapp" target="_blank">Falar com a equipe</a>' +
+      "<h3>" +
+      escaparHTML(nomeFallback) +
+      "</h3>" +
+      '<p>Equipe pronta para ajudar você a encontrar o carro ideal.</p></div>' +
       "</article>";
     return;
   }
@@ -223,79 +240,17 @@ function renderizarVendedorMesHome() {
   homeVendedorMes.innerHTML =
     '<article class="vendedor-mes-card">' +
     '<div class="vendedor-mes-avatar">' +
-    escaparHTML(iniciaisNome(destaque.nome)) +
+    montarFotoVendedorHome(vendedorContato, destaque.nome) +
     "</div>" +
     "<div><span>Vendedor do mês</span>" +
     "<h3>" +
     escaparHTML(destaque.nome) +
     "</h3>" +
-    "<p>" +
-    destaque.vendas +
-    " venda(s) no mês · " +
-    escaparHTML(formatarMoeda(destaque.valor)) +
-    " em negócios registrados.</p></div>" +
-    '<a href="' +
-    escaparAtributo(
-      criarLinkWhatsAppNumero(
-        vendedorContato && vendedorContato.whatsapp
-          ? vendedorContato.whatsapp
-          : carregarConfigLoja().whatsapp,
-        "Olá! Gostaria de falar com " + destaque.nome + ", vendedor em destaque da 3M Veículos."
-      )
-    ) +
-    '" class="btn-whatsapp" target="_blank">Falar com vendedor</a>' +
+    '<p>Destaque em atendimento e negociações neste mês.</p></div>' +
     "</article>";
 }
 
 renderizarVendedorMesHome();
-
-function renderizarVendedoresContatoHome() {
-  if (!homeVendedoresContato) return;
-
-  const vendedores = carregarVendedoresPublicos().slice(0, 4);
-
-  if (!vendedores.length) {
-    homeVendedoresContato.innerHTML = "";
-    return;
-  }
-
-  homeVendedoresContato.innerHTML =
-    '<section class="vendedores-contato-card">' +
-    '<div class="vendedores-contato-topo">' +
-    '<div><span>Atendimento direto</span><h3>Fale com um vendedor</h3></div>' +
-    '<p>Escolha um consultor e envie sua dúvida direto no WhatsApp.</p>' +
-    '</div>' +
-    '<div class="vendedores-contato-grid">' +
-    vendedores
-      .map(function (vendedor) {
-        const mensagem =
-          "Olá, " +
-          vendedor.nome +
-          "! Vim pelo site da 3M Veículos e gostaria de atendimento.";
-
-        return (
-          '<article class="vendedor-contato-item">' +
-          '<div class="vendedor-contato-avatar">' +
-          escaparHTML(iniciaisNome(vendedor.nome)) +
-          "</div>" +
-          "<div>" +
-          "<strong>" +
-          escaparHTML(vendedor.nome) +
-          "</strong>" +
-          "<span>Consultor de vendas</span>" +
-          "</div>" +
-          '<a href="' +
-          escaparAtributo(criarLinkWhatsAppNumero(vendedor.whatsapp, mensagem)) +
-          '" class="btn-whatsapp" target="_blank">WhatsApp</a>' +
-          "</article>"
-        );
-      })
-      .join("") +
-    "</div>" +
-    "</section>";
-}
-
-renderizarVendedoresContatoHome();
 
 function abrirDetalhesCarro(id) {
   window.location.href = "detalhes.html?id=" + id;
