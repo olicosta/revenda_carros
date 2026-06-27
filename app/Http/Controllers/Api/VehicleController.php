@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Sale;
+use App\Models\Seller;
 use App\Models\StoreSetting;
 use App\Models\Testimonial;
 use App\Models\Vehicle;
@@ -64,6 +65,18 @@ class VehicleController extends Controller
                         'id' => $partner->id,
                         'nome' => $partner->name,
                         'ativo' => $partner->visible,
+                    ])
+                    ->values(),
+                'sellers' => Seller::query()
+                    ->where('status', 'Ativo')
+                    ->orderBy('name')
+                    ->get()
+                    ->map(fn (Seller $seller) => [
+                        'id' => $seller->id,
+                        'nome' => $seller->name,
+                        'whatsapp' => $seller->phone ?? '',
+                        'email' => $seller->email ?? '',
+                        'ativo' => $seller->status === 'Ativo',
                     ])
                     ->values(),
             ],

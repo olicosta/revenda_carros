@@ -355,6 +355,67 @@ function salvarParcerias(listaParcerias) {
   });
 }
 
+function normalizarVendedorPublico(vendedor) {
+  return {
+    id: Number(vendedor.id) || 0,
+    nome: vendedor.nome || vendedor.name || "Vendedor 3M",
+    whatsapp: vendedor.whatsapp || vendedor.phone || "",
+    email: vendedor.email || "",
+    ativo: vendedor.ativo !== false && vendedor.active !== false && vendedor.status !== "Inativo",
+  };
+}
+
+function carregarVendedoresPublicos() {
+  const respostaApi = Array.isArray(window.siteDataCache.sellers)
+    ? { data: window.siteDataCache.sellers }
+    : null;
+
+  if (respostaApi && Array.isArray(respostaApi.data)) {
+    localStorage.setItem("vendedoresPublicos", JSON.stringify(respostaApi.data));
+    return respostaApi.data.map(normalizarVendedorPublico).filter(function (vendedor) {
+      return vendedor.ativo && vendedor.whatsapp;
+    });
+  }
+
+  try {
+    const salvos = JSON.parse(localStorage.getItem("vendedoresPublicos"));
+
+    if (Array.isArray(salvos)) {
+      return salvos.map(normalizarVendedorPublico).filter(function (vendedor) {
+        return vendedor.ativo && vendedor.whatsapp;
+      });
+    }
+  } catch (error) {
+    localStorage.removeItem("vendedoresPublicos");
+  }
+
+  try {
+    const vendedoresPainel = JSON.parse(localStorage.getItem("vendedores"));
+
+    if (Array.isArray(vendedoresPainel)) {
+      return vendedoresPainel.map(normalizarVendedorPublico).filter(function (vendedor) {
+        return vendedor.ativo && vendedor.whatsapp;
+      });
+    }
+  } catch (error) {
+    localStorage.removeItem("vendedores");
+  }
+
+  return [];
+}
+
+function buscarVendedorPublicoPorNome(nome) {
+  const nomeBusca = String(nome || "").trim().toLowerCase();
+
+  if (!nomeBusca) return null;
+
+  return (
+    carregarVendedoresPublicos().find(function (vendedor) {
+      return String(vendedor.nome || "").trim().toLowerCase() === nomeBusca;
+    }) || null
+  );
+}
+
 function requisicaoConteudoApi(metodo, caminho, dados) {
   if (window.location.protocol === "file:") return Promise.resolve(null);
 

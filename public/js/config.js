@@ -1,8 +1,8 @@
 ﻿const lojaConfig = {
   nome: "3M Veículos",
   subtitulo: "Revenda de Veículos",
-  whatsapp: "5547999999999",
-  endereco: "Rua Principal, 100 - Centro",
+  whatsapp: "3012-3333",
+  endereco: "CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094",
   horario: "Segunda a sábado, das 8h às 18h",
   instagram: "@3mveiculos",
   email: "contato@3mveiculos.com.br",
@@ -320,6 +320,9 @@ function carregarDadosSite() {
     const partners = bootstrap && bootstrap.data
       ? { data: bootstrap.data.partners }
       : null;
+    const sellers = bootstrap && bootstrap.data
+      ? { data: bootstrap.data.sellers }
+      : null;
 
     if (settings && settings.data) {
       window.siteDataCache.settings = settings.data;
@@ -346,6 +349,10 @@ function carregarDadosSite() {
       window.siteDataCache.partners = partners.data;
       localStorage.setItem("parcerias", JSON.stringify(partners.data));
     }
+    if (sellers && Array.isArray(sellers.data)) {
+      window.siteDataCache.sellers = sellers.data;
+      localStorage.setItem("vendedoresPublicos", JSON.stringify(sellers.data));
+    }
     if (analytics && analytics.data) {
       window.siteDataCache.analytics = analytics.data;
       localStorage.setItem("analyticsSitePrime", JSON.stringify(analytics.data));
@@ -367,9 +374,29 @@ function substituirMarcasAntigas(valor) {
 
 function criarLinkWhatsApp(mensagem) {
   const config = carregarConfigLoja();
+
+  return criarLinkWhatsAppNumero(config.whatsapp, mensagem);
+}
+
+function normalizarNumeroWhatsApp(numero) {
+  let digitos = String(numero || "").replace(/\D/g, "");
+
+  if (digitos.length === 8 || digitos.length === 9) {
+    digitos = "47" + digitos;
+  }
+
+  if (digitos.length === 10 || digitos.length === 11) {
+    digitos = "55" + digitos;
+  }
+
+  return digitos;
+}
+
+function criarLinkWhatsAppNumero(numero, mensagem) {
+  const digitos = normalizarNumeroWhatsApp(numero);
   const texto = mensagem ? "?text=" + encodeURIComponent(mensagem) : "";
 
-  return "https://wa.me/" + config.whatsapp + texto;
+  return "https://wa.me/" + digitos + texto;
 }
 
 function escaparHTML(valor) {

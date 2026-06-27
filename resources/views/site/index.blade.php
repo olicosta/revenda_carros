@@ -8,7 +8,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260627-vendedor-mes-home" />
+    <link rel="stylesheet" href="/css/style.css?v=20260627-contato-vendedores" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260625-card-beneficios-fix" />
   </head>
 
@@ -65,7 +65,7 @@
               >Ver veículos</a
             >
             <a
-              href="https://wa.me/5547999999999"
+              href="https://wa.me/554730123333"
               class="btn-secondary"
               target="_blank"
               data-whatsapp-link
@@ -123,6 +123,7 @@
         <div class="home-veiculos-grid" id="home-veiculos-grid"></div>
 
         <div class="home-vendedor-mes" id="home-vendedor-mes"></div>
+        <div class="home-vendedores-contato" id="home-vendedores-contato"></div>
       </div>
     </section>
 
@@ -209,12 +210,12 @@
           personalizada.
         </p>
         <p>
-          <span data-loja-endereco>Rua Principal, 100 - Centro</span> |
+          <span data-loja-endereco>CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094</span> |
           <span data-loja-horario>Segunda a sábado, das 8h às 18h</span>
         </p>
 
         <a
-          href="https://wa.me/5547999999999"
+          href="https://wa.me/554730123333"
           class="btn-primary"
           target="_blank"
           data-whatsapp-link
@@ -229,7 +230,7 @@
     </footer>
 
     <a
-      href="https://wa.me/5547999999999"
+      href="https://wa.me/554730123333"
       class="whatsapp-fixo"
       target="_blank"
       aria-label="Chamar 3M Veículos no WhatsApp"
@@ -246,8 +247,8 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/home.js?v=20260627-vendedor-mes-home"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260627-contato-vendedores"></script>
+    <script data-site-script data-src="/js/home.js?v=20260627-contato-vendedores"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

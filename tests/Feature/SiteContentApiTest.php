@@ -102,7 +102,7 @@ class SiteContentApiTest extends TestCase
         $response = $this->putJson('/api/site/settings', [
             'store' => [
                 'nome' => 'Nova Loja',
-                'whatsapp' => '5547999999999',
+                'whatsapp' => '3012-3333',
                 'logo' => $logo,
             ],
             'home' => [

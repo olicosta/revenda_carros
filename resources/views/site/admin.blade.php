@@ -542,7 +542,7 @@
                 <button type="button" class="btn-cancelar btn-visivel" id="instagram-baixar">
                   Baixar arte
                 </button>
-                <a href="https://wa.me/5547999999999" class="btn-cancelar btn-visivel" id="instagram-whatsapp" target="_blank" data-whatsapp-link>
+                <a href="https://wa.me/554730123333" class="btn-cancelar btn-visivel" id="instagram-whatsapp" target="_blank" data-whatsapp-link>
                   Enviar para equipe
                 </a>
               </div>
@@ -1138,6 +1138,7 @@
                 <label>
                   WhatsApp
                   <input type="text" id="vendedor-whatsapp" placeholder="(00) 00000-0000" />
+                  <small>Quando preenchido, pode aparecer no site para contato direto com o vendedor.</small>
                 </label>
                 <label>
                   Comissão padrão
