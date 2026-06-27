@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260627-aniversarios-clientes" />
+    <link rel="stylesheet" href="/css/style.css?v=20260627-clientes-sem-botao-duplicado" />
   </head>
   <body>
     <header class="topo">
@@ -1232,9 +1232,6 @@
                 <h3>Prioridades do dia</h3>
                 <p>Veja rapidamente quem precisa de retorno e qual ação tomar agora.</p>
               </div>
-              <button type="button" class="btn-primary" id="central-novo-cliente">
-                + Novo cliente
-              </button>
             </div>
 
             <div class="central-atendimento-grid">
@@ -1999,7 +1996,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260627-aniversarios-clientes"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260627-clientes-sem-botao-duplicado"></script>
   </body>
 </html>
 
