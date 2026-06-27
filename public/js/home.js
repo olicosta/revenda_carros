@@ -106,7 +106,7 @@ if (homeVeiculosGrid) {
     .sort(function (a, b) {
       return Number(b.destaque) - Number(a.destaque) || Number(b.oferta) - Number(a.oferta);
     })
-    .slice(0, 6);
+    .slice(0, 4);
 
   homeVeiculosGrid.innerHTML = veiculosHome
     .map(function (carro) {
