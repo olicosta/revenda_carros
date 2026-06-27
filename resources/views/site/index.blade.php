@@ -8,7 +8,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260625-modal-cards" />
+    <link rel="stylesheet" href="/css/style.css?v=20260627-vendedor-mes-home" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260625-card-beneficios-fix" />
   </head>
 
@@ -107,21 +107,22 @@
 
     <section class="home-veiculos">
       <div class="container">
-        <div class="section-header">
-          <span data-home="estoqueEtiqueta">Estoque selecionado</span>
-          <h2 data-home="estoqueTitulo">Ofertas e recém-chegados</h2>
-          <p data-home="estoqueTexto">
-            Confira alguns veículos em destaque no estoque da 3M Veículos.
-          </p>
-        </div>
-
-        <div class="home-veiculos-grid" id="home-veiculos-grid"></div>
-
-        <div class="home-veiculos-acoes">
+        <div class="section-header home-veiculos-topo">
+          <div>
+            <span data-home="estoqueEtiqueta">Estoque selecionado</span>
+            <h2 data-home="estoqueTitulo">Ofertas e recém-chegados</h2>
+            <p data-home="estoqueTexto">
+              Confira alguns veículos em destaque no estoque da 3M Veículos.
+            </p>
+          </div>
           <a href="carros.html" class="btn-primary" data-home="estoqueBotao"
             >Ver estoque completo</a
           >
         </div>
+
+        <div class="home-veiculos-grid" id="home-veiculos-grid"></div>
+
+        <div class="home-vendedor-mes" id="home-vendedor-mes"></div>
       </div>
     </section>
 
@@ -246,7 +247,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/home.js?v=20260627-home-4-veiculos"></script>
+    <script data-site-script data-src="/js/home.js?v=20260627-vendedor-mes-home"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

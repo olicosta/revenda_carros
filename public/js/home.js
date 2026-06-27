@@ -47,6 +47,7 @@ const listaDepoimentosHome = document.getElementById("lista-depoimentos-home");
 const depoimentosPrev = document.getElementById("depoimentos-prev");
 const depoimentosNext = document.getElementById("depoimentos-next");
 const homeVeiculosGrid = document.getElementById("home-veiculos-grid");
+const homeVendedorMes = document.getElementById("home-vendedor-mes");
 const listaParceriasHome = document.getElementById("lista-parcerias-home");
 
 const logosBancos = {
@@ -156,6 +157,88 @@ if (homeVeiculosGrid) {
     })
     .join("");
 }
+
+function mesAtualLocal() {
+  const hoje = new Date();
+  const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+
+  return hoje.getFullYear() + "-" + mes;
+}
+
+function iniciaisNome(nome) {
+  return String(nome || "Equipe 3M")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(function (parte) {
+      return parte.slice(0, 1).toUpperCase();
+    })
+    .join("");
+}
+
+function renderizarVendedorMesHome() {
+  if (!homeVendedorMes) return;
+
+  const mes = mesAtualLocal();
+  const vendasMes = baseCarrosHome.filter(function (carro) {
+    return carro.status === "Vendido" && String(carro.dataVenda || "").slice(0, 7) === mes;
+  });
+  const resumo = {};
+
+  vendasMes.forEach(function (carro) {
+    const nome = carro.vendedorNome || "Equipe 3M";
+
+    if (!resumo[nome]) {
+      resumo[nome] = {
+        nome: nome,
+        vendas: 0,
+        valor: 0,
+      };
+    }
+
+    resumo[nome].vendas += 1;
+    resumo[nome].valor += Number(carro.valorVenda) || precoNumero(carro.preco);
+  });
+
+  const destaque = Object.values(resumo).sort(function (a, b) {
+    return b.vendas - a.vendas || b.valor - a.valor;
+  })[0];
+
+  if (!destaque) {
+    homeVendedorMes.innerHTML =
+      '<article class="vendedor-mes-card vendedor-mes-card-vazio">' +
+      '<div class="vendedor-mes-avatar">3M</div>' +
+      '<div><span>Atendimento em destaque</span>' +
+      '<h3>Equipe pronta para ajudar</h3>' +
+      '<p>Fale com a 3M Veículos para encontrar o carro ideal ou iniciar uma negociação.</p></div>' +
+      '<a href="' +
+      escaparAtributo(criarLinkWhatsApp("Olá! Gostaria de falar com a equipe da 3M Veículos.")) +
+      '" class="btn-whatsapp" target="_blank">Falar com a equipe</a>' +
+      "</article>";
+    return;
+  }
+
+  homeVendedorMes.innerHTML =
+    '<article class="vendedor-mes-card">' +
+    '<div class="vendedor-mes-avatar">' +
+    escaparHTML(iniciaisNome(destaque.nome)) +
+    "</div>" +
+    "<div><span>Vendedor do mês</span>" +
+    "<h3>" +
+    escaparHTML(destaque.nome) +
+    "</h3>" +
+    "<p>" +
+    destaque.vendas +
+    " venda(s) no mês · " +
+    escaparHTML(formatarMoeda(destaque.valor)) +
+    " em negócios registrados.</p></div>" +
+    '<a href="' +
+    escaparAtributo(criarLinkWhatsApp("Olá! Gostaria de falar com o vendedor em destaque da 3M Veículos.")) +
+    '" class="btn-whatsapp" target="_blank">Falar com a equipe</a>' +
+    "</article>";
+}
+
+renderizarVendedorMesHome();
 
 function abrirDetalhesCarro(id) {
   window.location.href = "detalhes.html?id=" + id;
