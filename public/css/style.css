@@ -7545,6 +7545,10 @@ body:has(.admin) .pagina-titulo p {
   --central-cor: #d97706;
 }
 
+.central-card-aniversarios {
+  --central-cor: #db2777;
+}
+
 .central-mini-card span {
   display: block;
   margin-bottom: 8px;
@@ -7571,6 +7575,22 @@ body:has(.admin) .pagina-titulo p {
 }
 
 .central-prioridades {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.central-prioridades-dupla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
+  gap: 18px;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.central-prioridades-dupla > div {
   border: 1px solid #e2e8f0;
   border-radius: 18px;
   background: #ffffff;
@@ -7645,6 +7665,10 @@ body:has(.admin) .pagina-titulo p {
   --prioridade-cor: #16a34a;
 }
 
+.central-prioridade-item.prioridade-aniversario {
+  --prioridade-cor: #db2777;
+}
+
 .central-prioridade-tag {
   display: inline-flex;
   align-items: center;
@@ -7705,6 +7729,14 @@ body:has(.admin) .pagina-titulo p {
   text-align: center;
 }
 
+.aniversario-mensagem-card {
+  margin-bottom: 18px;
+}
+
+.aniversario-mensagem-card textarea {
+  margin-top: 12px;
+}
+
 @media (max-width: 1050px) {
   .clientes-pipeline-card .analytics-lista {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -7712,6 +7744,10 @@ body:has(.admin) .pagina-titulo p {
 
   .central-atendimento-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .central-prioridades-dupla {
+    grid-template-columns: 1fr;
   }
 
   .central-prioridade-item {

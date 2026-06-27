@@ -167,8 +167,13 @@ const centralRetornosHoje = document.getElementById("central-retornos-hoje");
 const centralRetornosAtrasados = document.getElementById("central-retornos-atrasados");
 const centralClientesNovos = document.getElementById("central-clientes-novos");
 const centralPropostasAbertas = document.getElementById("central-propostas-abertas");
+const centralAniversariosHoje = document.getElementById("central-aniversarios-hoje");
 const centralPrioridadesResumo = document.getElementById("central-prioridades-resumo");
 const centralListaPrioridades = document.getElementById("central-lista-prioridades");
+const centralAniversariosResumo = document.getElementById("central-aniversarios-resumo");
+const centralListaAniversarios = document.getElementById("central-lista-aniversarios");
+const textareaMensagemAniversario = document.getElementById("mensagem-aniversario");
+const btnSalvarMensagemAniversario = document.getElementById("salvar-mensagem-aniversario");
 const kanbanClientes = document.getElementById("kanban-clientes");
 const listaSolicitacoesFinanciamento = document.getElementById("lista-solicitacoes-financiamento");
 const selectHistoricoVeiculo = document.getElementById("historico-veiculo");
@@ -846,6 +851,21 @@ function salvarNotasFiscais() {
   localStorage.setItem("notasFiscais", JSON.stringify(notasFiscaisAdmin));
 }
 
+function mensagemAniversarioPadrao() {
+  return (
+    "Olá, {nome}! 🎉 Passando para desejar um feliz aniversário, muita saúde, alegria e grandes conquistas. " +
+    "A equipe da 3M Veículos deseja um dia especial para você!"
+  );
+}
+
+function carregarMensagemAniversario() {
+  return localStorage.getItem("mensagemAniversarioClientes") || mensagemAniversarioPadrao();
+}
+
+function salvarMensagemAniversario(valor) {
+  localStorage.setItem("mensagemAniversarioClientes", valor || mensagemAniversarioPadrao());
+}
+
 function carregarVendedores() {
   const respostaApi = requisicaoAdminApi("GET", "/finance/sellers");
 
@@ -1452,7 +1472,7 @@ function renderizarDashboard() {
 
   listarResumo(dashAlertasExecutivos, alertas, "Nenhum alerta crítico agora.");
 
-  const hoje = new Date().toISOString().slice(0, 10);
+  const hoje = dataLocalISO(new Date());
   const proximos = leadsAdmin
     .filter(function (lead) {
       return lead.proximoContato && lead.status !== "Fechado" && lead.status !== "Perdido";
@@ -2939,7 +2959,7 @@ function registrarVendaPendente() {
     return;
   }
 
-  const hoje = new Date().toISOString().slice(0, 10);
+  const hoje = dataLocalISO(new Date());
   const valorVenda =
     Number(String(inputModalVendaValor.value).replace(/\D/g, "")) ||
     precoNumero(carroVenda.preco);
@@ -4063,6 +4083,158 @@ function fecharHistoricoComissoes() {
   document.body.classList.remove("modal-aberto");
 }
 
+function dataLocalISO(data) {
+  return new Date(data.getTime() - data.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 10);
+}
+
+function aniversarioNoAno(dataNascimento, ano) {
+  if (!dataNascimento) return null;
+
+  const partes = String(dataNascimento).split("-");
+  if (partes.length < 3) return null;
+
+  const mes = Number(partes[1]) - 1;
+  const dia = Number(partes[2]);
+  if (!dia || mes < 0) return null;
+
+  return new Date(ano, mes, dia);
+}
+
+function diasParaAniversario(dataNascimento, hoje) {
+  const aniversarioAtual = aniversarioNoAno(dataNascimento, hoje.getFullYear());
+  if (!aniversarioAtual) return null;
+
+  let alvo = aniversarioAtual;
+  if (dataLocalISO(alvo) < dataLocalISO(hoje)) {
+    alvo = aniversarioNoAno(dataNascimento, hoje.getFullYear() + 1);
+  }
+
+  return Math.round((alvo - hoje) / 86400000);
+}
+
+function idadeCliente(dataNascimento, hoje) {
+  if (!dataNascimento) return "";
+
+  const nascimento = new Date(dataNascimento + "T00:00:00");
+  if (Number.isNaN(nascimento.getTime())) return "";
+
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const aniversario = aniversarioNoAno(dataNascimento, hoje.getFullYear());
+
+  if (aniversario && aniversario > hoje) idade -= 1;
+
+  return idade > 0 ? idade + " anos" : "";
+}
+
+function mensagemAniversarioCliente(lead) {
+  const primeiroNome = String(lead.nome || "tudo bem").trim().split(" ")[0] || "tudo bem";
+  return carregarMensagemAniversario().replace(/\{nome\}/g, primeiroNome);
+}
+
+function abrirWhatsappAniversario(id) {
+  const lead = leadsAdmin.find(function (item) {
+    return Number(item.id) === Number(id);
+  });
+
+  if (!lead || !lead.whatsapp) {
+    alert("Cliente sem WhatsApp cadastrado.");
+    return;
+  }
+
+  const numero = normalizarWhatsApp(lead.whatsapp);
+  if (!numero) {
+    alert("WhatsApp inválido para este cliente.");
+    return;
+  }
+
+  window.open(
+    "https://wa.me/" +
+      numero +
+      "?text=" +
+      encodeURIComponent(mensagemAniversarioCliente(lead)),
+    "_blank"
+  );
+}
+
+function renderizarAniversariosClientes(hojeISO) {
+  if (!centralListaAniversarios) return;
+
+  const hoje = new Date(hojeISO + "T00:00:00");
+  const aniversarios = leadsAdmin
+    .filter(function (lead) {
+      return lead.dataNascimento;
+    })
+    .map(function (lead) {
+      return {
+        lead: lead,
+        dias: diasParaAniversario(lead.dataNascimento, hoje),
+        idade: idadeCliente(lead.dataNascimento, hoje),
+      };
+    })
+    .filter(function (item) {
+      return item.dias !== null && item.dias <= 7;
+    })
+    .sort(function (a, b) {
+      return a.dias - b.dias;
+    });
+  const hojeLista = aniversarios.filter(function (item) {
+    return item.dias === 0;
+  });
+
+  atualizarDashboardTexto("central-aniversarios-hoje", hojeLista.length);
+
+  if (centralAniversariosResumo) {
+    centralAniversariosResumo.textContent = hojeLista.length
+      ? hojeLista.length + " hoje"
+      : aniversarios.length
+        ? aniversarios.length + " nos próximos 7 dias"
+        : "Nenhum próximo";
+  }
+
+  centralListaAniversarios.innerHTML = aniversarios.length
+    ? aniversarios
+        .slice(0, 5)
+        .map(function (item) {
+          const lead = item.lead;
+          const idLead = Number(lead.id) || 0;
+          const textoData =
+            item.dias === 0
+              ? "Hoje"
+              : item.dias === 1
+                ? "Amanhã"
+                : "Em " + item.dias + " dias";
+
+          return (
+            '<article class="central-prioridade-item prioridade-aniversario">' +
+            '<span class="central-prioridade-tag">Aniversário</span>' +
+            "<div><strong>" +
+            escaparHTML(lead.nome || "Cliente sem nome") +
+            "</strong><small>" +
+            escaparHTML(
+              [
+                textoData,
+                lead.dataNascimento ? formatarDataBR(lead.dataNascimento) : "",
+                item.idade,
+              ]
+                .filter(Boolean)
+                .join(" · ")
+            ) +
+            "</small></div>" +
+            "<p>" +
+            escaparHTML(lead.whatsapp || "WhatsApp não informado") +
+            "</p>" +
+            '<button type="button" onclick="abrirWhatsappAniversario(' +
+            idLead +
+            ')">Enviar parabéns</button>' +
+            "</article>"
+          );
+        })
+        .join("")
+    : '<p class="central-prioridades-vazio">Nenhum aniversário nos próximos 7 dias.</p>';
+}
+
 function renderizarCentralAtendimento(hoje, atrasados, propostas) {
   if (!centralListaPrioridades) return;
 
@@ -4115,6 +4287,7 @@ function renderizarCentralAtendimento(hoje, atrasados, propostas) {
   atualizarDashboardTexto("central-retornos-atrasados", atrasados.length);
   atualizarDashboardTexto("central-clientes-novos", novosRecentes.length);
   atualizarDashboardTexto("central-propostas-abertas", propostas.length);
+  renderizarAniversariosClientes(hoje);
 
   if (centralPrioridadesResumo) {
     centralPrioridadesResumo.textContent = prioridades.length
@@ -4184,7 +4357,7 @@ function renderizarClientes() {
   const fechados = leadsAdmin.filter(function (lead) {
     return lead.status === "Fechado";
   });
-  const hoje = new Date().toISOString().slice(0, 10);
+  const hoje = dataLocalISO(new Date());
   const atrasados = leadsAdmin.filter(function (lead) {
     return (
       lead.proximoContato &&
@@ -4881,6 +5054,15 @@ function gerarTextoWhatsappLead(lead, tipo) {
   );
 }
 
+function normalizarWhatsApp(numero) {
+  const digitos = String(numero || "").replace(/\D/g, "");
+
+  if (!digitos) return "";
+  if (digitos.startsWith("55")) return digitos;
+
+  return "55" + digitos;
+}
+
 function abrirWhatsappLead(id, tipo) {
   const lead = leadsAdmin.find(function (item) {
     return Number(item.id) === Number(id);
@@ -4888,9 +5070,9 @@ function abrirWhatsappLead(id, tipo) {
 
   if (!lead) return;
 
-  const telefone = String(lead.whatsapp || "").replace(/\D/g, "");
+  const telefone = normalizarWhatsApp(lead.whatsapp);
   const texto = gerarTextoWhatsappLead(lead, tipo || "retorno");
-  const url = "https://wa.me/55" + telefone + "?text=" + encodeURIComponent(texto);
+  const url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(texto);
 
   window.open(url, "_blank");
 }
@@ -5636,6 +5818,21 @@ if (btnClientesTopoNovoCliente) {
   });
 }
 
+if (textareaMensagemAniversario) {
+  textareaMensagemAniversario.value = carregarMensagemAniversario();
+}
+
+if (btnSalvarMensagemAniversario) {
+  btnSalvarMensagemAniversario.addEventListener("click", function () {
+    salvarMensagemAniversario(
+      textareaMensagemAniversario
+        ? textareaMensagemAniversario.value.trim()
+        : mensagemAniversarioPadrao()
+    );
+    renderizarClientes();
+  });
+}
+
 const inputLeadCpf = document.getElementById("lead-cpf");
 const inputLeadEstado = document.getElementById("lead-estado");
 
@@ -6329,6 +6526,7 @@ btnExportarBackup.addEventListener("click", function () {
     vendedores: vendedoresAdmin,
     leadsClientes: leadsAdmin,
     historicoVeiculos: historicoVeiculosAdmin,
+    mensagemAniversarioClientes: carregarMensagemAniversario(),
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: "application/json",
@@ -6648,6 +6846,12 @@ inputImportarBackup.addEventListener("change", async function () {
       if (Array.isArray(backup.historicoVeiculos)) {
         historicoVeiculosAdmin = backup.historicoVeiculos;
         salvarHistoricoVeiculos();
+      }
+      if (backup.mensagemAniversarioClientes) {
+        salvarMensagemAniversario(backup.mensagemAniversarioClientes);
+        if (textareaMensagemAniversario) {
+          textareaMensagemAniversario.value = carregarMensagemAniversario();
+        }
       }
       carrosAdmin = carregarCarros();
       depoimentosAdmin = carregarDepoimentos();

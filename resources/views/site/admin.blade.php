@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260626-notas-clientes" />
+    <link rel="stylesheet" href="/css/style.css?v=20260627-aniversarios-clientes" />
   </head>
   <body>
     <header class="topo">
@@ -1258,14 +1258,44 @@
                 <strong id="central-propostas-abertas">0</strong>
                 <small>Negociações em andamento</small>
               </article>
+              <article class="central-mini-card central-card-aniversarios">
+                <span>Aniversários</span>
+                <strong id="central-aniversarios-hoje">0</strong>
+                <small>Clientes para parabenizar hoje</small>
+              </article>
             </div>
 
-            <div class="central-prioridades">
-              <div class="central-prioridades-topo">
-                <h4>Lista rápida de prioridades</h4>
-                <span id="central-prioridades-resumo">Tudo em dia</span>
+            <div class="central-prioridades central-prioridades-dupla">
+              <div>
+                <div class="central-prioridades-topo">
+                  <h4>Lista rápida de prioridades</h4>
+                  <span id="central-prioridades-resumo">Tudo em dia</span>
+                </div>
+                <div id="central-lista-prioridades" class="central-lista-prioridades"></div>
               </div>
-              <div id="central-lista-prioridades" class="central-lista-prioridades"></div>
+              <div>
+                <div class="central-prioridades-topo">
+                  <h4>Aniversários próximos</h4>
+                  <span id="central-aniversarios-resumo">Nenhum hoje</span>
+                </div>
+                <div id="central-lista-aniversarios" class="central-lista-prioridades central-lista-aniversarios"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="admin-form aniversario-mensagem-card">
+            <div class="financeiro-relatorio-topo">
+              <div>
+                <span class="admin-eyebrow">Mensagem padrão</span>
+                <h3>Parabéns de aniversário</h3>
+              </div>
+              <p>Use {nome} para inserir automaticamente o primeiro nome do cliente.</p>
+            </div>
+            <textarea id="mensagem-aniversario" rows="3"></textarea>
+            <div class="admin-form-acoes">
+              <button type="button" class="btn-primary" id="salvar-mensagem-aniversario">
+                Salvar mensagem
+              </button>
             </div>
           </section>
 
@@ -1969,7 +1999,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260626-notas-clientes"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260627-aniversarios-clientes"></script>
   </body>
 </html>
 
