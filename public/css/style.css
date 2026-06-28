@@ -2475,7 +2475,7 @@ body.sistema-modal-aberto {
 
 .depoimento-card {
   background: white;
-  padding: 0 0 28px;
+  padding: 0;
   border-radius: 22px;
   overflow: hidden;
   box-shadow:
@@ -2521,17 +2521,17 @@ body.sistema-modal-aberto {
 
 .foto-entrega {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
 }
 
 .cliente-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 24px 28px 14px;
+  display: grid;
+  place-items: center;
+  padding: 20px 18px 22px;
   margin-bottom: 0;
+  text-align: center;
 }
 
 .depoimento-card p {
@@ -2543,7 +2543,8 @@ body.sistema-modal-aberto {
 
 .depoimento-card strong {
   display: block;
-  font-size: 18px;
+  font-size: clamp(18px, 1.7vw, 22px);
+  line-height: 1.2;
 }
 
 .depoimento-card span {

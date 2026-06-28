@@ -269,20 +269,10 @@ if (listaDepoimentosHome) {
         escaparAtributo(depoimento.cliente) +
         '" loading="lazy">' +
         '<div class="cliente-info">' +
-        "<div>" +
         "<strong>" +
         escaparHTML(depoimento.cliente) +
         "</strong>" +
-        "<span>Comprou " +
-        escaparHTML(depoimento.veiculo) +
-        "</span>" +
         "</div>" +
-        "</div>" +
-        "<p>" +
-        '"' +
-        escaparHTML(depoimento.texto) +
-        '"' +
-        "</p>" +
         "</article>"
       );
     })
