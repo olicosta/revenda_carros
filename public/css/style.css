@@ -1730,20 +1730,15 @@ body.sistema-modal-aberto {
 }
 
 .home-veiculos-topo {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  text-align: left;
+  display: block;
+  max-width: 820px;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .home-veiculos-topo p {
   max-width: 680px;
-}
-
-.home-veiculos-topo .btn-primary {
-  flex: 0 0 auto;
-  margin-bottom: 8px;
+  margin-inline: auto;
 }
 
 .home-veiculos-grid {
@@ -7943,11 +7938,6 @@ body:has(.admin) .pagina-titulo p {
 
   .home-veiculos-topo p {
     margin-inline: auto;
-  }
-
-  .home-veiculos-topo .btn-primary {
-    width: 100%;
-    margin-bottom: 0;
   }
 
   .vendedor-mes-card {
