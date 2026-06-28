@@ -194,11 +194,6 @@
           </button>
         </div>
 
-        <div class="home-veiculos-acoes">
-          <a href="depoimentos.html" class="btn-primary"
-            >Ver todos depoimentos</a
-          >
-        </div>
       </div>
     </section>
 
