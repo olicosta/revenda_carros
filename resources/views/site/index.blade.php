@@ -115,12 +115,15 @@
               Confira alguns veículos em destaque no estoque da 3M Veículos.
             </p>
           </div>
+        </div>
+
+        <div class="home-veiculos-grid" id="home-veiculos-grid"></div>
+
+        <div class="home-veiculos-acoes">
           <a href="carros.html" class="btn-primary" data-home="estoqueBotao"
             >Ver estoque completo</a
           >
         </div>
-
-        <div class="home-veiculos-grid" id="home-veiculos-grid"></div>
 
         <div class="home-vendedor-mes" id="home-vendedor-mes"></div>
       </div>
