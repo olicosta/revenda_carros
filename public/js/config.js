@@ -937,6 +937,13 @@ function aplicarConfigLoja() {
       encodeURIComponent(config.endereco);
   });
 
+  document.querySelectorAll("[data-mapa-iframe]").forEach(function (iframe) {
+    iframe.src =
+      "https://www.google.com/maps?q=" +
+      encodeURIComponent(config.endereco) +
+      "&output=embed";
+  });
+
   document.querySelectorAll("[data-whatsapp-link]").forEach(function (link) {
     link.href = criarLinkWhatsApp(link.dataset.whatsappMensagem || "");
   });

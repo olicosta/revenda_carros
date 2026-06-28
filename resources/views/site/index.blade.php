@@ -8,7 +8,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260627-vendedor-foto-home" />
+    <link rel="stylesheet" href="/css/style.css?v=20260628-localizacao-home" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260625-card-beneficios-fix" />
   </head>
 
@@ -222,6 +222,32 @@
       </div>
     </section>
 
+    <section class="localizacao-home" id="localizacao">
+      <div class="container localizacao-grid">
+        <div class="localizacao-info">
+          <span class="badge">Localização</span>
+          <h2>Venha conhecer a 3M Veículos</h2>
+          <p>
+            Estamos em
+            <strong data-loja-endereco>CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094</strong>
+          </p>
+          <a href="#" class="btn-primary" target="_blank" rel="noopener" data-mapa-link>
+            Abrir rota no Google Maps
+          </a>
+        </div>
+
+        <div class="localizacao-mapa">
+          <iframe
+            title="Mapa da 3M Veículos"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=CENTRO%20II%20-%20R.%20Campos%20S%C3%A1les%2C%20293%20-%20Vila%20Ferroviaria%2C%20Mafra%20-%20SC%2C%2089300-094&output=embed"
+            data-mapa-iframe
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
     <footer>
       <p>2026 3M Veículos - Todos os direitos reservados</p>
     </footer>
@@ -240,7 +266,7 @@
       </svg>
     </a>
 
-    <script src="/js/config.js?v=20260625-cep-global"></script>
+    <script src="/js/config.js?v=20260628-localizacao-home"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
