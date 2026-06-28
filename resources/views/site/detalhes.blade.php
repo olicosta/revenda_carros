@@ -8,9 +8,9 @@
       content="Detalhes do veículo selecionado na 3M Veículos."
     />
     <title>Detalhes do Veículo - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260625-modal-cards" />
+    <link rel="stylesheet" href="/css/style.css?v=20260628-catalogo-detalhes-plus" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260623-menu-publico-1" />
-    <link rel="stylesheet" href="/css/detalhes-premium.css?v=20260623-detalhes-premium-1" />
+    <link rel="stylesheet" href="/css/detalhes-premium.css?v=20260628-catalogo-detalhes-plus" />
   </head>
   <body>
     <header class="topo">
@@ -51,10 +51,10 @@
       <p>2026 3M Veículos - Todos os direitos reservados</p>
     </footer>
 
-    <script src="/js/config.js?v=20260625-cep-global"></script>
+    <script src="/js/config.js?v=20260628-catalogo-detalhes-plus"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/detalhes.js?v=20260625-sem-favoritos"></script>
+    <script data-site-script data-src="/js/detalhes.js?v=20260628-catalogo-detalhes-plus"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

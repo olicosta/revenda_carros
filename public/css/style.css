@@ -1747,6 +1747,40 @@ body.sistema-modal-aberto {
   gap: clamp(18px, 2vw, 24px);
 }
 
+.catalogo-resumo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 12px 0 18px;
+}
+
+.catalogo-resumo article {
+  padding: 14px 16px;
+  border: 1px solid #dbe4ef;
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(var(--gold-rgb), 0.08), transparent),
+    #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.catalogo-resumo span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.catalogo-resumo strong {
+  display: block;
+  margin-top: 4px;
+  color: #07152f;
+  font-size: clamp(18px, 2vw, 25px);
+  line-height: 1.15;
+}
+
 .home-veiculos-acoes {
   text-align: center;
   margin-top: 32px;
@@ -8013,6 +8047,10 @@ body:has(.admin) .pagina-titulo p {
 }
 
 @media (max-width: 760px) {
+  .catalogo-resumo {
+    grid-template-columns: 1fr;
+  }
+
   .home-veiculos-topo {
     display: grid;
     text-align: center;

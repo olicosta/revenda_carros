@@ -44,6 +44,54 @@ function compartilharVeiculo(nome) {
   copiarLinkVeiculo();
 }
 
+function adicionarJsonLdVeiculo(carro) {
+  const scriptAntigo = document.getElementById("vehicle-json-ld");
+
+  if (scriptAntigo) scriptAntigo.remove();
+
+  const script = document.createElement("script");
+  const preco = precoNumero(carro.preco);
+
+  script.type = "application/ld+json";
+  script.id = "vehicle-json-ld";
+  script.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Vehicle",
+    name: carro.nome,
+    brand: carro.marca,
+    model: carro.modelo || carro.nome,
+    vehicleModelDate: String(carro.ano || ""),
+    mileageFromOdometer: {
+      "@type": "QuantitativeValue",
+      value: kmNumero(carro.km),
+      unitCode: "KMT"
+    },
+    color: carro.cor,
+    fuelType: carro.combustivel,
+    vehicleTransmission: carro.cambio,
+    image: carro.imagem,
+    offers: {
+      "@type": "Offer",
+      price: preco,
+      priceCurrency: "BRL",
+      availability: carro.status === "Vendido"
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/InStock",
+      url: window.location.href
+    },
+    seller: {
+      "@type": "AutoDealer",
+      name: carregarConfigLoja().nome,
+      address: carregarConfigLoja().endereco
+    }
+  });
+  document.head.appendChild(script);
+}
+
+function kmNumero(km) {
+  return Number(String(km || "").replace(/\D/g, ""));
+}
+
 if (container && carro) {
   const mensagem = mensagemVeiculo(carro);
   const galeria = carro.galeria || [carro.imagem];
@@ -79,6 +127,7 @@ if (container && carro) {
     descricaoSeo,
     carro.imagem
   );
+  adicionarJsonLdVeiculo(carro);
 
   container.innerHTML =
     '<div class="detalhe-card">' +
@@ -144,6 +193,14 @@ if (container && carro) {
     escaparHTML(carro.descricao) +
     "</p>" +
     "</div>" +
+    '<section class="detalhe-bloco detalhe-vantagens">' +
+    '<h4 class="detalhe-subtitulo">Por que considerar este veículo?</h4>' +
+    '<div class="detalhe-vantagens-grid">' +
+    '<article><span>✓</span><strong>Estoque selecionado</strong><small>Veículo conferido antes de ir para a vitrine.</small></article>' +
+    '<article><span>R$</span><strong>Financiamento facilitado</strong><small>Simule condições com parceiros da loja.</small></article>' +
+    '<article><span>WA</span><strong>Atendimento direto</strong><small>Tire dúvidas e avance na negociação pelo WhatsApp.</small></article>' +
+    "</div>" +
+    "</section>" +
     '<details class="detalhe-bloco detalhe-ficha-card">' +
     '<summary class="detalhe-ficha-toggle"><span>Ficha técnica</span><small>Ver especificações</small></summary>' +
     '<div class="detalhe-specs">' +

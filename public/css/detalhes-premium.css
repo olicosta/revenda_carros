@@ -7,6 +7,12 @@
         linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
 }
 
+@media (max-width: 760px) {
+    .detalhe-vantagens-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .detalhe-card {
     align-items: start;
     border: 1px solid rgba(var(--secondary-rgb), 0.08);
@@ -118,6 +124,49 @@
     background:
         linear-gradient(135deg, rgba(var(--gold-rgb), 0.17), rgba(var(--secondary-rgb), 0.04)),
         #fff;
+}
+
+.detalhe-vantagens {
+    padding: 18px;
+}
+
+.detalhe-vantagens-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.detalhe-vantagens-grid article {
+    display: grid;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid #dbe4ef;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+.detalhe-vantagens-grid span {
+    width: 38px;
+    height: 38px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #d4af37, #facc15);
+    color: #07152f;
+    font-weight: 950;
+}
+
+.detalhe-vantagens-grid strong {
+    color: #07152f;
+    font-size: 15px;
+    line-height: 1.2;
+}
+
+.detalhe-vantagens-grid small {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
 }
 
 .detalhe-info h3 {

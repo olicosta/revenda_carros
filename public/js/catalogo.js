@@ -19,6 +19,7 @@ const filtroBlindado = document.getElementById("filtro-blindado");
 const ordenarPreco = document.getElementById("ordenar-preco");
 const limparFiltros = document.getElementById("limpar-filtros");
 const filtrosAtivos = document.getElementById("filtros-ativos");
+const catalogoResumo = document.getElementById("catalogo-resumo");
 const filtrosAvancados = document.querySelector(".filtros-avancados");
 const botoesAbrirFiltrosMobile = document.querySelectorAll("[data-catalogo-filtro-toggle]");
 const botaoFecharFiltrosMobile = document.querySelector("[data-catalogo-filtro-fechar]");
@@ -160,6 +161,7 @@ function renderizar(listaCarros) {
   lista.innerHTML = "";
   contadorResultados.textContent =
     listaCarros.length + " de " + todosCarros.length + " veículo(s)";
+  renderizarResumoCatalogo(listaCarros);
 
   if (resumoFiltrosMobile) {
     resumoFiltrosMobile.textContent = listaCarros.length + " encontrados";
@@ -230,6 +232,36 @@ function renderizar(listaCarros) {
       "</div>" +
       "</article>";
   });
+}
+
+function renderizarResumoCatalogo(listaCarros) {
+  if (!catalogoResumo) return;
+
+  const disponiveis = listaCarros.filter(function (carro) {
+    return carro.status === "Disponível";
+  }).length;
+  const ofertas = listaCarros.filter(function (carro) {
+    return carro.oferta === true;
+  }).length;
+  const precos = listaCarros.map(function (carro) {
+    return precoNumero(carro.preco);
+  }).filter(Boolean);
+  const menorPreco = precos.length ? Math.min.apply(null, precos) : 0;
+  const maiorPreco = precos.length ? Math.max.apply(null, precos) : 0;
+  const faixa = menorPreco && maiorPreco
+    ? formatarMoeda(menorPreco) + " até " + formatarMoeda(maiorPreco)
+    : "Sem faixa definida";
+
+  catalogoResumo.innerHTML =
+    '<article><span>Disponíveis</span><strong>' +
+    disponiveis +
+    "</strong></article>" +
+    '<article><span>Ofertas</span><strong>' +
+    ofertas +
+    "</strong></article>" +
+    '<article><span>Faixa de preço</span><strong>' +
+    escaparHTML(faixa) +
+    "</strong></article>";
 }
 
 function abrirDetalhesCarro(id) {

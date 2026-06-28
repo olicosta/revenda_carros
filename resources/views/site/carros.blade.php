@@ -195,6 +195,7 @@
             </button>
           </div>
           <div id="filtros-ativos" class="filtros-ativos" aria-live="polite"></div>
+          <div class="catalogo-resumo" id="catalogo-resumo" aria-live="polite"></div>
           <div class="grid-carros" id="lista-carros"></div>
         </div>
       </div>
@@ -204,10 +205,10 @@
       <p>2026 3M Veículos - Todos os direitos reservados</p>
     </footer>
 
-    <script src="/js/config.js?v=20260625-cep-global"></script>
+    <script src="/js/config.js?v=20260628-catalogo-detalhes-plus"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/catalogo.js?v=20260625-sem-favoritos"></script>
+    <script data-site-script data-src="/js/catalogo.js?v=20260628-catalogo-detalhes-plus"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>
