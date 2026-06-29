@@ -2581,6 +2581,45 @@ body.sistema-modal-aberto {
   font-size: 14px;
 }
 
+.depoimento-foto-box {
+  position: relative;
+  min-height: 100%;
+  background: #0b1b33;
+}
+
+.depoimento-card .foto-entrega {
+  aspect-ratio: 16 / 11;
+  min-height: 260px;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.depoimento-card:hover .foto-entrega {
+  transform: scale(1.035);
+  filter: saturate(1.05) contrast(1.04);
+}
+
+.depoimento-card .cliente-info {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(7, 18, 37, 0.88), rgba(15, 32, 56, 0.72));
+  color: white;
+  box-shadow: 0 16px 32px rgba(7, 18, 37, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.depoimento-card .cliente-info strong {
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+}
+
 /* DETALHES */
 .detalhes {
   padding: 70px 0;
@@ -3895,6 +3934,33 @@ body.sistema-modal-aberto {
 
 .depoimento-form-grid-simples {
   grid-template-columns: minmax(0, 1fr);
+}
+
+#form-depoimento {
+  max-width: 920px;
+}
+
+#form-depoimento .upload-box {
+  min-height: 82px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f8fbff, #eef4ff);
+}
+
+#form-depoimento .preview-entrega {
+  width: min(100%, 560px);
+  height: 320px;
+  max-height: none;
+  margin: 0 auto 18px;
+  border: 1px solid #d7e3f3;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+}
+
+@media (max-width: 650px) {
+  #form-depoimento .preview-entrega {
+    height: 240px;
+  }
 }
 
 .admin-item-depoimento {

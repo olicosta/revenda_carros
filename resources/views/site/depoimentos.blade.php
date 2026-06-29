@@ -8,7 +8,7 @@
       content="Depoimentos de clientes que compraram veículos na 3M Veículos."
     />
     <title>Depoimentos - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260625-modal-cards" />
+    <link rel="stylesheet" href="/css/style.css?v=20260628-depoimentos-foto" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260623-menu-publico-1" />
   </head>
   <body>
@@ -93,8 +93,8 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/home.js?v=20260625-sem-favoritos"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
+    <script data-site-script data-src="/js/home.js?v=20260628-depoimentos-foto"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

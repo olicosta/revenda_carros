@@ -261,17 +261,21 @@ if (listaDepoimentosHome) {
 
   listaDepoimentosHome.innerHTML = depoimentos
     .map(function (depoimento) {
+      const imagemDepoimento = depoimento.imagem || "/img/logo-3m-veiculos.jpg";
+
       return (
         '<article class="depoimento-card">' +
+        '<div class="depoimento-foto-box">' +
         '<img class="foto-entrega" src="' +
-        escaparAtributo(depoimento.imagem) +
+        escaparAtributo(imagemDepoimento) +
         '" alt="Foto da entrega do veículo para ' +
         escaparAtributo(depoimento.cliente) +
-        '" loading="lazy">' +
+        '" loading="lazy" onerror="this.src=\'/img/logo-3m-veiculos.jpg\'">' +
         '<div class="cliente-info">' +
         "<strong>" +
         escaparHTML(depoimento.cliente) +
         "</strong>" +
+        "</div>" +
         "</div>" +
         "</article>"
       );

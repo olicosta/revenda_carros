@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260627-vendedor-foto-home" />
+    <link rel="stylesheet" href="/css/style.css?v=20260628-depoimentos-foto" />
   </head>
   <body>
     <header class="topo">
@@ -2005,8 +2005,8 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260627-vendedor-foto-home"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260627-vendedor-foto-home"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260628-depoimentos-foto"></script>
   </body>
 </html>
 
