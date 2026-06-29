@@ -576,7 +576,7 @@ function normalizarDepoimento(depoimento) {
   return {
     id: depoimento.id || Date.now(),
     cliente: depoimento.cliente || "Cliente 3M Veículos",
-    veiculo: depoimento.veiculo || "Veículo comprado",
+    veiculo: depoimento.veiculo || "Entrega 3M Veículos",
     texto:
       depoimento.texto ||
       "Atendimento rápido, transparente e com todo suporte na compra.",

@@ -5310,14 +5310,15 @@ function montarDepoimento(idExistente) {
   const depoimentoExistente = depoimentosAdmin.find(function (depoimento) {
     return Number(depoimento.id) === Number(idExistente);
   });
+  const cliente = document.getElementById("depoimento-cliente").value.trim();
 
   return {
     id: idExistente
       ? Number(idExistente)
       : gerarIdUnico([depoimentosAdmin, carrosAdmin, parceriasAdmin]),
-    cliente: document.getElementById("depoimento-cliente").value.trim(),
-    veiculo: document.getElementById("depoimento-veiculo").value.trim(),
-    texto: document.getElementById("depoimento-texto").value.trim(),
+    cliente: cliente,
+    veiculo: (depoimentoExistente && depoimentoExistente.veiculo) || "Entrega 3M Veículos",
+    texto: (depoimentoExistente && depoimentoExistente.texto) || "Cliente satisfeito com a entrega.",
     imagem:
       imagemDepoimentoBase64 ||
       (depoimentoExistente && depoimentoExistente.imagem) ||
@@ -5343,12 +5344,6 @@ function renderizarDepoimentosAdmin() {
       "<h4>" +
       escaparHTML(depoimento.cliente) +
       "</h4>" +
-      "<p>Comprou " +
-      escaparHTML(depoimento.veiculo) +
-      "</p>" +
-      "<p>" +
-      escaparHTML(depoimento.texto) +
-      "</p>" +
       "</div>" +
       '<div class="admin-acoes">' +
       '<button type="button" class="btn-editar" onclick="editarDepoimento(' +
@@ -5543,8 +5538,6 @@ function editarDepoimento(id) {
   abrirCadastroAdmin("form-depoimento");
   document.getElementById("depoimento-id").value = depoimento.id;
   document.getElementById("depoimento-cliente").value = depoimento.cliente;
-  document.getElementById("depoimento-veiculo").value = depoimento.veiculo;
-  document.getElementById("depoimento-texto").value = depoimento.texto;
 
   previewDepoimento.src = depoimento.imagem;
   previewDepoimento.style.display = "block";

@@ -563,30 +563,17 @@
         <form id="form-depoimento" class="admin-form">
           <input type="hidden" id="depoimento-id" />
 
-          <div class="form-grid">
+          <div class="form-grid depoimento-form-grid-simples">
             <input
               type="text"
               id="depoimento-cliente"
               placeholder="Nome do cliente"
               required
             />
-            <input
-              type="text"
-              id="depoimento-veiculo"
-              placeholder="Veículo comprado"
-              required
-            />
           </div>
 
-          <textarea
-            id="depoimento-texto"
-            placeholder="Texto do depoimento"
-            rows="4"
-            required
-          ></textarea>
-
           <label class="upload-box">
-            Selecionar foto da entrega
+            Selecionar foto com cliente, vendedor e veículo
             <input type="file" id="depoimento-file" accept="image/*" />
           </label>
 

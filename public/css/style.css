@@ -3893,6 +3893,23 @@ body.sistema-modal-aberto {
   height: 110px;
 }
 
+.depoimento-form-grid-simples {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.admin-item-depoimento {
+  grid-template-columns: 180px minmax(0, 1fr) auto;
+}
+
+.admin-item-depoimento img {
+  width: 180px;
+  height: 128px;
+}
+
+.admin-item-depoimento h4 {
+  font-size: 22px;
+}
+
 .admin-item-simples {
   grid-template-columns: 1fr auto;
 }
