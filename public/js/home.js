@@ -19,7 +19,11 @@ if (destaqueHome && carroDestaque) {
 
   destaqueHome.innerHTML =
     '<div class="showcase-topline"><span>Selecionado pela equipe</span><strong>Pronto para negociar</strong></div>' +
-    '<div class="showcase-img"></div>' +
+    '<div class="showcase-img"><img src="' +
+    escaparAtributo(carroDestaque.imagem) +
+    '" alt="' +
+    escaparAtributo(carroDestaque.nome) +
+    '" decoding="async" fetchpriority="high"></div>' +
     '<div class="showcase-card">' +
     '<span class="showcase-badge">Oferta em destaque</span>' +
     "<h3>" +
@@ -28,19 +32,16 @@ if (destaqueHome && carroDestaque) {
     "<p>" +
     escaparHTML(textoCarro(carroDestaque)) +
     "</p>" +
-    "<strong>" +
+    '<div class="showcase-price"><span>Preço anunciado</span><strong>' +
     escaparHTML(carroDestaque.preco) +
-    "</strong>" +
+    "</strong></div>" +
     '<div class="showcase-actions"><a href="detalhes.html?id=' +
     idDestaque +
     '" class="btn-primary">Ver oferta</a>' +
     '<a href="' +
     escaparAtributo(criarLinkWhatsApp(mensagem)) +
-    '" class="btn-whatsapp destaque-whats" target="_blank">WhatsApp</a></div>' +
+    '" class="btn-whatsapp destaque-whats" target="_blank" rel="noopener">WhatsApp</a></div>' +
     "</div>";
-
-  destaqueHome.querySelector(".showcase-img").style.backgroundImage =
-    'url("' + String(carroDestaque.imagem || "").replace(/"/g, "%22") + '")';
 }
 
 const listaDepoimentosHome = document.getElementById("lista-depoimentos-home");

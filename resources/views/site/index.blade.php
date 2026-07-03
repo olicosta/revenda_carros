@@ -8,8 +8,8 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260628-depoimentos-foto" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260625-card-beneficios-fix" />
+    <link rel="stylesheet" href="/css/style.css?v=20260703-localizacao-responsiva" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20260703-botoes-grafite" />
   </head>
 
   <body>
@@ -48,9 +48,9 @@
       <div class="container hero-grid">
         <div class="hero-text">
           <span class="badge" data-home="heroBadge">3M Veículos</span>
-          <h2 data-home="heroTitulo">
+          <h1 data-home="heroTitulo">
             Seu próximo carro, sem complicação
-          </h2>
+          </h1>
           <p data-home="heroTexto">
             Encontre veículos selecionados, compare opções com facilidade e fale
             direto pelo WhatsApp para tirar dúvidas, negociar e avançar com
@@ -206,10 +206,6 @@
           Fale agora com a equipe 3M Veículos e receba uma proposta
           personalizada.
         </p>
-        <p>
-          <span data-loja-endereco>CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094</span> |
-          <span data-loja-horario>Segunda a sábado, das 8h às 18h</span>
-        </p>
 
         <a
           href="https://wa.me/554730123333"
@@ -271,7 +267,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
-    <script data-site-script data-src="/js/home.js?v=20260628-depoimentos-foto"></script>
+    <script data-site-script data-src="/js/home.js?v=20260703-hero-refinado"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

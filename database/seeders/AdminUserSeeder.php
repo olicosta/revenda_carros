@@ -12,6 +12,8 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         $password = (string) env('ADMIN_PASSWORD', '1234');
+        $username = (string) env('ADMIN_USERNAME', 'admin');
+        $email = (string) env('ADMIN_EMAIL', 'admin@3mveiculos.local');
 
         if (app()->isProduction() && ($password === '1234' || strlen($password) < 12)) {
             throw ValidationException::withMessages([
@@ -19,14 +21,17 @@ class AdminUserSeeder extends Seeder
             ]);
         }
 
-        User::query()->updateOrCreate(
-            ['username' => env('ADMIN_USERNAME', 'admin')],
-            [
-                'name' => env('ADMIN_NAME', 'Administrador 3M'),
-                'role' => env('ADMIN_ROLE', 'gestor'),
-                'email' => env('ADMIN_EMAIL', 'admin@3mveiculos.local'),
-                'password' => Hash::make($password),
-            ]
-        );
+        $user = User::query()
+            ->where('username', $username)
+            ->orWhere('email', $email)
+            ->first() ?? new User;
+
+        $user->fill([
+            'username' => $username,
+            'name' => env('ADMIN_NAME', 'Administrador 3M'),
+            'role' => env('ADMIN_ROLE', 'gestor'),
+            'email' => $email,
+            'password' => Hash::make($password),
+        ])->save();
     }
 }

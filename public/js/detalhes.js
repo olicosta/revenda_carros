@@ -94,7 +94,11 @@ function kmNumero(km) {
 
 if (container && carro) {
   const mensagem = mensagemVeiculo(carro);
-  const galeria = carro.galeria || [carro.imagem];
+  const galeria = [carro.imagem]
+    .concat(Array.isArray(carro.galeria) ? carro.galeria : [])
+    .filter(function (imagem, index, imagens) {
+      return Boolean(imagem) && imagens.indexOf(imagem) === index;
+    });
   const nomeSeguro = escaparHTML(carro.nome);
   const nomeAtributo = escaparAtributo(carro.nome);
   const idCarroAtual = Number(carro.id) || 0;
@@ -110,7 +114,7 @@ if (container && carro) {
       ? '<span class="btn-indisponivel detalhe-indisponivel">Vendido</span>'
       : '<a href="' +
         escaparAtributo(criarLinkWhatsApp(mensagem)) +
-        '" class="btn-whatsapp" target="_blank">Falar no WhatsApp</a>';
+        '" class="btn-whatsapp" target="_blank" rel="noopener">Falar no WhatsApp</a>';
   const linkWhatsAppContato = criarLinkWhatsApp(mensagem);
   const linkFinanciamento =
     "financiamento.html?veiculo=" +
@@ -137,7 +141,7 @@ if (container && carro) {
     escaparAtributo(galeria[0]) +
     '" class="detalhe-img" id="imagem-principal" alt="' +
     nomeAtributo +
-    '">' +
+    '" decoding="async" fetchpriority="high">' +
     '<button type="button" class="galeria-btn galeria-prev" id="galeria-prev" aria-label="Foto anterior">&lsaquo;</button>' +
     '<button type="button" class="galeria-btn galeria-next" id="galeria-next" aria-label="Próxima foto">&rsaquo;</button>' +
     '<button type="button" class="galeria-full" id="galeria-full" aria-label="Ver foto em tela cheia">Tela cheia</button>' +
@@ -160,7 +164,7 @@ if (container && carro) {
           (index + 1) +
           " de " +
           nomeAtributo +
-          '"></button>'
+          '" loading="lazy" decoding="async"></button>'
         );
       })
       .join("") +
@@ -240,7 +244,11 @@ if (container && carro) {
         const idRelacionado = Number(item.id) || 0;
 
         return (
-          '<article class="carro-card card-clicavel" onclick="window.location.href=\'detalhes.html?id=' +
+          '<article class="carro-card card-clicavel" tabindex="0" role="link" aria-label="Ver detalhes de ' +
+          escaparAtributo(item.nome) +
+          '" onclick="window.location.href=\'detalhes.html?id=' +
+          idRelacionado +
+          '\'" onkeydown="if(event.key === \'Enter\') window.location.href=\'detalhes.html?id=' +
           idRelacionado +
           '\'">' +
           '<div class="carro-img-box">' +
@@ -248,7 +256,7 @@ if (container && carro) {
           escaparAtributo(item.imagem) +
           '" alt="' +
           escaparAtributo(item.nome) +
-          '"></div>' +
+          '" loading="lazy" decoding="async"></div>' +
           '<div class="carro-info"><h3>' +
           escaparHTML(item.nome) +
           "</h3><p>" +
@@ -266,7 +274,9 @@ if (container && carro) {
 
   document.body.insertAdjacentHTML(
     "beforeend",
-    '<div class="galeria-lightbox" id="galeria-lightbox">' +
+    '<div class="galeria-lightbox" id="galeria-lightbox" role="dialog" aria-modal="true" aria-label="Galeria ampliada de ' +
+      nomeAtributo +
+      '" aria-hidden="true">' +
       '<button type="button" class="lightbox-fechar" id="lightbox-fechar">Fechar</button>' +
       '<img src="' +
       escaparAtributo(galeria[0]) +
@@ -286,7 +296,7 @@ if (container && carro) {
         ? '<span class="btn-indisponivel">Vendido</span>'
         : '<a href="' +
           escaparAtributo(linkWhatsAppContato) +
-          '" class="btn-whatsapp" target="_blank">WhatsApp</a>') +
+          '" class="btn-whatsapp" target="_blank" rel="noopener">WhatsApp</a>') +
     "</div>"
   );
 
@@ -325,12 +335,14 @@ if (container && carro) {
 
   function abrirLightbox() {
     lightbox.classList.add("ativo");
+    lightbox.setAttribute("aria-hidden", "false");
     document.body.classList.add("lightbox-aberto");
     lightboxFechar.focus();
   }
 
   function fecharLightbox() {
     lightbox.classList.remove("ativo");
+    lightbox.setAttribute("aria-hidden", "true");
     document.body.classList.remove("lightbox-aberto");
     imagemPrincipal.focus();
   }

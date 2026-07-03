@@ -5,17 +5,23 @@
     --home-gold-soft: #ffe082;
     --home-blue: #2f68f1;
     --home-green: #18a84f;
-    --home-ink: #071225;
-    --home-card: rgba(10, 18, 34, 0.78);
+    --home-ink: #202124;
+    --home-graphite: #242527;
+    --home-charcoal: #303235;
+    --home-silver: #bfc1c4;
+    --home-card: rgba(36, 37, 39, 0.84);
+    --home-title-section: clamp(30px, 3.4vw, 46px);
+    --home-title-card: clamp(19px, 1.6vw, 22px);
+    --home-text: clamp(16px, 1.15vw, 18px);
 }
 
 html {
-    background: #111c2e;
+    background: var(--home-graphite);
 }
 
 body {
     padding-top: 0;
-    background: #111c2e;
+    background: var(--home-graphite);
 }
 
 .topo {
@@ -23,7 +29,7 @@ body {
     top: 0;
     z-index: 30;
     border-bottom: 1px solid rgba(230, 189, 47, 0.22);
-    background: rgba(7, 18, 37, 0.92);
+    background: rgba(31, 32, 34, 0.94);
     box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
     backdrop-filter: blur(16px);
 }
@@ -136,8 +142,8 @@ body {
     isolation: isolate;
     background:
         radial-gradient(circle at 82% 20%, rgba(230, 189, 47, 0.2), transparent 28%),
-        radial-gradient(circle at 12% 82%, rgba(47, 104, 241, 0.18), transparent 32%),
-        linear-gradient(120deg, rgba(7, 18, 37, 0.94) 0%, rgba(17, 28, 48, 0.88) 47%, rgba(39, 63, 75, 0.88) 100%),
+        radial-gradient(circle at 12% 82%, rgba(191, 193, 196, 0.16), transparent 32%),
+        linear-gradient(120deg, rgba(29, 30, 32, 0.97) 0%, rgba(47, 49, 52, 0.94) 52%, rgba(64, 66, 68, 0.92) 100%),
         url('/images/hero-bg.svg') center / cover no-repeat;
 }
 
@@ -158,13 +164,13 @@ body {
     min-height: calc(100svh - 96px);
     display: grid;
     align-items: center;
-    padding: clamp(28px, 4.5vh, 56px) 0;
+    padding: clamp(34px, 5vh, 64px) 0;
     overflow: clip;
 }
 
 .hero-grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(390px, 0.78fr);
+    grid-template-columns: minmax(0, 1.08fr) minmax(380px, 0.72fr);
     align-items: center;
     gap: clamp(34px, 5vw, 72px);
 }
@@ -194,17 +200,18 @@ body {
     box-shadow: 0 0 0 5px rgba(8, 18, 37, 0.12);
 }
 
-.hero-text h2 {
-    max-width: 780px;
+.hero-text h1 {
+    max-width: 720px;
     margin-top: clamp(18px, 2.4vh, 26px);
-    font-size: clamp(44px, 4.8vw, 74px);
-    line-height: 0.95;
-    letter-spacing: -0.06em;
+    color: #fff;
+    font-size: clamp(42px, 4.3vw, 68px);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
     text-wrap: balance;
 }
 
 .hero-text p {
-    max-width: 780px;
+    max-width: 660px;
     margin-top: 18px;
     color: rgba(255, 255, 255, 0.86);
     font-size: clamp(18px, 1.25vw, 22px);
@@ -236,8 +243,8 @@ body {
 
 .hero-servicos article,
 .hero-servicos > div {
-    min-height: 136px;
-    padding: 20px;
+    min-height: 112px;
+    padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 18px;
     background:
@@ -253,7 +260,7 @@ body {
     height: 34px;
     align-items: center;
     justify-content: center;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     border-radius: 12px;
     background: rgba(230, 189, 47, 0.14);
     color: var(--home-gold-soft);
@@ -269,18 +276,19 @@ body {
 
 .hero-servicos span {
     display: block;
-    margin-top: 10px;
+    margin-top: 7px;
     color: rgba(255, 255, 255, 0.76);
     font-size: 14px;
     line-height: 1.55;
 }
 
 .hero-showcase {
-    width: min(100%, 600px);
+    width: min(100%, 540px);
     justify-self: end;
-    border-radius: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
     background: rgba(255, 255, 255, 0.96);
-    box-shadow: 0 34px 90px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 34px 90px rgba(0, 0, 0, 0.38), 0 0 0 8px rgba(255, 255, 255, 0.035);
     overflow: hidden;
     transform: translateY(2px);
 }
@@ -290,7 +298,7 @@ body {
     justify-content: space-between;
     gap: 12px;
     padding: 11px 20px;
-    background: linear-gradient(135deg, #091327, #15243d);
+    background: linear-gradient(135deg, #202124, #3a3b3e);
     color: #fff;
     font-size: 12px;
     text-transform: uppercase;
@@ -307,12 +315,18 @@ body {
 }
 
 .showcase-img {
-    height: clamp(220px, 27vh, 300px);
+    aspect-ratio: 16 / 9;
+    height: auto;
     width: 100%;
     display: block;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: #dfe5ec;
+}
+
+.showcase-img img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .hero-showcase .showcase-card {
@@ -347,12 +361,32 @@ body {
     font-size: 17px;
 }
 
-.showcase-card > strong {
+.showcase-price {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 14px 0 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e6eaf0;
+}
+
+.showcase-price span {
     display: block;
-    margin-bottom: 14px;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #667085;
+    box-shadow: none;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.showcase-price strong {
     color: var(--home-ink);
     font-size: clamp(28px, 2.2vw, 36px);
     letter-spacing: -0.045em;
+    line-height: 1;
 }
 
 .showcase-actions {
@@ -378,8 +412,8 @@ body {
     overflow: hidden;
     background:
         radial-gradient(circle at 18% 18%, rgba(230, 189, 47, 0.22), transparent 30%),
-        radial-gradient(circle at 84% 30%, rgba(47, 104, 241, 0.22), transparent 34%),
-        linear-gradient(135deg, #071225 0%, #10213b 52%, #172b48 100%);
+        radial-gradient(circle at 84% 30%, rgba(191, 193, 196, 0.2), transparent 34%),
+        linear-gradient(135deg, #202124 0%, #303235 52%, #444649 100%);
     color: #fff;
 }
 
@@ -423,7 +457,7 @@ body {
     overflow: hidden;
     background:
         radial-gradient(circle at 12% 12%, rgba(230, 189, 47, 0.16), transparent 30%),
-        linear-gradient(135deg, #071225 0%, #10213b 100%);
+        linear-gradient(135deg, #202124 0%, #37393c 100%);
 }
 
 .destaques::before {
@@ -501,7 +535,7 @@ body {
         border-radius: 24px;
         background:
             linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
-            rgba(7, 18, 37, 0.96);
+            rgba(31, 32, 34, 0.97);
         box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
         backdrop-filter: blur(18px);
         opacity: 0;
@@ -548,7 +582,7 @@ body {
         width: min(100%, 680px);
     }
 
-    .hero-text h2 {
+    .hero-text h1 {
         max-width: 720px;
     }
 }
@@ -597,7 +631,7 @@ body {
         padding: 26px 0 34px;
     }
 
-    .hero-text h2 {
+    .hero-text h1 {
         margin-top: 16px;
         font-size: clamp(36px, 11vw, 48px);
         line-height: 0.98;
@@ -673,8 +707,7 @@ body {
         font-size: 15px;
     }
 
-    .showcase-card > strong {
-        margin-bottom: 12px;
+    .showcase-price strong {
         font-size: 28px;
     }
 
@@ -805,7 +838,7 @@ body {
         height: 48px;
     }
 
-    .hero-text h2 {
+    .hero-text h1 {
         font-size: clamp(34px, 11vw, 42px);
     }
 
@@ -819,7 +852,7 @@ body {
         padding: 24px 0;
     }
 
-    .hero-text h2 {
+    .hero-text h1 {
         font-size: clamp(42px, 4.4vw, 66px);
     }
 
@@ -859,5 +892,114 @@ body {
 
     .showcase-img {
         height: 205px;
+    }
+}
+
+/* Escala tipográfica da home */
+.home-veiculos-topo h2,
+.destaques h2,
+.depoimentos-home-resumo .section-header h2,
+.contato-modern h2,
+.localizacao-info h2 {
+    margin-top: 8px;
+    font-size: var(--home-title-section);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+}
+
+.home-veiculos-topo > div > span,
+.depoimentos-home-resumo .section-header > span,
+.localizacao-info > .badge {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.home-veiculos-topo p,
+.depoimentos-home-resumo .section-header p,
+.contato-modern p,
+.localizacao-info p {
+    max-width: 720px;
+    font-size: var(--home-text);
+    line-height: 1.6;
+}
+
+.carro-card h3,
+.destaques .card h3,
+.depoimento-card h3,
+.showcase-card h3 {
+    font-size: var(--home-title-card);
+    font-weight: 900;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+}
+
+.home-veiculos .btn-primary,
+.contato-modern .btn-primary,
+.localizacao-info .btn-primary,
+.carro-acoes a,
+.showcase-actions a {
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+/* Botões alinhados à paleta grafite da marca */
+.hero-buttons .btn-primary {
+    border-color: var(--home-gold);
+    background: linear-gradient(135deg, var(--home-gold), #f5d34d);
+    color: var(--home-ink);
+    box-shadow: 0 16px 36px rgba(230, 189, 47, 0.24);
+}
+
+.hero-buttons .btn-primary:hover {
+    background: linear-gradient(135deg, #f2cc3e, #ffe275);
+    color: #18191b;
+}
+
+.hero-buttons .btn-secondary {
+    border-color: rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+}
+
+.hero-buttons .btn-secondary:hover {
+    border-color: var(--home-silver);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+}
+
+.showcase-actions .btn-primary,
+.home-veiculos .btn-primary,
+.localizacao-info .btn-primary {
+    border-color: var(--home-graphite);
+    background: linear-gradient(135deg, var(--home-graphite), #3c3e41);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(32, 33, 36, 0.18);
+}
+
+.showcase-actions .btn-primary:hover,
+.home-veiculos .btn-primary:hover,
+.localizacao-info .btn-primary:hover {
+    background: linear-gradient(135deg, #343538, #505256);
+    color: #fff;
+}
+
+@media (max-width: 680px) {
+    :root {
+        --home-title-section: clamp(28px, 8vw, 34px);
+        --home-title-card: 20px;
+        --home-text: 16px;
+    }
+
+    .home-veiculos-topo h2,
+    .destaques h2,
+    .depoimentos-home-resumo .section-header h2,
+    .contato-modern h2,
+    .localizacao-info h2 {
+        letter-spacing: -0.035em;
     }
 }

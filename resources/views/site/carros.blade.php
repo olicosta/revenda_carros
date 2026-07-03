@@ -10,7 +10,7 @@
     <title>Veículos - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260625-modal-cards" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260623-menu-publico-1" />
-    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260623-catalogo-desktop-fix" />
+    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260703-mobile-ux" />
   </head>
   <body>
     <header class="topo">
@@ -44,6 +44,12 @@
     </header>
 
     <section class="area-catalogo">
+      <div class="container catalogo-intro">
+        <span>Estoque 3M Veículos</span>
+        <h1>Encontre seu próximo veículo</h1>
+        <p>Pesquise, compare e fale diretamente com nossa equipe.</p>
+      </div>
+
       <div class="container catalogo-layout">
         <div class="catalogo-filtro-overlay" data-catalogo-filtro-overlay></div>
 
@@ -68,6 +74,7 @@
             id="filtro-busca"
             placeholder="Buscar por nome, modelo ou cor..."
             class="input-busca"
+            aria-label="Buscar veículo por nome, modelo ou cor"
           />
 
           <div class="filtros-principais">
@@ -208,7 +215,7 @@
     <script src="/js/config.js?v=20260628-catalogo-detalhes-plus"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
-    <script data-site-script data-src="/js/catalogo.js?v=20260628-catalogo-detalhes-plus"></script>
+    <script data-site-script data-src="/js/catalogo.js?v=20260703-cards-acessiveis"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

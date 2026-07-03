@@ -173,7 +173,7 @@ function renderizar(listaCarros) {
     return;
   }
 
-  listaCarros.forEach(function (carro) {
+  const cards = listaCarros.map(function (carro) {
     const idCarro = Number(carro.id) || 0;
     const badge = carro.oferta ? '<span class="badge-oferta">OFERTA</span>' : "";
     const badgeStatus =
@@ -188,12 +188,16 @@ function renderizar(listaCarros) {
         ? '<span class="btn-indisponivel">Vendido</span>'
         : '<a href="' +
           escaparAtributo(criarLinkWhatsApp(mensagem)) +
-          '" class="btn-whatsapp" target="_blank" onclick="event.stopPropagation()">WhatsApp</a>';
+          '" class="btn-whatsapp" target="_blank" rel="noopener" onclick="event.stopPropagation()">WhatsApp</a>';
 
-    lista.innerHTML +=
+    return (
       '<article class="carro-card card-clicavel ' +
       (carro.status === "Vendido" ? "carro-vendido" : "") +
+      '" tabindex="0" role="link" aria-label="Ver detalhes de ' +
+      escaparAtributo(carro.nome) +
       '" onclick="abrirDetalhesCarro(' +
+      idCarro +
+      ')" onkeydown="if(event.key === \'Enter\') abrirDetalhesCarro(' +
       idCarro +
       ')">' +
       '<div class="carro-img-box">' +
@@ -204,7 +208,7 @@ function renderizar(listaCarros) {
       escaparAtributo(carro.imagem) +
       '" alt="' +
       escaparAtributo(carro.nome) +
-      '" loading="lazy">' +
+      '" loading="lazy" decoding="async">' +
       "</div>" +
       '<div class="carro-info">' +
       "<h3>" +
@@ -226,12 +230,15 @@ function renderizar(listaCarros) {
       '<div class="carro-acoes">' +
       '<a href="detalhes.html?id=' +
       idCarro +
-      '" class="btn-primary" onclick="event.stopPropagation()">Detalhes</a>' +
+      '" class="btn-primary" onclick="event.stopPropagation()">Ver detalhes</a>' +
       botaoWhatsapp +
       "</div>" +
       "</div>" +
-      "</article>";
+      "</article>"
+    );
   });
+
+  lista.innerHTML = cards.join("");
 }
 
 function renderizarResumoCatalogo(listaCarros) {
