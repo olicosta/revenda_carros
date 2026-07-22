@@ -7256,7 +7256,7 @@ btnExportarBackup.addEventListener("click", function () {
   const link = document.createElement("a");
 
   link.href = URL.createObjectURL(blob);
-  link.download = "backup-prime-motors.json";
+  link.download = "backup-3m-veiculos.json";
   link.click();
   URL.revokeObjectURL(link.href);
   localStorage.setItem("ultimoBackupAdmin", new Date().toISOString().slice(0, 10));
@@ -7363,7 +7363,7 @@ btnExportarFinanceiro.addEventListener("click", function () {
   const link = document.createElement("a");
 
   link.href = URL.createObjectURL(blob);
-  link.download = "financeiro-prime-motors.csv";
+  link.download = "financeiro-3m-veiculos.csv";
   link.click();
   URL.revokeObjectURL(link.href);
 });
@@ -7371,7 +7371,7 @@ btnExportarFinanceiro.addEventListener("click", function () {
 if (btnExportarEstoque) {
   btnExportarEstoque.addEventListener("click", function () {
     baixarCSV(
-      "estoque-prime-motors.csv",
+      "estoque-3m-veiculos.csv",
       [
         ["Veículo", "Marca", "Modelo", "Ano", "Status", "Preço", "Compra", "Preparação", "Origem"],
       ].concat(
@@ -7396,7 +7396,7 @@ if (btnExportarEstoque) {
 if (btnExportarVendas) {
   btnExportarVendas.addEventListener("click", function () {
     baixarCSV(
-      "vendas-prime-motors.csv",
+      "vendas-3m-veiculos.csv",
       [
         ["Veículo", "Data", "Vendedor", "Valor", "Recebido", "Troca", "Saldo", "Lucro"],
       ].concat(
@@ -7420,7 +7420,7 @@ if (btnExportarVendas) {
 if (btnExportarComissoes) {
   btnExportarComissoes.addEventListener("click", function () {
     baixarCSV(
-      "comissoes-prime-motors.csv",
+      "comissoes-3m-veiculos.csv",
       [
         ["Vendedor", "Veículo", "Data", "Valor venda", "Taxa %", "Comissão"],
       ].concat(
@@ -7442,7 +7442,7 @@ if (btnExportarComissoes) {
 if (btnExportarRecebiveis) {
   btnExportarRecebiveis.addEventListener("click", function () {
     baixarCSV(
-      "contas-a-receber-prime-motors.csv",
+      "contas-a-receber-3m-veiculos.csv",
       [
         ["Veículo", "Data venda", "Vendedor", "Saldo a receber"],
       ].concat(
@@ -7461,7 +7461,7 @@ if (btnExportarRecebiveis) {
 if (btnExportarClientes) {
   btnExportarClientes.addEventListener("click", function () {
     baixarCSV(
-      "clientes-prime-motors.csv",
+      "clientes-3m-veiculos.csv",
       [
         [
           "Nome",
@@ -7516,7 +7516,7 @@ if (btnExportarClientes) {
 if (btnExportarHistorico) {
   btnExportarHistorico.addEventListener("click", function () {
     baixarCSV(
-      "historico-veiculos-prime-motors.csv",
+      "historico-veiculos-3m-veiculos.csv",
       [
         ["Data", "Veículo", "Tipo", "Descrição"],
       ].concat(
