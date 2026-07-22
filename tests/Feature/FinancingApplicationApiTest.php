@@ -90,4 +90,28 @@ class FinancingApplicationApiTest extends TestCase
         ])->assertOk()
             ->assertJsonPath('data.status', 'Aprovada');
     }
+
+    public function test_financing_documents_are_not_public_storage_files(): void
+    {
+        $lead = Lead::query()->create(['name' => 'Cliente', 'status' => 'Novo']);
+        $application = FinancingApplication::query()->create([
+            'lead_id' => $lead->id,
+            'customer_name' => 'Cliente',
+            'status' => 'Recebida',
+            'form_data' => [],
+            'access_token' => hash('sha256', 'token-for-upload'),
+        ]);
+
+        $this->post('/api/financing-applications/'.$application->id.'/documents', [
+            'token' => $application->access_token,
+            'documents' => [
+                \Illuminate\Http\UploadedFile::fake()->create('rg.pdf', 120, 'application/pdf'),
+            ],
+        ])->assertCreated();
+
+        $document = $application->documents()->firstOrFail();
+
+        $this->get('/storage/'.$document->path)
+            ->assertNotFound();
+    }
 }
