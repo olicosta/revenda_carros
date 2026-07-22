@@ -3171,6 +3171,7 @@ body.sistema-modal-aberto {
 }
 
 .localizacao-mapa {
+  position: relative;
   overflow: hidden;
   width: 100%;
   height: clamp(320px, 48vw, 560px);
@@ -3181,6 +3182,61 @@ body.sistema-modal-aberto {
   height: 100%;
   display: block;
   border: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.localizacao-mapa.mapa-carregado iframe {
+  opacity: 1;
+}
+
+.mapa-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 28px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 28% 24%, rgba(var(--gold-rgb), 0.22), transparent 28%),
+    linear-gradient(145deg, #0b1f3a, #111827);
+  color: #ffffff;
+}
+
+.localizacao-mapa.mapa-carregado .mapa-placeholder {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.mapa-placeholder span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(var(--gold-rgb), 0.18);
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mapa-placeholder strong {
+  max-width: 520px;
+  font-size: clamp(24px, 4vw, 38px);
+  line-height: 1.08;
+}
+
+.mapa-placeholder p {
+  max-width: 520px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.5;
 }
 
 @media (max-width: 760px) {

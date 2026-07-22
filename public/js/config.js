@@ -940,14 +940,75 @@ function aplicarConfigLoja() {
   });
 
   document.querySelectorAll("[data-mapa-iframe]").forEach(function (iframe) {
-    iframe.src =
+    const mapaUrl =
       "https://www.google.com/maps?q=" +
       encodeURIComponent(config.endereco) +
       "&output=embed";
+
+    iframe.dataset.src = mapaUrl;
+
+    if (iframe.dataset.carregado === "true") {
+      iframe.src = mapaUrl;
+    }
   });
+
+  prepararMapasSobDemanda();
 
   document.querySelectorAll("[data-whatsapp-link]").forEach(function (link) {
     link.href = criarLinkWhatsApp(link.dataset.whatsappMensagem || "");
+  });
+}
+
+function carregarMapaIframe(iframe) {
+  if (!iframe || iframe.dataset.carregado === "true") return;
+
+  const mapaUrl = iframe.dataset.src;
+  if (!mapaUrl) return;
+
+  iframe.src = mapaUrl;
+  iframe.dataset.carregado = "true";
+
+  const container = iframe.closest("[data-mapa-container]");
+  if (container) {
+    container.classList.add("mapa-carregado");
+  }
+}
+
+function prepararMapasSobDemanda() {
+  const iframesMapa = Array.from(document.querySelectorAll("[data-mapa-iframe]"));
+
+  if (!iframesMapa.length) return;
+
+  document.querySelectorAll("[data-carregar-mapa]").forEach(function (botao) {
+    botao.addEventListener(
+      "click",
+      function () {
+        const container = botao.closest("[data-mapa-container]");
+        carregarMapaIframe(container && container.querySelector("[data-mapa-iframe]"));
+      },
+      { once: true }
+    );
+  });
+
+  if (!("IntersectionObserver" in window)) return;
+
+  const observer = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+
+        carregarMapaIframe(entry.target);
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      rootMargin: "420px 0px",
+      threshold: 0.01,
+    }
+  );
+
+  iframesMapa.forEach(function (iframe) {
+    observer.observe(iframe);
   });
 }
 

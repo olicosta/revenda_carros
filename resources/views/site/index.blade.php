@@ -9,7 +9,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260721-sem-favoritos" />
+    <link rel="stylesheet" href="/css/style.css?v=20260722-mapa-lazy" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260703-botoes-grafite" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -277,12 +277,20 @@
           </a>
         </div>
 
-        <div class="localizacao-mapa">
+        <div class="localizacao-mapa" data-mapa-container>
+          <div class="mapa-placeholder">
+            <span>Mapa</span>
+            <strong>Veja a localização da loja</strong>
+            <p>Carregue o Google Maps somente quando precisar consultar a rota.</p>
+            <button type="button" class="btn-primary" data-carregar-mapa>
+              Carregar mapa
+            </button>
+          </div>
           <iframe
             title="Mapa da 3M Veículos"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=CENTRO%20II%20-%20R.%20Campos%20S%C3%A1les%2C%20293%20-%20Vila%20Ferroviaria%2C%20Mafra%20-%20SC%2C%2089300-094&output=embed"
+            data-src="https://www.google.com/maps?q=CENTRO%20II%20-%20R.%20Campos%20S%C3%A1les%2C%20293%20-%20Vila%20Ferroviaria%2C%20Mafra%20-%20SC%2C%2089300-094&output=embed"
             data-mapa-iframe
           ></iframe>
         </div>
@@ -307,7 +315,7 @@
       </svg>
     </a>
 
-    <script src="/js/config.js?v=20260628-localizacao-home"></script>
+    <script src="/js/config.js?v=20260722-mapa-lazy"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
