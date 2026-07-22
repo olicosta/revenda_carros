@@ -1,0 +1,46 @@
+{
+  "name": "3M Veículos",
+  "short_name": "3M Veículos",
+  "description": "Catálogo, atendimento e gestão da 3M Veículos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F3F4F6",
+  "theme_color": "#0B1F3A",
+  "categories": ["auto", "business", "shopping"],
+  "icons": [
+    {
+      "src": "/img/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Veículos",
+      "short_name": "Veículos",
+      "url": "/veiculos",
+      "description": "Ver veículos disponíveis"
+    },
+    {
+      "name": "Financiamento",
+      "short_name": "Financiar",
+      "url": "/financiamento",
+      "description": "Enviar interesse em financiamento"
+    },
+    {
+      "name": "Admin",
+      "short_name": "Admin",
+      "url": "/admin",
+      "description": "Abrir painel administrativo"
+    }
+  ]
+}

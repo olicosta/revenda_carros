@@ -1,0 +1,465 @@
+/* Catálogo mobile - 3M Veículos */
+
+.catalogo-filtro-toggle,
+.filtros-fechar-mobile {
+    display: none;
+}
+
+.catalogo-intro {
+    margin-bottom: clamp(20px, 3vw, 30px);
+}
+
+.catalogo-intro span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.catalogo-intro h1 {
+    max-width: 760px;
+    margin: 0;
+    color: var(--secondary);
+    font-size: clamp(30px, 5vw, 50px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+}
+
+.catalogo-intro p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: clamp(15px, 2vw, 18px);
+}
+
+.catalogo-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    border: 1px solid rgba(var(--secondary-rgb), 0.1);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(var(--secondary-rgb), 0.07);
+}
+
+.catalogo-toolbar span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.catalogo-toolbar #contador-resultados {
+    margin: 0;
+    color: var(--secondary);
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.catalogo-filtro-toggle-inline {
+    flex: 0 0 auto;
+    border: 1px solid rgba(var(--secondary-rgb), 0.14);
+    border-radius: 999px;
+    background: var(--secondary);
+    color: #fff;
+    font-weight: 900;
+}
+
+.filtros-acoes-mobile {
+    display: grid;
+    gap: 8px;
+}
+
+.filtros-acoes-mobile .btn-primary {
+    display: none;
+}
+
+@media (min-width: 801px) {
+    .area-catalogo {
+        padding-top: clamp(28px, 5vh, 50px);
+    }
+
+    .catalogo-layout {
+        display: grid;
+        grid-template-columns: minmax(250px, 292px) minmax(0, 1fr);
+        align-items: flex-start;
+    }
+
+    .filtros-lateral {
+        width: auto;
+        max-width: none;
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .filtros-lateral select,
+    .input-busca,
+    .range-filtros input,
+    .range-filtros select {
+        min-height: 36px;
+        padding: 8px 11px;
+        border-radius: 9px;
+        font-size: 13px;
+    }
+
+    .catalogo-toolbar {
+        position: static;
+    }
+
+    .filtros-acoes-mobile .btn-primary,
+    .filtros-fechar-mobile,
+    .catalogo-filtro-overlay {
+        display: none;
+    }
+
+    .btn-limpar {
+        margin-top: 8px;
+    }
+}
+
+.carro-card .carro-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.carro-card .carro-info h3 {
+    line-height: 1.18;
+}
+
+.carro-card .carro-acoes {
+    margin-top: auto;
+}
+
+.carro-card:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 4px;
+}
+
+@media (max-width: 800px) {
+    body.catalogo-filtros-aberto {
+        overflow: hidden;
+    }
+
+    .area-catalogo {
+        padding-top: 22px;
+    }
+
+    .catalogo-layout {
+        display: block;
+    }
+
+    .catalogo-filtro-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        min-height: 54px;
+        margin-bottom: 14px;
+        padding: 12px 16px;
+        border: 1px solid rgba(var(--secondary-rgb), 0.12);
+        border-radius: 16px;
+        background:
+            linear-gradient(135deg, rgba(var(--gold-rgb), 0.16), rgba(var(--secondary-rgb), 0.04)),
+            #fff;
+        color: var(--secondary);
+        box-shadow: 0 14px 32px rgba(var(--secondary-rgb), 0.08);
+        font-weight: 900;
+        cursor: pointer;
+    }
+
+    .catalogo-filtro-toggle::before {
+        content: '☰';
+        display: inline-grid;
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 12px;
+        background: var(--secondary);
+        color: var(--gold);
+        font-size: 18px;
+    }
+
+    .catalogo-filtro-toggle span {
+        margin-right: auto;
+    }
+
+    .catalogo-filtro-toggle strong {
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .catalogo-filtro-toggle-inline {
+        width: auto;
+        min-height: 42px;
+        margin: 0;
+        padding: 0 14px;
+        background: var(--secondary);
+        color: #fff;
+        box-shadow: none;
+    }
+
+    .catalogo-filtro-toggle-inline::before,
+    .catalogo-filtro-toggle-inline strong {
+        display: none;
+    }
+
+    .catalogo-toolbar {
+        position: sticky;
+        top: calc(var(--header-offset) + 8px);
+        z-index: 12;
+        margin-bottom: 12px;
+        padding: 13px 14px;
+        border-radius: 16px;
+    }
+
+    .catalogo-toolbar span {
+        font-size: 10px;
+    }
+
+    .catalogo-toolbar #contador-resultados {
+        font-size: 18px;
+    }
+
+    .catalogo-filtro-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 180;
+        background: rgba(7, 18, 37, 0.58);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+
+    body.catalogo-filtros-aberto .catalogo-filtro-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .filtros-lateral {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 190;
+        max-height: min(86svh, 720px);
+        padding: 16px;
+        border-radius: 26px 26px 0 0;
+        overflow-y: auto;
+        box-shadow: 0 -24px 70px rgba(0, 0, 0, 0.32);
+        transform: translateY(105%);
+        transition: transform 0.24s ease;
+    }
+
+    body.catalogo-filtros-aberto .filtros-lateral {
+        transform: translateY(0);
+    }
+
+    .filtros-topo {
+        position: sticky;
+        top: -16px;
+        z-index: 2;
+        align-items: center;
+        margin: -16px -16px 14px;
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        border-radius: 26px 26px 0 0;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(14px);
+    }
+
+    .filtros-fechar-mobile {
+        display: inline-grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border: none;
+        border-radius: 14px;
+        background: #eef2f7;
+        color: var(--secondary);
+        font-size: 26px;
+        font-weight: 900;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .input-busca,
+    .filtros-lateral select,
+    .range-filtros input,
+    .range-filtros select {
+        min-height: 44px;
+        border-radius: 12px;
+        font-size: 16px;
+    }
+
+    .filtros-principais,
+    .filtros-grid,
+    .range-filtros {
+        gap: 9px;
+    }
+
+    .range-filtros,
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-atalhos {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filtros-atalhos .check-filtro {
+        min-height: 42px;
+        border-radius: 12px;
+    }
+
+    .filtros-acoes-mobile {
+        position: sticky;
+        right: -16px;
+        bottom: -16px;
+        left: -16px;
+        margin: 12px -16px -16px;
+        padding: 12px 16px 16px;
+        border-top: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(14px);
+    }
+
+    .filtros-acoes-mobile .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        border: none;
+        border-radius: 12px;
+    }
+
+    .btn-limpar {
+        min-height: 42px;
+        margin: 0;
+        border-radius: 12px;
+        background: #eef2f7;
+        color: var(--secondary);
+    }
+
+    .filtros-ativos {
+        gap: 8px;
+        margin: 0 0 12px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .filtros-ativos::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filtro-chip {
+        flex: 0 0 auto;
+        padding: 7px 9px;
+        font-size: 13px;
+    }
+
+    .grid-carros {
+        gap: 14px;
+    }
+
+    .carro-card {
+        border-radius: 18px;
+    }
+
+    .carro-card:hover {
+        transform: none;
+    }
+
+    .carro-img-box {
+        aspect-ratio: 16 / 9;
+        min-height: 190px;
+    }
+
+    .carro-info {
+        padding: 16px;
+    }
+
+    .carro-card .carro-info h3 {
+        font-size: 22px;
+        letter-spacing: -0.02em;
+    }
+
+    .carro-card .carro-info p {
+        font-size: 14px;
+    }
+
+    .carro-card .carro-info strong {
+        margin-top: 2px;
+        font-size: 26px;
+    }
+
+    .carro-acoes {
+        display: grid;
+        grid-template-columns: 0.88fr 1fr;
+        gap: 9px;
+    }
+
+    .carro-acoes .btn-primary,
+    .carro-acoes .btn-whatsapp,
+    .btn-indisponivel {
+        min-height: 46px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 420px) {
+    .catalogo-intro {
+        margin-bottom: 18px;
+    }
+
+    .catalogo-intro h1 {
+        font-size: 30px;
+    }
+
+    .catalogo-toolbar {
+        align-items: stretch;
+    }
+
+    .catalogo-toolbar #contador-resultados {
+        font-size: 16px;
+    }
+
+    .catalogo-filtro-toggle-inline {
+        min-width: 88px;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .carro-img-box {
+        min-height: 170px;
+    }
+
+    .carro-card .carro-info h3 {
+        font-size: 20px;
+    }
+
+    .carro-card .carro-info strong {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 360px) {
+    .carro-acoes {
+        grid-template-columns: 1fr;
+    }
+}

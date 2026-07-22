@@ -1,0 +1,284 @@
+/* Menu publico padronizado com o painel admin - 3M Veiculos */
+
+.menu-mobile-toggle {
+  display: none;
+}
+
+.nav .menu-toggle {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --site-header-height: 74px;
+    --header-offset: var(--site-header-height);
+  }
+
+  body {
+    padding-top: var(--site-header-height);
+  }
+
+  body:not(.admin-page) .hero-modern:first-of-type {
+    padding-top: clamp(48px, 7vh, 72px) !important;
+  }
+
+  body:not(.admin-page) main > section:first-child,
+  body:not(.admin-page) .hero:first-child {
+    scroll-margin-top: calc(var(--site-header-height) + 18px);
+  }
+
+  body.menu-mobile-aberto {
+    overflow: hidden;
+  }
+
+  body.menu-mobile-aberto::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 690;
+    background: rgba(2, 6, 23, 0.58);
+    backdrop-filter: blur(4px);
+  }
+
+  .topo {
+    position: fixed !important;
+    inset: 0 0 auto 0 !important;
+    z-index: 800 !important;
+    height: var(--site-header-height) !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(var(--gold-rgb), 0.28) !important;
+    background:
+      linear-gradient(90deg, rgba(var(--primary-rgb), 0.98), rgba(var(--secondary-rgb), 0.98)) !important;
+    box-shadow: 0 14px 30px rgba(2, 6, 23, 0.18) !important;
+  }
+
+  .topo::after {
+    opacity: 0.45 !important;
+  }
+
+  .topo .container.nav,
+  .topo .nav {
+    display: flex !important;
+    width: min(calc(100% - 24px), 1180px) !important;
+    height: var(--site-header-height) !important;
+    min-height: var(--site-header-height) !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    margin: 0 auto !important;
+  }
+
+  .topo .logo {
+    display: inline-flex !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 60px) !important;
+    color: #ffffff !important;
+  }
+
+  .topo .logo img {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .topo .logo span {
+    min-width: 0 !important;
+    color: #ffffff !important;
+    font-size: 1.28rem !important;
+    line-height: 1 !important;
+  }
+
+  .topo .logo small {
+    color: var(--gold) !important;
+    font-size: 0.67rem !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  .menu-mobile-toggle {
+    position: relative;
+    z-index: 810;
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    border: 1px solid rgba(var(--gold-rgb), 0.55);
+    border-radius: 16px;
+    background:
+      linear-gradient(145deg, rgba(var(--gold-rgb), 0.18), rgba(255, 255, 255, 0.06)),
+      rgba(var(--secondary-rgb), 0.92);
+    color: #ffffff;
+    font-size: 0;
+    box-shadow: 0 12px 28px rgba(var(--secondary-rgb), 0.24), 0 0 18px rgba(var(--gold-rgb), 0.16);
+    cursor: pointer;
+  }
+
+  .menu-mobile-toggle span {
+    position: absolute;
+    width: 22px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+
+  .menu-mobile-toggle span:nth-child(1) {
+    transform: translateY(-7px);
+  }
+
+  .menu-mobile-toggle span:nth-child(3) {
+    transform: translateY(7px);
+  }
+
+  body.menu-mobile-aberto .menu-mobile-toggle span:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  body.menu-mobile-aberto .menu-mobile-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  body.menu-mobile-aberto .menu-mobile-toggle span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  .nav nav.site-nav,
+  .nav nav[data-site-nav] {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    z-index: 760 !important;
+    display: flex !important;
+    width: min(86vw, 360px) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding: calc(var(--site-header-height) + 16px) 16px 22px !important;
+    border: 0 !important;
+    border-right: 1px solid rgba(var(--gold-rgb), 0.3) !important;
+    border-radius: 0 24px 24px 0 !important;
+    background:
+      radial-gradient(circle at 10% 12%, rgba(var(--gold-rgb), 0.18), transparent 32%),
+      linear-gradient(165deg, rgba(var(--primary-rgb), 0.98), rgba(var(--secondary-rgb), 0.98)) !important;
+    box-shadow: 24px 0 70px rgba(2, 6, 23, 0.34), 0 0 26px rgba(var(--gold-rgb), 0.12) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(-105%) !important;
+    transition: transform 0.26s ease !important;
+  }
+
+  body.menu-mobile-aberto .nav nav.site-nav,
+  body.menu-mobile-aberto .nav nav[data-site-nav] {
+    transform: translateX(0) !important;
+  }
+
+  .nav nav.site-nav::before,
+  .nav nav[data-site-nav]::before {
+    content: "Navegacao";
+    display: flex;
+    margin: 0 4px 2px;
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 950;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .nav nav.site-nav a,
+  .nav nav[data-site-nav] a {
+    position: relative;
+    display: grid !important;
+    width: 100%;
+    min-height: 50px;
+    grid-template-columns: 10px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 15px !important;
+    background: rgba(255, 255, 255, 0.055) !important;
+    color: #e5e7eb !important;
+    font-size: 0.95rem !important;
+    font-weight: 900 !important;
+    text-align: left !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  .nav nav.site-nav a::before,
+  .nav nav[data-site-nav] a::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(var(--gold-rgb), 0.32);
+    box-shadow: 0 0 14px rgba(var(--gold-rgb), 0.2);
+  }
+
+  .nav nav.site-nav a::after,
+  .nav nav[data-site-nav] a::after {
+    content: "›";
+    color: var(--gold);
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .nav nav.site-nav a.ativo,
+  .nav nav[data-site-nav] a.ativo,
+  .nav nav.site-nav a:hover,
+  .nav nav[data-site-nav] a:hover,
+  .nav nav.site-nav a[href="admin.html"],
+  .nav nav[data-site-nav] a[href="admin.html"] {
+    border-color: rgba(var(--gold-rgb), 0.55) !important;
+    background: rgba(var(--gold-rgb), 0.18) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(var(--gold-rgb), 0.12) !important;
+  }
+
+  .nav nav.site-nav a.ativo::before,
+  .nav nav[data-site-nav] a.ativo::before,
+  .nav nav.site-nav a:hover::before,
+  .nav nav[data-site-nav] a:hover::before,
+  .nav nav.site-nav a[href="admin.html"]::before,
+  .nav nav[data-site-nav] a[href="admin.html"]::before {
+    background: var(--gold);
+  }
+}
+
+@media (max-width: 420px) {
+  .topo .container.nav,
+  .topo .nav {
+    width: calc(100% - 20px) !important;
+  }
+
+  .topo .logo span {
+    font-size: 1.08rem !important;
+  }
+
+  .menu-mobile-toggle {
+    width: 44px !important;
+    height: 44px !important;
+    flex-basis: 44px !important;
+  }
+
+  .nav nav.site-nav,
+  .nav nav[data-site-nav] {
+    width: min(88vw, 340px) !important;
+    padding-inline: 14px !important;
+  }
+
+  body:not(.admin-page) .hero-modern:first-of-type {
+    padding-top: 46px !important;
+  }
+}

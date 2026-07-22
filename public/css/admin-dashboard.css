@@ -1,0 +1,376 @@
+body.admin-page .dashboard-decisao {
+  display: grid;
+  gap: 18px;
+  margin: 22px 0;
+  padding: 22px;
+  border: 1px solid rgba(214, 226, 237, 0.92);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 253, 0.92)),
+    #ffffff;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+}
+
+body.admin-page .dashboard-decisao .financeiro-relatorio-topo {
+  align-items: flex-start !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+body.admin-page .dashboard-decisao .financeiro-relatorio-topo p {
+  margin: 5px 0 0;
+  color: var(--admin-muted);
+  font-weight: 700;
+}
+
+body.admin-page .dashboard-decisao-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+body.admin-page .dashboard-decisao-card {
+  --decision-color: #2563eb;
+  --decision-rgb: 37, 99, 235;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-height: 128px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(var(--decision-rgb), 0.18);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(var(--decision-rgb), 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(var(--decision-rgb), 0.08), rgba(255, 255, 255, 0.94));
+  box-shadow: 0 14px 32px rgba(var(--decision-rgb), 0.08);
+}
+
+body.admin-page .dashboard-decisao-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 14px 0;
+  height: 3px;
+  border-radius: 999px 999px 0 0;
+  background: var(--decision-color);
+}
+
+body.admin-page .dashboard-decisao-estoque {
+  --decision-color: #16a34a;
+  --decision-rgb: 22, 163, 74;
+}
+
+body.admin-page .dashboard-decisao-comercial {
+  --decision-color: #d4af37;
+  --decision-rgb: 212, 175, 55;
+}
+
+body.admin-page .dashboard-decisao-financeiro {
+  --decision-color: #e11d48;
+  --decision-rgb: 225, 29, 72;
+}
+
+body.admin-page .dashboard-decisao-icone {
+  display: inline-grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 15px;
+  background: rgba(var(--decision-rgb), 0.14);
+  color: var(--decision-color);
+}
+
+body.admin-page .dashboard-decisao-icone svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.admin-page .dashboard-decisao-card span:not(.dashboard-decisao-icone) {
+  display: block;
+  color: var(--admin-muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+body.admin-page .dashboard-decisao-card strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--admin-text);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1;
+}
+
+body.admin-page .dashboard-decisao-card small {
+  display: block;
+  margin-top: 8px;
+  color: var(--admin-muted);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+body.admin-page .dashboard-decisao-acao {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+  padding: 0 13px;
+  border: 1px solid rgba(var(--decision-rgb), 0.22);
+  border-radius: 999px;
+  background: rgba(var(--decision-rgb), 0.1);
+  color: var(--decision-color);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+body.admin-page .dashboard-decisao-acao:hover {
+  background: var(--decision-color);
+  color: #ffffff;
+}
+
+body.admin-page .sistema-cache-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+  background:
+    radial-gradient(circle at 90% 12%, rgba(37, 99, 235, 0.14), transparent 34%),
+    linear-gradient(145deg, #ffffff, #f8fbfd) !important;
+}
+
+body.admin-page .sistema-cache-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, #2563eb, #16a34a);
+}
+
+body.admin-page .sistema-cache-card .admin-form-acoes {
+  position: relative;
+  z-index: 1;
+}
+
+body.admin-page .sistema-acessos-card {
+  border-top: 4px solid #2563eb;
+}
+
+body.admin-page .sistema-acessos-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+body.admin-page .sistema-acessos-topo h3,
+body.admin-page .sistema-conta-form h4 {
+  margin: 6px 0 8px;
+  color: var(--admin-text);
+}
+
+body.admin-page .sistema-perfis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  margin: 16px 0 22px;
+}
+
+body.admin-page .sistema-perfis-grid article {
+  min-height: 96px;
+  padding: 14px;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(239, 246, 255, 0.92), rgba(255, 255, 255, 0.98));
+}
+
+body.admin-page .sistema-perfis-grid strong,
+body.admin-page .sistema-perfis-grid span {
+  display: block;
+}
+
+body.admin-page .sistema-perfis-grid strong {
+  color: #0f172a;
+  font-size: 0.94rem;
+}
+
+body.admin-page .sistema-perfis-grid span {
+  margin-top: 6px;
+  color: var(--admin-muted);
+  font-size: 0.83rem;
+  line-height: 1.4;
+}
+
+body.admin-page .sistema-contas-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+body.admin-page .sistema-conta-form {
+  padding: 18px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.78);
+}
+
+body.admin-page .sistema-contas-lista {
+  display: grid;
+  gap: 12px;
+}
+
+body.admin-page .sistema-conta-item {
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+body.admin-page .sistema-conta-avatar {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #0b1f3a, #2563eb);
+  color: #ffffff;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.18);
+}
+
+body.admin-page .sistema-conta-eu,
+body.admin-page .sistema-perfil-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.18);
+  color: #8a6500;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+body.admin-page .sistema-perfil-badge {
+  margin-right: 6px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis {
+  align-items: stretch;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-principais {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-secundarios {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-notas {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-card {
+  min-width: 0 !important;
+  overflow: visible !important;
+  padding-right: 18px !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-topo {
+  min-width: 0 !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-topo span:not(.financeiro-kpi-icone) {
+  min-width: 0 !important;
+  padding-right: 8px !important;
+  overflow-wrap: anywhere !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-card strong {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+  color: #020617 !important;
+  font-size: clamp(26px, 2.35vw, 36px) !important;
+  line-height: 1.08 !important;
+  white-space: nowrap !important;
+  font-variant-numeric: tabular-nums !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-principal strong {
+  font-size: clamp(28px, 2.6vw, 38px) !important;
+}
+
+body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-card small {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+}
+
+@media (max-width: 1360px) {
+  body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-secundarios {
+    grid-template-columns: repeat(2, minmax(260px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-principais,
+  body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-secundarios,
+  body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpis-notas {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-card strong,
+  body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-principal strong {
+    font-size: clamp(24px, 8vw, 34px) !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 900px) {
+  body.admin-page .dashboard-decisao {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  body.admin-page .dashboard-decisao-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.admin-page .dashboard-decisao-card {
+    min-height: 108px;
+    padding: 16px;
+  }
+
+  body.admin-page .sistema-acessos-topo {
+    flex-direction: column;
+  }
+
+  body.admin-page .sistema-acessos-topo .btn-primary {
+    width: 100%;
+  }
+
+  body.admin-page .sistema-contas-layout {
+    grid-template-columns: 1fr;
+  }
+
+  body.admin-page .sistema-conta-item {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  body.admin-page .sistema-conta-item .admin-acoes {
+    grid-column: 1 / -1;
+  }
+}
