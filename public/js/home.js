@@ -42,7 +42,7 @@ function htmlOfertaDestaque(carro, indice, total) {
     totalOfertas > 1 ? "Oferta " + (indiceAtual + 1) + " de " + totalOfertas : "Pronto para negociar";
 
   return (
-    '<div class="showcase-topline"><span>Telão de ofertas</span><strong>' +
+    '<div class="showcase-topline"><span>Ofertas</span><strong>' +
     escaparHTML(textoContador) +
     "</strong></div>" +
     '<div class="showcase-img"><img src="' +
@@ -94,14 +94,10 @@ function renderizarOfertaDestaque(carros, indice) {
   const carro = carros[indiceSeguro];
   const htmlDestaque = htmlOfertaDestaque(carro, indiceSeguro, total);
   const aplicarHtml = function () {
-    destaqueHome.classList.add("showcase-trocando");
-    window.setTimeout(function () {
-      destaqueHome.innerHTML = htmlDestaque;
-      destaqueHome.dataset.hidratado = "true";
-      destaqueHome.dataset.ofertaAtual = String(indiceSeguro);
-      destaqueHome.classList.remove("showcase-trocando");
-      vincularIndicadoresOfertas(carros);
-    }, 140);
+    destaqueHome.innerHTML = htmlDestaque;
+    destaqueHome.dataset.hidratado = "true";
+    destaqueHome.dataset.ofertaAtual = String(indiceSeguro);
+    vincularIndicadoresOfertas(carros);
   };
 
   if (carro.imagem) {
