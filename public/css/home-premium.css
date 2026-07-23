@@ -332,6 +332,9 @@ body {
 .hero-showcase .showcase-card {
     padding: 18px 22px 20px;
     color: var(--home-ink);
+    min-height: 292px;
+    display: flex;
+    flex-direction: column;
 }
 
 .showcase-card .showcase-badge {
@@ -353,12 +356,21 @@ body {
     font-size: clamp(24px, 1.8vw, 30px);
     line-height: 1.05;
     letter-spacing: -0.035em;
+    min-height: 62px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .showcase-card p {
     margin: 0 0 8px;
     color: #667085;
     font-size: 17px;
+    min-height: 25px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .showcase-price {
@@ -369,6 +381,7 @@ body {
     margin: 14px 0 16px;
     padding-top: 14px;
     border-top: 1px solid #e6eaf0;
+    min-height: 70px;
 }
 
 .showcase-price span {
@@ -393,6 +406,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+    margin-top: auto;
 }
 
 .showcase-actions .btn-primary,
@@ -409,6 +423,7 @@ body {
     justify-content: center;
     gap: 7px;
     margin-top: 14px;
+    min-height: 10px;
 }
 
 .showcase-indicadores button {

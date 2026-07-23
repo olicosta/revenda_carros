@@ -1,4 +1,4 @@
-const CACHE_NAME = "3m-veiculos-pwa-v25-ofertas-estavel";
+const CACHE_NAME = "3m-veiculos-pwa-v26-card-ofertas-fixo";
 const APP_SHELL = [
   "/",
   "/veiculos",

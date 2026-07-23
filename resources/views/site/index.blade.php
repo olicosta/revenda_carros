@@ -10,7 +10,7 @@
     />
     <title>3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260722-mapa-lazy" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260722-ofertas-estavel" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20260722-card-ofertas-fixo" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
