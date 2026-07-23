@@ -2138,7 +2138,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260721-cache-tools"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260722-contas-erros"></script>
   </body>
 </html>
 

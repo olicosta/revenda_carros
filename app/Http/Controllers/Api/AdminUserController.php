@@ -36,7 +36,7 @@ class AdminUserController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'role' => ['required', Rule::in(self::ROLES)],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ], $this->validationMessages());
 
         $user = User::query()->create($validated);
 
@@ -69,7 +69,7 @@ class AdminUserController extends Controller
             ],
             'role' => ['required', Rule::in(self::ROLES)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-        ]);
+        ], $this->validationMessages());
 
         $this->ensureAtLeastOneGestorRemains($user, $validated['role']);
 
@@ -123,5 +123,22 @@ class AdminUserController extends Controller
     private function publicUser(User $user): array
     {
         return $user->only(['id', 'name', 'username', 'email', 'role', 'created_at', 'updated_at']);
+    }
+
+    private function validationMessages(): array
+    {
+        return [
+            'name.required' => 'Informe o nome da conta.',
+            'username.required' => 'Informe o usuário de login.',
+            'username.unique' => 'Este usuário já está cadastrado.',
+            'email.required' => 'Informe o e-mail da conta.',
+            'email.email' => 'Informe um e-mail válido.',
+            'email.unique' => 'Este e-mail já está cadastrado.',
+            'role.required' => 'Selecione o perfil de acesso.',
+            'role.in' => 'Selecione um perfil de acesso válido.',
+            'password.required' => 'Informe uma senha para a nova conta.',
+            'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
+            'password.confirmed' => 'A confirmação da senha não confere.',
+        ];
     }
 }

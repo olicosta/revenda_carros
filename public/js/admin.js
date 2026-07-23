@@ -889,14 +889,39 @@ function requisicaoAdminApi(metodo, caminho, dados) {
 
     requisicao.send(dados === undefined ? null : JSON.stringify(dados));
 
+    const resposta = requisicao.responseText ? JSON.parse(requisicao.responseText) : {};
+
     if (requisicao.status < 200 || requisicao.status >= 300) {
-      return null;
+      return {
+        ok: false,
+        status: requisicao.status,
+        data: resposta,
+      };
     }
 
-    return requisicao.responseText ? JSON.parse(requisicao.responseText) : {};
+    return resposta;
   } catch (error) {
     return null;
   }
+}
+
+function mensagemErroApi(resposta, mensagemPadrao) {
+  const dados = resposta && resposta.data ? resposta.data : resposta;
+  const erros = dados && dados.errors ? dados.errors : null;
+
+  if (erros) {
+    const mensagens = Object.keys(erros)
+      .map(function (campo) {
+        return Array.isArray(erros[campo]) ? erros[campo][0] : erros[campo];
+      })
+      .filter(Boolean);
+
+    if (mensagens.length) {
+      return mensagens.join(" ");
+    }
+  }
+
+  return (dados && dados.message) || mensagemPadrao;
 }
 
 function requisicaoLaravel(metodo, caminho, dados) {
@@ -6879,8 +6904,11 @@ function salvarContaAdmin(evento) {
     : "/admin/users";
   const resposta = requisicaoAdminApi(editando ? "PUT" : "POST", caminho, dados);
 
-  if (!resposta || !resposta.data) {
-    retornoContaAdmin.textContent = "Não foi possível salvar a conta. Confira os dados e tente novamente.";
+  if (!resposta || resposta.ok === false || !resposta.data) {
+    retornoContaAdmin.textContent = mensagemErroApi(
+      resposta,
+      "Não foi possível salvar a conta. Confira os dados e tente novamente."
+    );
     retornoContaAdmin.className = "admin-retorno admin-retorno-erro";
     return;
   }
