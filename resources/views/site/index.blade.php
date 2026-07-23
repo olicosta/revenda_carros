@@ -10,7 +10,7 @@
     />
     <title>3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260722-mapa-lazy" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260703-botoes-grafite" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20260722-telao-ofertas" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
@@ -320,7 +320,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
-    <script data-site-script data-src="/js/home.js?v=20260721-home-instant-card"></script>
+    <script data-site-script data-src="/js/home.js?v=20260722-telao-ofertas"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

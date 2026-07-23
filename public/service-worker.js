@@ -1,4 +1,4 @@
-const CACHE_NAME = "3m-veiculos-pwa-v23-mapa-lazy";
+const CACHE_NAME = "3m-veiculos-pwa-v24-telao-ofertas";
 const APP_SHELL = [
   "/",
   "/veiculos",

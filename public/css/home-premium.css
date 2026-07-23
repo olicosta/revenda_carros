@@ -291,6 +291,12 @@ body {
     box-shadow: 0 34px 90px rgba(0, 0, 0, 0.38), 0 0 0 8px rgba(255, 255, 255, 0.035);
     overflow: hidden;
     transform: translateY(2px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.hero-showcase.showcase-trocando {
+    opacity: 0.62;
+    transform: translateY(8px) scale(0.992);
 }
 
 .showcase-topline {
@@ -401,6 +407,31 @@ body {
     margin: 0;
     border-radius: 13px;
     font-size: 18px;
+}
+
+.showcase-indicadores {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 14px;
+}
+
+.showcase-indicadores button {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: #cbd5e1;
+    cursor: pointer;
+    transition: width 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.showcase-indicadores button.ativo {
+    width: 28px;
+    background: #e7194b;
+    box-shadow: 0 8px 18px rgba(231, 25, 75, 0.22);
 }
 
 .whatsapp-float {

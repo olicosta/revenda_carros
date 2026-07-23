@@ -3,36 +3,63 @@ const baseCarrosHome = carregarCarros();
 const carrosDisponiveisHome = baseCarrosHome.filter(function (carro) {
   return carro.status !== "Vendido";
 });
+const carrosOfertaHome = carrosDisponiveisHome.filter(function (carro) {
+  return carro.oferta === true;
+});
 
 const carroDestaque =
-  carrosDisponiveisHome.find(function (carro) {
-    return carro.oferta === true && carro.status !== "Vendido";
-  }) ||
+  carrosOfertaHome[0] ||
   carrosDisponiveisHome.find(function (carro) {
     return carro.destaque === true;
   }) ||
   carrosDisponiveisHome[0];
 
-if (destaqueHome && carroDestaque) {
-  const mensagem = mensagemVeiculo(carroDestaque);
-  const idDestaque = Number(carroDestaque.id) || 0;
-  const htmlDestaque =
-    '<div class="showcase-topline"><span>Selecionado pela equipe</span><strong>Pronto para negociar</strong></div>' +
+function montarIndicadoresOfertas(indiceAtual, total) {
+  if (total <= 1) return "";
+
+  let html = '<div class="showcase-indicadores" aria-label="Ofertas em destaque">';
+
+  for (let i = 0; i < total; i += 1) {
+    html +=
+      '<button type="button" aria-label="Ver oferta ' +
+      (i + 1) +
+      '" class="' +
+      (i === indiceAtual ? "ativo" : "") +
+      '" data-oferta-indice="' +
+      i +
+      '"></button>';
+  }
+
+  return html + "</div>";
+}
+
+function htmlOfertaDestaque(carro, indice, total) {
+  const mensagem = mensagemVeiculo(carro);
+  const idDestaque = Number(carro.id) || 0;
+  const totalOfertas = Number(total) || 1;
+  const indiceAtual = Number(indice) || 0;
+  const textoContador =
+    totalOfertas > 1 ? "Oferta " + (indiceAtual + 1) + " de " + totalOfertas : "Pronto para negociar";
+
+  return (
+    '<div class="showcase-topline"><span>Telão de ofertas</span><strong>' +
+    escaparHTML(textoContador) +
+    "</strong></div>" +
     '<div class="showcase-img"><img src="' +
-    escaparAtributo(carroDestaque.imagem) +
+    escaparAtributo(carro.imagem) +
     '" alt="' +
-    escaparAtributo(carroDestaque.nome) +
+    escaparAtributo(carro.nome) +
     '" decoding="async" fetchpriority="high"></div>' +
     '<div class="showcase-card">' +
     '<span class="showcase-badge">Oferta em destaque</span>' +
     "<h3>" +
-    escaparHTML(carroDestaque.nome) +
+    escaparHTML(carro.nome) +
     "</h3>" +
     "<p>" +
-    escaparHTML(textoCarro(carroDestaque)) +
+    escaparHTML(textoCarro(carro)) +
     "</p>" +
     '<div class="showcase-price"><span>Preço anunciado</span><strong>' +
-    escaparHTML(carroDestaque.preco) +
+    escaparHTML(carro.preco) +
     "</strong></div>" +
     '<div class="showcase-actions"><a href="detalhes.html?id=' +
     idDestaque +
@@ -40,29 +67,73 @@ if (destaqueHome && carroDestaque) {
     '<a href="' +
     escaparAtributo(criarLinkWhatsApp(mensagem)) +
     '" class="btn-whatsapp destaque-whats" target="_blank" rel="noopener">WhatsApp</a></div>' +
-    "</div>";
+    montarIndicadoresOfertas(indiceAtual, totalOfertas) +
+    "</div>"
+  );
+}
 
-  if (!destaqueHome.dataset.hidratado) {
-    const imagemAtual = destaqueHome.querySelector(".showcase-img img");
-    const deveTrocarImagem =
-      !imagemAtual || imagemAtual.getAttribute("src") !== carroDestaque.imagem;
+let timerOfertasHome = null;
 
-    if (deveTrocarImagem && carroDestaque.imagem) {
-      const preload = new Image();
-      preload.decoding = "async";
-      preload.onload = function () {
-        destaqueHome.innerHTML = htmlDestaque;
-        destaqueHome.dataset.hidratado = "true";
-      };
-      preload.onerror = function () {
-        destaqueHome.innerHTML = htmlDestaque;
-        destaqueHome.dataset.hidratado = "true";
-      };
-      preload.src = carroDestaque.imagem;
-    } else {
+function vincularIndicadoresOfertas(carros) {
+  if (!destaqueHome) return;
+
+  destaqueHome.querySelectorAll("[data-oferta-indice]").forEach(function (botao) {
+    botao.addEventListener("click", function () {
+      const indice = Number(botao.dataset.ofertaIndice) || 0;
+      renderizarOfertaDestaque(carros, indice);
+      reiniciarTimerOfertas(carros);
+    });
+  });
+}
+
+function renderizarOfertaDestaque(carros, indice) {
+  if (!destaqueHome || !carros.length) return;
+
+  const total = carros.length;
+  const indiceSeguro = ((indice % total) + total) % total;
+  const carro = carros[indiceSeguro];
+  const htmlDestaque = htmlOfertaDestaque(carro, indiceSeguro, total);
+  const aplicarHtml = function () {
+    destaqueHome.classList.add("showcase-trocando");
+    window.setTimeout(function () {
       destaqueHome.innerHTML = htmlDestaque;
       destaqueHome.dataset.hidratado = "true";
-    }
+      destaqueHome.dataset.ofertaAtual = String(indiceSeguro);
+      destaqueHome.classList.remove("showcase-trocando");
+      vincularIndicadoresOfertas(carros);
+    }, 140);
+  };
+
+  if (carro.imagem) {
+    const preload = new Image();
+    preload.decoding = "async";
+    preload.onload = aplicarHtml;
+    preload.onerror = aplicarHtml;
+    preload.src = carro.imagem;
+  } else {
+    aplicarHtml();
+  }
+}
+
+function reiniciarTimerOfertas(carros) {
+  if (timerOfertasHome) {
+    window.clearInterval(timerOfertasHome);
+  }
+
+  if (!carros || carros.length <= 1 || !destaqueHome) return;
+
+  timerOfertasHome = window.setInterval(function () {
+    const indiceAtual = Number(destaqueHome.dataset.ofertaAtual || 0);
+    renderizarOfertaDestaque(carros, indiceAtual + 1);
+  }, 5200);
+}
+
+if (destaqueHome && carroDestaque) {
+  const carrosTelao = carrosOfertaHome.length > 0 ? carrosOfertaHome : [carroDestaque];
+
+  if (!destaqueHome.dataset.hidratado) {
+    renderizarOfertaDestaque(carrosTelao, 0);
+    reiniciarTimerOfertas(carrosTelao);
   }
 }
 
