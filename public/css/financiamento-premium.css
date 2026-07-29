@@ -174,6 +174,8 @@
 
 .finance-layout-interest {
     align-items: start;
+    grid-template-columns: 1fr;
+    gap: 22px;
 }
 
 .finance-form-card,
@@ -188,7 +190,7 @@
 }
 
 .finance-form-interest {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .finance-form-interest .finance-submit {
@@ -206,7 +208,10 @@
 
 .finance-side {
     display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
     gap: 18px;
+    position: static;
+    align-items: start;
 }
 
 .finance-benefits-card ul {
@@ -241,6 +246,7 @@
 
 .bancos-grid-compacto {
     margin-top: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
 }
 
 @media (max-width: 900px) {
@@ -253,6 +259,10 @@
     }
 
     .finance-form-interest {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .finance-side {
         grid-template-columns: 1fr;
     }
 
@@ -292,6 +302,10 @@
     }
 
     .finance-steps-premium .finance-step-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .finance-form-interest {
         grid-template-columns: 1fr;
     }
 
