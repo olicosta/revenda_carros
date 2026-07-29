@@ -9,7 +9,7 @@
       content="Detalhes do veículo selecionado na 3M Veículos."
     />
     <title>Detalhes do Veículo - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-mobile-actions" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
     <link rel="stylesheet" href="/css/detalhes-premium.css?v=20260729-detail-grid" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
   </head>

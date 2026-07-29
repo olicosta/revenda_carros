@@ -7852,7 +7852,7 @@ body:has(.admin) .pagina-titulo p {
 @media (max-width: 650px) {
   .whatsapp-fixo {
     right: 14px;
-    bottom: 86px;
+    bottom: max(18px, env(safe-area-inset-bottom));
     width: 48px;
     height: 48px;
     box-shadow: 0 12px 28px rgba(var(--success-rgb), 0.26);
