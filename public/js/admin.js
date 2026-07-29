@@ -2144,7 +2144,7 @@ async function renderizarInstagram() {
   }
 
   const imagem = await carregarImagemCanvas(carro.imagem);
-  const imagemAltura = formato === "story" ? 1040 : 650;
+  const imagemAltura = formato === "story" ? 1040 : 620;
 
   if (imagem) {
     desenharImagemCapa(ctx, imagem, 0, 0, largura, imagemAltura);
@@ -2160,6 +2160,11 @@ async function renderizarInstagram() {
   gradiente.addColorStop(1, "#020617");
   ctx.fillStyle = gradiente;
   ctx.fillRect(0, imagemAltura - 220, largura, 360);
+
+  if (formato !== "story") {
+    ctx.fillStyle = "#020617";
+    ctx.fillRect(0, imagemAltura, largura, altura - imagemAltura);
+  }
 
   ctx.fillStyle = tema.destaque;
   ctx.fillRect(72, 72, 210, 10);
@@ -2193,14 +2198,14 @@ async function renderizarInstagram() {
           ctaTextoY: altura - 134,
         }
       : {
-          tituloY: 690,
-          precoY: 825,
-          metaY1: 900,
-          metaY2: 948,
-          ctaY: 980,
+          tituloY: 675,
+          precoY: 800,
+          metaY1: 880,
+          metaY2: 928,
+          ctaY: 982,
           ctaAltura: 68,
           ctaFonte: "900 25px Arial",
-          ctaTextoY: 1024,
+          ctaTextoY: 1026,
         };
 
   ctx.fillStyle = "#ffffff";
