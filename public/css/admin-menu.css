@@ -84,6 +84,8 @@ body.admin-page .menu-toggle {
 
   body.admin-page .admin-mobile-menu-toggle span {
     position: absolute;
+    top: 50%;
+    left: 50%;
     width: 22px;
     height: 2px;
     border-radius: 999px;
@@ -92,15 +94,19 @@ body.admin-page .menu-toggle {
   }
 
   body.admin-page .admin-mobile-menu-toggle span:nth-child(1) {
-    transform: translateY(-7px);
+    transform: translate(-50%, -50%) translateY(-7px);
+  }
+
+  body.admin-page .admin-mobile-menu-toggle span:nth-child(2) {
+    transform: translate(-50%, -50%);
   }
 
   body.admin-page .admin-mobile-menu-toggle span:nth-child(3) {
-    transform: translateY(7px);
+    transform: translate(-50%, -50%) translateY(7px);
   }
 
   body.admin-page.admin-menu-aberto .admin-mobile-menu-toggle span:nth-child(1) {
-    transform: rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
   }
 
   body.admin-page.admin-menu-aberto .admin-mobile-menu-toggle span:nth-child(2) {
@@ -108,7 +114,7 @@ body.admin-page .menu-toggle {
   }
 
   body.admin-page.admin-menu-aberto .admin-mobile-menu-toggle span:nth-child(3) {
-    transform: rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
 
   body.admin-page .admin-top-actions {

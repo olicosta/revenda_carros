@@ -10,7 +10,7 @@
     <title>Painel Admin - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260721-admin-users" />
-    <link rel="stylesheet" href="/css/admin-menu.css?v=20260721-admin-drawer-scroll" />
+    <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body class="admin-page">
     <header class="topo">

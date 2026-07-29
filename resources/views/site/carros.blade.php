@@ -11,7 +11,7 @@
     <title>Veículos - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
     <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-mobile-actions" />
-    <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
+    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body>
     <header class="topo">
