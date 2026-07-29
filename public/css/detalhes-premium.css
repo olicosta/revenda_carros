@@ -22,6 +22,47 @@
     box-shadow: 0 28px 70px rgba(var(--secondary-rgb), 0.13);
 }
 
+@media (min-width: 901px) {
+    .detalhe-card {
+        grid-template-columns: minmax(0, 1.32fr) minmax(340px, 0.78fr);
+        grid-template-areas:
+            "galeria badges"
+            "galeria resumo"
+            "vantagens atendimento"
+            "ficha atendimento";
+        gap: 18px 34px;
+    }
+
+    .detalhe-galeria {
+        grid-area: galeria;
+    }
+
+    .detalhe-info {
+        display: contents;
+    }
+
+    .detalhe-badges {
+        grid-area: badges;
+        margin-bottom: -4px;
+    }
+
+    .detalhe-resumo {
+        grid-area: resumo;
+    }
+
+    .detalhe-vantagens {
+        grid-area: vantagens;
+    }
+
+    .detalhe-ficha-card {
+        grid-area: ficha;
+    }
+
+    .detalhe-bloco-acoes {
+        grid-area: atendimento;
+    }
+}
+
 .galeria-principal {
     overflow: hidden;
     border-radius: 24px;
