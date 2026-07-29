@@ -661,7 +661,7 @@ function renderizarSolicitacoesFinanciamento() {
         '<p>' + escaparHTML(item.cpf || "") + " · " + escaparHTML(item.phone || "") + '</p>' +
         '<small>Protocolo: <strong>' + escaparHTML(item.protocol || "Não gerado") + '</strong></small>' +
         '<small>' + documentos.length + ' documento(s) enviado(s)</small></div>' +
-        '<label>Status<select onchange="atualizarStatusFinanciamento(' + Number(item.id) + ', this.value)">' +
+        '<label class="financiamento-status-campo"><span>Status da análise</span><select onchange="atualizarStatusFinanciamento(' + Number(item.id) + ', this.value)">' +
         ["Recebida", "Em análise", "Documentação pendente", "Aprovada", "Recusada"]
           .map(function (status) {
             return '<option value="' + status + '"' +
