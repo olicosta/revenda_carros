@@ -9,8 +9,8 @@
       content="Catálogo de veículos 3M Veículos com filtros por marca, câmbio, preço e ordenação."
     />
     <title>Veículos - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
-    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-busca-mobile" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-card-acoes" />
+    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-card-acoes" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body>
@@ -228,7 +228,7 @@
     <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
-    <script data-site-script data-src="/js/catalogo.js?v=20260729-busca-mobile"></script>
+    <script data-site-script data-src="/js/catalogo.js?v=20260729-card-acoes"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

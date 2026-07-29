@@ -1661,6 +1661,7 @@ body.sistema-modal-aberto {
 .carro-acoes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
   gap: 10px;
   margin-top: auto;
 }
@@ -1677,76 +1678,89 @@ body.sistema-modal-aberto {
 }
 
 .carro-acoes .card-action-icon {
-  width: 52px;
-  min-width: 52px;
-  height: 52px;
-  min-height: 52px;
-  padding: 0;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  justify-self: center;
-  gap: 0;
-  font-size: 0;
-  line-height: 1;
-  border: 1px solid rgba(var(--border-rgb), 0.95);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 14px 30px rgba(var(--primary-rgb), 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
+  justify-self: stretch;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(var(--primary-rgb), 0.08);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .carro-acoes .card-action-icon:hover {
-  background: #fff;
   transform: translateY(-1px);
 }
 
+.carro-acoes .card-action-icon:active {
+  transform: translateY(0);
+}
+
+.carro-acoes .card-action-icon:focus-visible {
+  outline: 3px solid rgba(var(--gold-rgb), 0.72);
+  outline-offset: 3px;
+}
+
 .carro-acoes .card-action-icon .card-action-svg {
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   fill: currentColor;
 }
 
+.carro-acoes .card-action-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .carro-acoes .btn-primary.card-action-icon {
-  color: var(--secondary);
-  border-color: rgba(var(--secondary-rgb), 0.16);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 12px 28px rgba(var(--secondary-rgb), 0.12),
-    0 0 22px rgba(var(--secondary-rgb), 0.16);
+  color: #ffffff;
+  border-color: rgba(var(--secondary-rgb), 0.72);
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  box-shadow: 0 10px 22px rgba(var(--secondary-rgb), 0.18);
 }
 
 .carro-acoes .btn-whatsapp.card-action-icon {
-  color: var(--success);
-  border-color: rgba(var(--success-rgb), 0.18);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 12px 28px rgba(var(--success-rgb), 0.13),
-    0 0 24px rgba(var(--success-rgb), 0.24);
+  color: #ffffff;
+  border-color: rgba(var(--success-rgb), 0.72);
+  background: var(--success);
+  box-shadow: 0 10px 22px rgba(var(--success-rgb), 0.18);
 }
 
 .carro-acoes .btn-primary.card-action-icon:hover {
-  color: var(--primary);
-  box-shadow:
-    0 16px 34px rgba(var(--secondary-rgb), 0.16),
-    0 0 30px rgba(var(--secondary-rgb), 0.25);
+  color: #ffffff;
+  background: linear-gradient(135deg, #0f294d, #172033);
+  box-shadow: 0 12px 24px rgba(var(--secondary-rgb), 0.24);
 }
 
 .carro-acoes .btn-whatsapp.card-action-icon:hover {
-  color: #109241;
-  box-shadow:
-    0 16px 34px rgba(var(--success-rgb), 0.18),
-    0 0 34px rgba(var(--success-rgb), 0.32);
+  color: #ffffff;
+  background: #15803d;
+  box-shadow: 0 12px 24px rgba(var(--success-rgb), 0.24);
 }
 
 .carro-acoes .card-action-sold {
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
   font-size: 13px;
   font-weight: 900;
+  box-shadow: none;
 }
 
 .btn-indisponivel {
@@ -9330,6 +9344,7 @@ section,
     width: auto;
     grid-template-columns: repeat(2, 48px);
     justify-content: center;
+    gap: 12px;
   }
 
   .carro-acoes .card-action-icon {
@@ -9339,11 +9354,27 @@ section,
     min-height: 48px;
     padding: 0;
     border-radius: 50%;
+    gap: 0;
   }
 
   .carro-acoes a.card-action-icon,
   .carro-acoes button.card-action-icon {
     width: 48px;
+  }
+
+  .carro-acoes .card-action-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .carro-acoes .card-action-icon .card-action-svg {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
   }
 
   .grid-carros,

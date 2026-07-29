@@ -475,11 +475,22 @@
         padding: 0;
         border-radius: 50%;
         justify-self: center;
+        gap: 0;
     }
 
     .carro-acoes .card-action-icon .card-action-svg {
         width: 25px;
         height: 25px;
+        flex-basis: 25px;
+    }
+
+    .carro-acoes .card-action-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
     }
 }
 

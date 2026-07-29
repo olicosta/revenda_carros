@@ -205,8 +205,9 @@ function renderizar(listaCarros) {
         ? '<span class="btn-indisponivel card-action-icon card-action-sold" title="Vendido" aria-label="Vendido">Vendido</span>'
         : '<a href="' +
           escaparAtributo(criarLinkWhatsApp(mensagem)) +
-          '" class="btn-whatsapp card-action-icon" target="_blank" rel="noopener" title="Chamar no WhatsApp" aria-label="Chamar no WhatsApp" onclick="event.stopPropagation()">' +
+          '" class="btn-whatsapp card-action-icon" target="_blank" rel="noopener" title="Falar pelo WhatsApp" aria-label="Falar pelo WhatsApp" onclick="event.stopPropagation()">' +
           iconeWhatsAppCard() +
+          '<span class="card-action-label">WhatsApp</span>' +
           "</a>";
 
     return (
@@ -254,6 +255,7 @@ function renderizar(listaCarros) {
       idCarro +
       '" class="btn-primary card-action-icon" title="Ver detalhes" aria-label="Ver detalhes" onclick="event.stopPropagation()">' +
       iconeDetalhesCard() +
+      '<span class="card-action-label">Ver detalhes</span>' +
       "</a>" +
       botaoWhatsapp +
       "</div>" +
