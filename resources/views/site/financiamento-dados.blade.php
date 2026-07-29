@@ -463,6 +463,8 @@
       </section>
     </main>
 
+    @include('site.partials.whatsapp-floating')
+
     <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>

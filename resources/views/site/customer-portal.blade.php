@@ -75,6 +75,8 @@
       </section>
     @endif
   </main>
+  @include('site.partials.whatsapp-floating')
+
   <script>
     document.querySelector("[data-submit-once]")?.addEventListener("submit", function () {
       const botao = this.querySelector('button[type="submit"]');

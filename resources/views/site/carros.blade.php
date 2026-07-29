@@ -223,6 +223,8 @@
       <p>2026 3M Veículos - Todos os direitos reservados</p>
     </footer>
 
+    @include('site.partials.whatsapp-floating')
+
     <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>

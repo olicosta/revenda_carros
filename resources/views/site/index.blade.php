@@ -301,19 +301,7 @@
       <p>2026 3M Veículos - Todos os direitos reservados</p>
     </footer>
 
-    <a
-      href="https://wa.me/554796207774"
-      class="whatsapp-fixo"
-      target="_blank"
-      aria-label="Chamar 3M Veículos no WhatsApp"
-      data-whatsapp-link
-    >
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path
-          d="M16 3C8.8 3 3 8.7 3 15.8c0 2.4.7 4.8 2 6.8L3.7 29l6.6-1.7c1.8 1 3.8 1.5 5.8 1.5 7.2 0 13-5.7 13-12.8S23.2 3 16 3Zm0 23.6c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4c-1.1-1.7-1.7-3.7-1.7-5.8C5.8 10.1 10.4 5.4 16 5.4s10.2 4.7 10.2 10.4S21.6 26.6 16 26.6Zm5.6-8.1c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.2 2.2 3.4 5.4 4.7.8.3 1.4.5 1.8.7.8.2 1.5.2 2.1.1.6-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"
-        />
-      </svg>
-    </a>
+    @include('site.partials.whatsapp-floating')
 
     <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
