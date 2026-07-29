@@ -4699,8 +4699,112 @@ body.sistema-modal-aberto {
 footer {
   background: var(--primary);
   color: white;
-  text-align: center;
-  padding: 24px;
+  padding: 28px 0;
+}
+
+.site-footer {
+  background: #05070d;
+  color: #ffffff;
+  border-top: 1px solid rgba(var(--gold-rgb), 0.24);
+}
+
+.site-footer-inner {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+  border-left: 4px solid rgba(255, 255, 255, 0.14);
+  text-align: left;
+}
+
+.site-footer strong {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.site-footer p,
+.site-footer small,
+.site-footer nav {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.site-footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.site-footer nav a + a::before {
+  content: "|";
+  margin: 0 7px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.legal-page {
+  padding: clamp(44px, 6vw, 76px) 0;
+  background: var(--background);
+}
+
+.legal-card {
+  max-width: 860px;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: var(--shadow-soft);
+}
+
+.legal-card > span {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.legal-card h1 {
+  margin: 8px 0 18px;
+  color: var(--text);
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.legal-card p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    padding: 24px 0 92px;
+  }
+
+  .site-footer-inner {
+    gap: 8px;
+    padding-left: 14px;
+  }
+
+  .site-footer p,
+  .site-footer small,
+  .site-footer nav {
+    font-size: 13px;
+  }
 }
 
 /* PALETA PROFISSIONAL */
@@ -11142,5 +11246,34 @@ body.admin-page footer {
 
   .login-content > p {
     display: none;
+  }
+}
+
+body.admin-page .site-footer {
+  background: #05070d !important;
+  color: #ffffff !important;
+  border-top: 1px solid rgba(var(--gold-rgb), 0.24) !important;
+}
+
+body.admin-page .site-footer strong,
+body.admin-page .site-footer p,
+body.admin-page .site-footer small,
+body.admin-page .site-footer nav,
+body.admin-page .site-footer a {
+  color: #ffffff !important;
+}
+
+body.admin-page .site-footer a:hover {
+  color: var(--gold) !important;
+}
+
+body.admin-page .site-footer-inner {
+  width: min(calc(100% - 48px), var(--admin-content-max, 1180px)) !important;
+  margin: 0 auto !important;
+}
+
+@media (max-width: 900px) {
+  body.admin-page .site-footer-inner {
+    width: min(calc(100% - 28px), var(--admin-content-max, 1180px)) !important;
   }
 }

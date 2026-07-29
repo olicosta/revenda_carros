@@ -4,13 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @include('site.partials.pwa')
-    <meta
-      name="description"
-      content="Detalhes do veículo selecionado na 3M Veículos."
-    />
-    <title>Detalhes do Veículo - 3M Veículos</title>
+    <meta name="description" content="Termos de Uso da 3M Veículos." />
+    <title>Termos de Uso - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
-    <link rel="stylesheet" href="/css/detalhes-premium.css?v=20260729-detail-grid" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>
@@ -20,13 +16,8 @@
           <img src="/img/logo-3m-veiculos.jpg" alt="" />
           <span>3M <small>Veículos</small></span>
         </a>
-        <button
-          type="button"
-          class="menu-mobile-toggle"
-          aria-expanded="false"
-          aria-controls="site-nav"
-          data-menu-toggle
-        >
+
+        <button type="button" class="menu-mobile-toggle" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
           <span></span>
           <span></span>
           <span></span>
@@ -44,31 +35,32 @@
       </div>
     </header>
 
-    <section class="detalhes">
-      <div class="container" id="detalhe-carro"></div>
-    </section>
+    <main class="legal-page">
+      <section class="container legal-card">
+        <span>Termos</span>
+        <h1>Termos de Uso</h1>
+        <p>
+          As informações dos veículos anunciados podem sofrer alterações de preço,
+          disponibilidade, quilometragem, opcionais e condições comerciais sem aviso
+          prévio.
+        </p>
+        <p>
+          O envio de interesse pelo site não garante aprovação de financiamento,
+          reserva automática do veículo ou fechamento da negociação. Todas as
+          condições são confirmadas diretamente pela equipe da 3M Veículos.
+        </p>
+        <p>
+          Ao utilizar o site, o cliente declara estar ciente de que o atendimento
+          poderá ocorrer por WhatsApp, telefone ou e-mail, conforme os dados
+          informados voluntariamente.
+        </p>
+      </section>
+    </main>
 
     @include('site.partials.footer')
-
     @include('site.partials.whatsapp-floating')
 
     <script src="/js/config.js?v=20260729-footer-compacto"></script>
-    <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
-    <script data-site-script data-src="/js/detalhes.js?v=20260721-ctas-plus"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -8,7 +8,7 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260721-admin-users" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
@@ -1953,9 +1953,7 @@
       </div>
     </section>
 
-    <footer>
-      <p>2026 3M Veículos - Todos os direitos reservados</p>
-    </footer>
+    @include('site.partials.footer')
 
     <div class="admin-modal" id="modal-venda" aria-hidden="true">
       <div class="admin-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-venda-titulo">
@@ -2134,7 +2132,7 @@
       </div>
     </div>
 
-    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
+    <script src="/js/config.js?v=20260729-footer-compacto"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

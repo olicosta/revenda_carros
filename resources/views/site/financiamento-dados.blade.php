@@ -9,7 +9,7 @@
       content="Formulário completo de dados para pré-análise de financiamento automotivo."
     />
     <title>Dados para Financiamento - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
   </head>
   <body>
     <main class="finance-external-page">
@@ -463,9 +463,10 @@
       </section>
     </main>
 
+    @include('site.partials.footer')
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
+    <script src="/js/config.js?v=20260729-footer-compacto"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
     <script data-site-script data-src="/js/financiamento-dados.js?v=20260625-modal-cards"></script>

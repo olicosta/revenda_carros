@@ -9,7 +9,7 @@
       content="Depoimentos de clientes que compraram veículos na 3M Veículos."
     />
     <title>Depoimentos - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>
@@ -86,13 +86,11 @@
       </div>
     </section>
 
-    <footer>
-      <p>2026 3M Veículos - Todos os direitos reservados</p>
-    </footer>
+    @include('site.partials.footer')
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
+    <script src="/js/config.js?v=20260729-footer-compacto"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

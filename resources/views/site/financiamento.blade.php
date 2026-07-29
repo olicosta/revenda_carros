@@ -9,7 +9,7 @@
       content="Financiamento automotivo com atendimento direto da 3M Veículos pelo WhatsApp."
     />
     <title>Financiamento - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
     <link rel="stylesheet" href="/css/financiamento-premium.css?v=20260729-layout-sem-vazio" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
@@ -186,13 +186,11 @@
 
     </main>
 
-    <footer>
-      <p>2026 3M Veículos - Todos os direitos reservados</p>
-    </footer>
+    @include('site.partials.footer')
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
+    <script src="/js/config.js?v=20260729-footer-compacto"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>

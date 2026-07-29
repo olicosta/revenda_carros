@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   @include('site.partials.pwa')
   <title>Área do cliente | 3M Veículos</title>
-  <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
+  <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
 </head>
 <body class="customer-portal-page">
   <main class="customer-portal">
@@ -75,6 +75,7 @@
       </section>
     @endif
   </main>
+  @include('site.partials.footer')
   @include('site.partials.whatsapp-floating')
 
   <script>

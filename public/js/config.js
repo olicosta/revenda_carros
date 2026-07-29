@@ -925,6 +925,10 @@ function aplicarConfigLoja() {
     elemento.textContent = config.email;
   });
 
+  document.querySelectorAll("[data-loja-whatsapp]").forEach(function (elemento) {
+    elemento.textContent = config.whatsapp;
+  });
+
   document.querySelectorAll("[data-loja-sobre]").forEach(function (elemento) {
     elemento.textContent = config.sobre;
   });

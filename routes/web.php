@@ -20,6 +20,10 @@ $publicPages = [
     '/financiamento-dados.html' => 'financiamento-dados',
     '/detalhes' => 'detalhes',
     '/detalhes.html' => 'detalhes',
+    '/politica-privacidade' => 'politica-privacidade',
+    '/politica-privacidade.html' => 'politica-privacidade',
+    '/termos-de-uso' => 'termos-de-uso',
+    '/termos-de-uso.html' => 'termos-de-uso',
 ];
 
 foreach ($publicPages as $uri => $view) {
