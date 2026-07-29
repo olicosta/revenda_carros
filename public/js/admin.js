@@ -199,6 +199,7 @@ const centralListaAniversarios = document.getElementById("central-lista-aniversa
 const textareaMensagemAniversario = document.getElementById("mensagem-aniversario");
 const btnSalvarMensagemAniversario = document.getElementById("salvar-mensagem-aniversario");
 const kanbanClientes = document.getElementById("kanban-clientes");
+const arquivoClientes = document.getElementById("arquivo-clientes");
 const listaSolicitacoesFinanciamento = document.getElementById("lista-solicitacoes-financiamento");
 const selectHistoricoVeiculo = document.getElementById("historico-veiculo");
 const listaHistoricoVeiculos = document.getElementById("lista-historico-veiculos");
@@ -227,6 +228,8 @@ let parceriasAdmin = carregarParcerias();
 let saidasFinanceiras = carregarSaidasFinanceiras();
 let vendedoresAdmin = carregarVendedores();
 let leadsAdmin = carregarLeadsAdmin();
+const kanbanClientesLimite = 6;
+const kanbanStatusExpandidos = new Set();
 let historicoVeiculosAdmin = carregarHistoricoVeiculos();
 let solicitacoesFinanciamentoAdmin = [];
 let notasFiscaisAdmin = carregarNotasFiscais();
@@ -5021,12 +5024,17 @@ function preencherVendedoresLead() {
 function renderizarKanbanClientes() {
   if (!kanbanClientes) return;
 
-  const etapas = ["Novo", "Em atendimento", "Proposta", "Fechado", "Perdido"];
+  const etapas = ["Novo", "Em atendimento", "Proposta"];
   kanbanClientes.innerHTML = etapas
     .map(function (etapa) {
       const itens = leadsAdmin.filter(function (lead) {
         return lead.status === etapa;
       });
+      const expandido = kanbanStatusExpandidos.has(etapa);
+      const itensVisiveis = expandido
+        ? itens
+        : itens.slice(0, kanbanClientesLimite);
+      const ocultos = Math.max(0, itens.length - itensVisiveis.length);
 
       return (
         '<section class="kanban-coluna" data-kanban-status="' +
@@ -5038,19 +5046,30 @@ function renderizarKanbanClientes() {
         itens.length +
         "</span></header>" +
         '<div class="kanban-lista">' +
-        itens
+        itensVisiveis
           .map(function (lead) {
             const vendedor = vendedorLeadPorId(lead.vendedorId);
+            const idLead = Number(lead.id);
 
             return (
               '<article class="kanban-card temperatura-' +
               classeTokenAdmin(lead.temperatura, "morno") +
               '" draggable="true" data-lead-id="' +
-              Number(lead.id) +
+              idLead +
               '">' +
+              '<div class="kanban-card-topo">' +
               "<strong>" +
               escaparHTML(lead.nome) +
               "</strong>" +
+              '<div class="kanban-card-acoes">' +
+              '<button type="button" title="Editar cliente" aria-label="Editar cliente" onclick="event.stopPropagation(); editarLead(' +
+              idLead +
+              ')">✎</button>' +
+              '<button type="button" class="kanban-card-excluir" title="Excluir cliente" aria-label="Excluir cliente" onclick="event.stopPropagation(); excluirLead(' +
+              idLead +
+              ')">×</button>' +
+              "</div>" +
+              "</div>" +
               "<span>" +
               escaparHTML(lead.veiculoNome || "Sem veículo definido") +
               "</span>" +
@@ -5063,6 +5082,17 @@ function renderizarKanbanClientes() {
             );
           })
           .join("") +
+        (ocultos
+          ? '<button type="button" class="kanban-ver-mais" onclick="alternarKanbanStatus(\'' +
+            escaparAtributo(etapa) +
+            "')\">+" +
+            ocultos +
+            " cliente(s)</button>"
+          : expandido && itens.length > kanbanClientesLimite
+            ? '<button type="button" class="kanban-ver-mais" onclick="alternarKanbanStatus(\'' +
+              escaparAtributo(etapa) +
+              "')\">Mostrar menos</button>"
+            : "") +
         "</div></section>"
       );
     })
@@ -5106,6 +5136,82 @@ function renderizarKanbanClientes() {
       renderizarClientes();
     });
   });
+
+  renderizarArquivoClientes();
+}
+
+function alternarKanbanStatus(status) {
+  if (kanbanStatusExpandidos.has(status)) {
+    kanbanStatusExpandidos.delete(status);
+  } else {
+    kanbanStatusExpandidos.add(status);
+  }
+
+  renderizarKanbanClientes();
+}
+
+function renderizarArquivoClientes() {
+  if (!arquivoClientes) return;
+
+  const arquivados = leadsAdmin
+    .filter(function (lead) {
+      return lead.status === "Fechado" || lead.status === "Perdido";
+    })
+    .sort(function (a, b) {
+      return String(b.atualizadoEm || b.criadoEm || "").localeCompare(
+        String(a.atualizadoEm || a.criadoEm || "")
+      );
+    });
+
+  const fechados = arquivados.filter(function (lead) {
+    return lead.status === "Fechado";
+  }).length;
+  const perdidos = arquivados.filter(function (lead) {
+    return lead.status === "Perdido";
+  }).length;
+
+  arquivoClientes.innerHTML =
+    '<div class="clientes-arquivo-topo">' +
+    '<div><span class="admin-eyebrow">Arquivo comercial</span><h4>Fechados e perdidos</h4><p>Clientes fora da pipeline ativa, mantendo histórico para consulta.</p></div>' +
+    '<div class="clientes-arquivo-contadores"><span>Fechados: ' +
+    fechados +
+    "</span><span>Perdidos: " +
+    perdidos +
+    "</span></div></div>" +
+    (arquivados.length
+      ? '<div class="clientes-arquivo-grid">' +
+        arquivados
+          .slice(0, 12)
+          .map(function (lead) {
+            const idLead = Number(lead.id);
+
+            return (
+              '<article class="clientes-arquivo-card status-' +
+              classeTokenAdmin(lead.status, "arquivo") +
+              '">' +
+              '<div><strong>' +
+              escaparHTML(lead.nome) +
+              "</strong><span>" +
+              escaparHTML(lead.status) +
+              " · " +
+              escaparHTML(lead.veiculoNome || "Sem veículo") +
+              "</span></div>" +
+              '<div class="clientes-arquivo-acoes">' +
+              '<button type="button" onclick="editarLead(' +
+              idLead +
+              ')">Editar</button>' +
+              '<button type="button" class="btn-excluir" onclick="excluirLead(' +
+              idLead +
+              ')">Excluir</button>' +
+              "</div></article>"
+            );
+          })
+          .join("") +
+        "</div>" +
+        (arquivados.length > 12
+          ? '<p class="clientes-arquivo-observacao">Mostrando os 12 mais recentes. Use a lista de clientes para consultar todos.</p>'
+          : "")
+      : '<p class="sem-resultados">Nenhum cliente arquivado ainda.</p>');
 }
 
 function renderizarHistoricoVeiculos() {

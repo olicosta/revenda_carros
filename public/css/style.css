@@ -9428,7 +9428,7 @@ section,
 
 .clientes-kanban {
   display: grid;
-  grid-template-columns: repeat(5, minmax(210px, 1fr));
+  grid-template-columns: repeat(3, minmax(230px, 1fr));
   gap: 12px;
   overflow-x: auto;
   padding-bottom: 8px;
@@ -9481,6 +9481,51 @@ section,
   cursor: grab;
 }
 
+.kanban-card-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.kanban-card-acoes {
+  display: inline-flex;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.kanban-card:hover .kanban-card-acoes,
+.kanban-card:focus-within .kanban-card-acoes {
+  opacity: 1;
+}
+
+.kanban-card-acoes button,
+.kanban-ver-mais {
+  border: 1px solid #dbe4ef;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.kanban-card-acoes button {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  line-height: 1;
+}
+
+.kanban-card-acoes .kanban-card-excluir {
+  color: #dc2626;
+}
+
+.kanban-ver-mais {
+  min-height: 38px;
+  border-radius: 10px;
+  color: #2563eb;
+}
+
 .kanban-card.arrastando {
   opacity: 0.45;
 }
@@ -9497,6 +9542,94 @@ section,
 .kanban-card small {
   color: #64748b;
   font-size: 11px;
+}
+
+.clientes-arquivo {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e5edf6;
+}
+
+.clientes-arquivo-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.clientes-arquivo-topo h4 {
+  margin: 2px 0 4px;
+  font-size: 20px;
+}
+
+.clientes-arquivo-topo p,
+.clientes-arquivo-observacao {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.clientes-arquivo-contadores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.clientes-arquivo-contadores span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #eef4fb;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.clientes-arquivo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.clientes-arquivo-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #dbe4ef;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.clientes-arquivo-card strong,
+.clientes-arquivo-card span {
+  display: block;
+}
+
+.clientes-arquivo-card span {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.clientes-arquivo-acoes {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.clientes-arquivo-acoes button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid #dbe4ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 @media (max-width: 1050px) {
