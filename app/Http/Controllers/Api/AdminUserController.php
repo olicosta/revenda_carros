@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 
 class AdminUserController extends Controller
@@ -35,7 +36,7 @@ class AdminUserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'role' => ['required', Rule::in(self::ROLES)],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', $this->passwordRule(), 'confirmed'],
         ], $this->validationMessages());
 
         $user = User::query()->create($validated);
@@ -68,7 +69,7 @@ class AdminUserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
             'role' => ['required', Rule::in(self::ROLES)],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password' => ['nullable', 'string', $this->passwordRule(), 'confirmed'],
         ], $this->validationMessages());
 
         $this->ensureAtLeastOneGestorRemains($user, $validated['role']);
@@ -137,8 +138,15 @@ class AdminUserController extends Controller
             'role.required' => 'Selecione o perfil de acesso.',
             'role.in' => 'Selecione um perfil de acesso válido.',
             'password.required' => 'Informe uma senha para a nova conta.',
-            'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
+            'password.min' => 'A senha deve ter pelo menos 10 caracteres.',
+            'password.letters' => 'A senha deve conter letras.',
+            'password.numbers' => 'A senha deve conter números.',
             'password.confirmed' => 'A confirmação da senha não confere.',
         ];
+    }
+
+    private function passwordRule(): Rules\Password
+    {
+        return Rules\Password::min(10)->letters()->numbers();
     }
 }

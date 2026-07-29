@@ -20,15 +20,15 @@ class AdminUserApiTest extends TestCase
             'username' => 'vendedor.teste',
             'email' => 'vendedor@example.com',
             'role' => 'vendedor',
-            'password' => 'senha-segura',
-            'password_confirmation' => 'senha-segura',
+            'password' => 'senha-segura-2026',
+            'password_confirmation' => 'senha-segura-2026',
         ])->assertCreated();
 
         $userId = $response->json('data.id');
         $user = User::query()->findOrFail($userId);
 
         $this->assertSame('vendedor', $user->role);
-        $this->assertTrue(Hash::check('senha-segura', $user->password));
+        $this->assertTrue(Hash::check('senha-segura-2026', $user->password));
 
         $this->actingAs($gestor)->putJson('/api/admin/users/'.$userId, [
             'name' => 'Financeiro Teste',
@@ -41,7 +41,7 @@ class AdminUserApiTest extends TestCase
 
         $user->refresh();
         $this->assertSame('financeiro', $user->role);
-        $this->assertTrue(Hash::check('senha-segura', $user->password));
+        $this->assertTrue(Hash::check('senha-segura-2026', $user->password));
 
         $this->actingAs($gestor)
             ->deleteJson('/api/admin/users/'.$userId)

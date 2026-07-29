@@ -86,8 +86,8 @@ class AuthenticationTest extends TestCase
                 'current_username' => 'admin',
                 'current_password' => '1234',
                 'username' => 'gestor',
-                'password' => 'nova-senha',
-                'password_confirmation' => 'nova-senha',
+                'password' => 'nova-senha-2026',
+                'password_confirmation' => 'nova-senha-2026',
             ])
             ->assertOk()
             ->assertJsonPath('message', 'Acesso atualizado com sucesso.');
@@ -95,6 +95,6 @@ class AuthenticationTest extends TestCase
         $user->refresh();
 
         $this->assertSame('gestor', $user->username);
-        $this->assertTrue(Hash::check('nova-senha', $user->password));
+        $this->assertTrue(Hash::check('nova-senha-2026', $user->password));
     }
 }

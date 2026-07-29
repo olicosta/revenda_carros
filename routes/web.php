@@ -40,6 +40,7 @@ Route::post('/esqueci-senha', [PasswordResetController::class, 'email'])
 Route::get('/redefinir-senha/{token}', [PasswordResetController::class, 'reset'])
     ->name('password.reset');
 Route::post('/redefinir-senha', [PasswordResetController::class, 'update'])
+    ->middleware('throttle:5,1')
     ->name('password.update');
 
 Route::get('/cliente', [CustomerPortalController::class, 'show'])

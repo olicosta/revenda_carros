@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -83,7 +84,7 @@ class AuthenticatedSessionController extends Controller
                 'max:255',
                 Rule::unique('users', 'username')->ignore($user->id),
             ],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', Rules\Password::min(10)->letters()->numbers(), 'confirmed'],
         ]);
 
         if (
