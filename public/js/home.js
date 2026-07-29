@@ -109,14 +109,18 @@ function renderizarOfertaDestaque(carros, indice) {
   const indiceSeguro = ((indice % total) + total) % total;
   const carro = carros[indiceSeguro];
   const htmlDestaque = htmlOfertaDestaque(carro, indiceSeguro, total);
+  const primeiraRenderizacao = destaqueHome.dataset.hidratado !== "true";
   const aplicarHtml = function () {
     destaqueHome.innerHTML = htmlDestaque;
     destaqueHome.dataset.hidratado = "true";
     destaqueHome.dataset.ofertaAtual = String(indiceSeguro);
+    destaqueHome.classList.remove("hero-showcase-loading");
     vincularIndicadoresOfertas(carros);
   };
 
-  if (carro.imagem) {
+  if (primeiraRenderizacao) {
+    aplicarHtml();
+  } else if (carro.imagem) {
     const preload = new Image();
     preload.decoding = "async";
     preload.onload = aplicarHtml;

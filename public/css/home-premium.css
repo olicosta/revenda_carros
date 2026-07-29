@@ -329,6 +329,25 @@ body {
     object-fit: cover;
 }
 
+.showcase-img-placeholder {
+    background:
+        linear-gradient(110deg, #dde3ea 8%, #f5f7fa 18%, #dde3ea 33%);
+    background-size: 200% 100%;
+    animation: showcasePulse 1.15s linear infinite;
+}
+
+.hero-showcase-loading .showcase-card h3,
+.hero-showcase-loading .showcase-card p,
+.hero-showcase-loading .showcase-price strong {
+    color: #667085;
+}
+
+@keyframes showcasePulse {
+    to {
+        background-position-x: -200%;
+    }
+}
+
 .hero-showcase .showcase-card {
     padding: 18px 22px 20px;
     color: var(--home-ink);

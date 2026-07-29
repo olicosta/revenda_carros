@@ -10,7 +10,7 @@
     />
     <title>3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260722-card-ofertas-fixo" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20260729-ofertas-sem-piscar" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
@@ -111,38 +111,28 @@
           </div>
         </div>
 
-        <div class="hero-showcase" id="destaque-home">
+        <div class="hero-showcase hero-showcase-loading" id="destaque-home" aria-live="polite">
           <div class="showcase-topline">
-            <span>Selecionado pela equipe</span>
+            <span>Ofertas</span>
             <strong>Pronto para negociar</strong>
           </div>
-          <div class="showcase-img">
-            <img
-              src="https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?auto=format&fit=crop&w=900&q=80"
-              alt="Honda Civic Touring"
-              width="900"
-              height="563"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </div>
+          <div class="showcase-img showcase-img-placeholder"></div>
           <div class="showcase-card">
-            <span class="showcase-badge">Oferta em destaque</span>
-            <h3>Honda Civic Touring</h3>
-            <p>2020 | 48.000 km | Automático</p>
+            <span class="showcase-badge">Ofertas em destaque</span>
+            <h3>Carregando ofertas</h3>
+            <p>Buscando os veículos disponíveis no estoque.</p>
             <div class="showcase-price">
               <span>Preço anunciado</span>
-              <strong>R$ 129.900</strong>
+              <strong>Consulte</strong>
             </div>
             <div class="showcase-actions">
-              <a href="detalhes.html?id=1" class="btn-primary">Ver oferta</a>
+              <a href="carros.html" class="btn-primary">Ver estoque</a>
               <a
                 href="https://wa.me/554796207774"
                 class="btn-whatsapp destaque-whats"
                 target="_blank"
                 rel="noopener"
                 data-whatsapp-link
-                data-whatsapp-mensagem="Olá, tenho interesse no Honda Civic Touring."
               >WhatsApp</a>
             </div>
           </div>
@@ -308,7 +298,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
-    <script data-site-script data-src="/js/home.js?v=20260729-whatsapp-led"></script>
+    <script data-site-script data-src="/js/home.js?v=20260729-ofertas-sem-piscar"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>
