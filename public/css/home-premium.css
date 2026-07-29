@@ -487,6 +487,10 @@ body {
 .contato-modern .container {
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .contato-modern h2,
@@ -497,6 +501,7 @@ body {
 
 .contato-modern p,
 .contato.contato-modern p {
+    margin-inline: auto;
     color: rgba(255, 255, 255, 0.82) !important;
 }
 
