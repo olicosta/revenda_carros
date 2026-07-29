@@ -1677,24 +1677,71 @@ body.sistema-modal-aberto {
 }
 
 .carro-acoes .card-action-icon {
-  min-height: 48px;
+  width: 52px;
+  min-width: 52px;
+  height: 52px;
+  min-height: 52px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  justify-self: center;
   gap: 0;
   font-size: 0;
   line-height: 1;
+  border: 1px solid rgba(var(--border-rgb), 0.95);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 14px 30px rgba(var(--primary-rgb), 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
 }
 
-.carro-acoes .card-action-icon span {
+.carro-acoes .card-action-icon:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.carro-acoes .card-action-icon .card-action-svg {
   width: 28px;
   height: 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  line-height: 1;
+  fill: currentColor;
+}
+
+.carro-acoes .btn-primary.card-action-icon {
+  color: var(--secondary);
+  border-color: rgba(var(--secondary-rgb), 0.16);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 12px 28px rgba(var(--secondary-rgb), 0.12),
+    0 0 22px rgba(var(--secondary-rgb), 0.16);
+}
+
+.carro-acoes .btn-whatsapp.card-action-icon {
+  color: var(--success);
+  border-color: rgba(var(--success-rgb), 0.18);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 12px 28px rgba(var(--success-rgb), 0.13),
+    0 0 24px rgba(var(--success-rgb), 0.24);
+}
+
+.carro-acoes .btn-primary.card-action-icon:hover {
+  color: var(--primary);
+  box-shadow:
+    0 16px 34px rgba(var(--secondary-rgb), 0.16),
+    0 0 30px rgba(var(--secondary-rgb), 0.25);
+}
+
+.carro-acoes .btn-whatsapp.card-action-icon:hover {
+  color: #109241;
+  box-shadow:
+    0 16px 34px rgba(var(--success-rgb), 0.18),
+    0 0 34px rgba(var(--success-rgb), 0.32);
 }
 
 .carro-acoes .card-action-sold {
