@@ -9,7 +9,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260722-mapa-lazy" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-card-icones" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260722-card-ofertas-fixo" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -320,7 +320,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
-    <script data-site-script data-src="/js/home.js?v=20260722-ofertas-estavel"></script>
+    <script data-site-script data-src="/js/home.js?v=20260729-card-icones"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

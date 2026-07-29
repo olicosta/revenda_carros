@@ -185,10 +185,12 @@ function renderizar(listaCarros) {
     const mensagem = mensagemVeiculo(carro);
     const botaoWhatsapp =
       carro.status === "Vendido"
-        ? '<span class="btn-indisponivel">Vendido</span>'
+        ? '<span class="btn-indisponivel card-action-icon card-action-sold" title="Vendido" aria-label="Vendido">Vendido</span>'
         : '<a href="' +
           escaparAtributo(criarLinkWhatsApp(mensagem)) +
-          '" class="btn-whatsapp" target="_blank" rel="noopener" onclick="event.stopPropagation()">WhatsApp</a>';
+          '" class="btn-whatsapp card-action-icon" target="_blank" rel="noopener" title="Chamar no WhatsApp" aria-label="Chamar no WhatsApp" onclick="event.stopPropagation()">' +
+          '<span aria-hidden="true">☎</span>' +
+          "</a>";
 
     return (
       '<article class="carro-card card-clicavel ' +
@@ -233,7 +235,9 @@ function renderizar(listaCarros) {
       '<div class="carro-acoes">' +
       '<a href="detalhes.html?id=' +
       idCarro +
-      '" class="btn-primary" onclick="event.stopPropagation()">Ver detalhes</a>' +
+      '" class="btn-primary card-action-icon" title="Ver detalhes" aria-label="Ver detalhes" onclick="event.stopPropagation()">' +
+      '<span aria-hidden="true">⌕</span>' +
+      "</a>" +
       botaoWhatsapp +
       "</div>" +
       "</div>" +

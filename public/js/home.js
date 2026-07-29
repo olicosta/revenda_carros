@@ -239,10 +239,14 @@ if (homeVeiculosGrid) {
         '<div class="carro-acoes">' +
         '<a href="detalhes.html?id=' +
         idCarro +
-        '" class="btn-primary" onclick="event.stopPropagation()">Detalhes</a>' +
+        '" class="btn-primary card-action-icon" title="Ver detalhes" aria-label="Ver detalhes" onclick="event.stopPropagation()">' +
+        '<span aria-hidden="true">⌕</span>' +
+        "</a>" +
         '<a href="' +
         escaparAtributo(criarLinkWhatsApp(mensagemVeiculo(carro))) +
-        '" class="btn-whatsapp" target="_blank" onclick="event.stopPropagation()">WhatsApp</a>' +
+        '" class="btn-whatsapp card-action-icon" target="_blank" rel="noopener" title="Chamar no WhatsApp" aria-label="Chamar no WhatsApp" onclick="event.stopPropagation()">' +
+        '<span aria-hidden="true">☎</span>' +
+        "</a>" +
         "</div>" +
         "</div>" +
         "</article>"
