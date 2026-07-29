@@ -9,8 +9,8 @@
       content="Catálogo de veículos 3M Veículos com filtros por marca, câmbio, preço e ordenação."
     />
     <title>Veículos - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-led" />
-    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260703-mobile-ux" />
+    <link rel="stylesheet" href="/css/style.css?v=20260729-mobile-actions" />
+    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-mobile-actions" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260721-mobile-hero-offset" />
   </head>
   <body>

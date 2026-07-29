@@ -7799,6 +7799,21 @@ body:has(.admin) .pagina-titulo p {
   fill: currentColor;
 }
 
+@media (max-width: 650px) {
+  .whatsapp-fixo {
+    right: 14px;
+    bottom: 86px;
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 12px 28px rgba(var(--success-rgb), 0.26);
+  }
+
+  .whatsapp-fixo svg {
+    width: 27px;
+    height: 27px;
+  }
+}
+
 @keyframes whatsapp-pulo {
   0%,
   100% {
@@ -9259,6 +9274,26 @@ section,
   .carro-acoes a,
   .carro-acoes button {
     text-align: center;
+  }
+
+  .carro-acoes {
+    width: auto;
+    grid-template-columns: repeat(2, 48px);
+    justify-content: center;
+  }
+
+  .carro-acoes .card-action-icon {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    min-height: 48px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .carro-acoes a.card-action-icon,
+  .carro-acoes button.card-action-icon {
+    width: 48px;
   }
 
   .grid-carros,

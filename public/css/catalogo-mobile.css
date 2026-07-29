@@ -408,8 +408,11 @@
 
     .carro-acoes {
         display: grid;
-        grid-template-columns: 0.88fr 1fr;
-        gap: 9px;
+        grid-template-columns: repeat(2, 48px);
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
     }
 
     .carro-acoes .btn-primary,
@@ -419,6 +422,21 @@
         padding: 10px 12px;
         border-radius: 12px;
         font-size: 15px;
+    }
+
+    .carro-acoes .card-action-icon {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        min-height: 48px;
+        padding: 0;
+        border-radius: 50%;
+        justify-self: center;
+    }
+
+    .carro-acoes .card-action-icon .card-action-svg {
+        width: 25px;
+        height: 25px;
     }
 }
 
@@ -460,6 +478,6 @@
 
 @media (max-width: 360px) {
     .carro-acoes {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 46px);
     }
 }
