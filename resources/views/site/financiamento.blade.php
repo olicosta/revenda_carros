@@ -10,7 +10,7 @@
     />
     <title>Financiamento - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
-    <link rel="stylesheet" href="/css/financiamento-premium.css?v=20260623-financiamento-premium-1" />
+    <link rel="stylesheet" href="/css/financiamento-premium.css?v=20260729-passos-4-colunas" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body>

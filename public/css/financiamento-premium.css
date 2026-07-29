@@ -145,6 +145,10 @@
     background: #f8fafc;
 }
 
+.finance-steps-premium .finance-step-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .finance-steps-premium .finance-step-grid article {
     position: relative;
     overflow: hidden;
@@ -251,6 +255,10 @@
     .finance-form-interest {
         grid-template-columns: 1fr;
     }
+
+    .finance-steps-premium .finance-step-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 650px) {
@@ -281,6 +289,10 @@
 
     .finance-steps-premium {
         padding-top: 34px;
+    }
+
+    .finance-steps-premium .finance-step-grid {
+        grid-template-columns: 1fr;
     }
 
     .finance-form-card,
