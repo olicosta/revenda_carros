@@ -10,7 +10,7 @@
     />
     <title>Veículos - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
-    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-mobile-actions" />
+    <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-busca-mobile" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body>
@@ -187,6 +187,17 @@
         </aside>
 
         <div class="resultado-area">
+          <label class="catalogo-busca-mobile" for="filtro-busca-mobile">
+            <span>Buscar veículo</span>
+            <input
+              type="text"
+              id="filtro-busca-mobile"
+              placeholder="Digite modelo, marca ou cor..."
+              autocomplete="off"
+              aria-label="Buscar veículo por modelo, marca ou cor"
+            />
+          </label>
+
           <div class="catalogo-toolbar">
             <div>
               <span>Estoque disponível</span>
@@ -215,7 +226,7 @@
     <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
-    <script data-site-script data-src="/js/catalogo.js?v=20260729-whatsapp-led"></script>
+    <script data-site-script data-src="/js/catalogo.js?v=20260729-busca-mobile"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

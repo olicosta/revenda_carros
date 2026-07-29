@@ -1,6 +1,7 @@
 ﻿const lista = document.getElementById("lista-carros");
 const contadorResultados = document.getElementById("contador-resultados");
 const filtroBusca = document.getElementById("filtro-busca");
+const filtroBuscaMobile = document.getElementById("filtro-busca-mobile");
 const filtroMarca = document.getElementById("filtro-marca");
 const filtroCambio = document.getElementById("filtro-cambio");
 const filtroCombustivel = document.getElementById("filtro-combustivel");
@@ -396,6 +397,10 @@ function renderizarFiltrosAtivos(filtros) {
 }
 
 function aplicarFiltros() {
+  if (filtroBuscaMobile && filtroBuscaMobile.value !== filtroBusca.value) {
+    filtroBuscaMobile.value = filtroBusca.value;
+  }
+
   let filtrados = todosCarros.slice();
   const filtros = obterFiltrosAtuais();
   const anoMin = Number(filtros.anoMin);
@@ -550,6 +555,7 @@ function aplicarFiltros() {
 
 function limparTodosFiltros() {
   filtroBusca.value = "";
+  if (filtroBuscaMobile) filtroBuscaMobile.value = "";
   filtroMarca.value = "";
   filtroCambio.value = "";
   filtroCombustivel.value = "";
@@ -598,6 +604,7 @@ function carregarFiltrosDaUrl() {
   filtroOferta.checked = params.get("oferta") === "1";
   filtroDisponivel.checked = params.get("disponivel") === "1";
   filtroBlindado.checked = params.get("blindado") === "1";
+  if (filtroBuscaMobile) filtroBuscaMobile.value = filtroBusca.value;
 
   if (
     filtrosAvancados &&
@@ -642,6 +649,13 @@ function carregarFiltrosDaUrl() {
   campo.addEventListener("input", aplicarFiltros);
   campo.addEventListener("change", aplicarFiltros);
 });
+
+if (filtroBuscaMobile) {
+  filtroBuscaMobile.addEventListener("input", function () {
+    filtroBusca.value = filtroBuscaMobile.value;
+    aplicarFiltros();
+  });
+}
 
 limparFiltros.addEventListener("click", limparTodosFiltros);
 
