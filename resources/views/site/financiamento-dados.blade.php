@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -463,7 +463,7 @@
       </section>
     </main>
 
-    <script src="/js/config.js?v=20260625-cep-global"></script>
+    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260621-banco"></script>
     <script data-site-script data-src="/js/financiamento-dados.js?v=20260625-modal-cards"></script>

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -75,7 +75,7 @@
               >Ver veículos</a
             >
             <a
-              href="https://wa.me/554730123333"
+              href="https://wa.me/554796207774"
               class="btn-secondary"
               target="_blank"
               data-whatsapp-link
@@ -137,7 +137,7 @@
             <div class="showcase-actions">
               <a href="detalhes.html?id=1" class="btn-primary">Ver oferta</a>
               <a
-                href="https://wa.me/554730123333"
+                href="https://wa.me/554796207774"
                 class="btn-whatsapp destaque-whats"
                 target="_blank"
                 rel="noopener"
@@ -253,7 +253,7 @@
         </p>
 
         <a
-          href="https://wa.me/554730123333"
+          href="https://wa.me/554796207774"
           class="btn-primary"
           target="_blank"
           data-whatsapp-link
@@ -302,7 +302,7 @@
     </footer>
 
     <a
-      href="https://wa.me/554730123333"
+      href="https://wa.me/554796207774"
       class="whatsapp-fixo"
       target="_blank"
       aria-label="Chamar 3M Veículos no WhatsApp"
@@ -315,7 +315,7 @@
       </svg>
     </a>
 
-    <script src="/js/config.js?v=20260722-mapa-lazy"></script>
+    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

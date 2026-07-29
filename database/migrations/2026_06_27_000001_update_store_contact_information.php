@@ -8,7 +8,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->mergeStoreSetting([
-            'whatsapp' => '3012-3333',
+            'whatsapp' => '+55 47 9620-7774',
             'endereco' => 'CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094',
         ]);
     }
@@ -23,8 +23,8 @@ return new class extends Migration
 
         $value = $setting->value ?? [];
 
-        if (($value['whatsapp'] ?? null) === '3012-3333') {
-            $value['whatsapp'] = '5547999999999';
+        if (($value['whatsapp'] ?? null) === '+55 47 9620-7774') {
+            $value['whatsapp'] = '554796207774';
         }
 
         if (($value['endereco'] ?? null) === 'CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094') {

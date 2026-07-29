@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -631,7 +631,7 @@
                 <button type="button" class="btn-cancelar btn-visivel" id="instagram-baixar">
                   Baixar arte
                 </button>
-                <a href="https://wa.me/554730123333" class="btn-cancelar btn-visivel" id="instagram-whatsapp" target="_blank" data-whatsapp-link>
+                <a href="https://wa.me/554796207774" class="btn-cancelar btn-visivel" id="instagram-whatsapp" target="_blank" data-whatsapp-link>
                   Enviar para equipe
                 </a>
               </div>
@@ -2133,7 +2133,7 @@
       </div>
     </div>
 
-    <script src="/js/config.js?v=20260721-admin-menu-fix"></script>
+    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

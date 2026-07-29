@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -77,7 +77,7 @@
       </section>
     </main>
 
-    <script src="/js/config.js?v=20260625-cep-global"></script>
+    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script>
       document.querySelector("[data-submit-once]")?.addEventListener("submit", function () {
         const botao = this.querySelector('button[type="submit"]');

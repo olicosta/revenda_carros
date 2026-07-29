@@ -134,7 +134,7 @@ class RestoreSiteDataSeeder extends Seeder
             ['value' => [
                 'nome' => '3M Veículos',
                 'subtitulo' => 'Revenda de Veículos',
-                'whatsapp' => '3012-3333',
+                'whatsapp' => '+55 47 9620-7774',
                 'endereco' => 'CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094',
                 'horario' => 'Segunda a sábado, das 8h às 18h',
                 'instagram' => '@3mveiculos',

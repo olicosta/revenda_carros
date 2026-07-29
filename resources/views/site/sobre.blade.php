@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -58,7 +58,7 @@
           <div class="sobre-acoes">
             <a href="carros.html" class="btn-primary">Ver estoque</a>
             <a
-              href="https://wa.me/554730123333"
+              href="https://wa.me/554796207774"
               class="btn-secondary btn-secondary-dark"
               target="_blank"
               data-whatsapp-link
@@ -94,7 +94,7 @@
           <span data-loja-endereco>CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094</span> |
           <span data-loja-horario>Segunda a sábado, das 8h às 18h</span>
         </p>
-        <a href="https://wa.me/554730123333" class="btn-primary" target="_blank" data-whatsapp-link>
+        <a href="https://wa.me/554796207774" class="btn-primary" target="_blank" data-whatsapp-link>
           Chamar no WhatsApp
         </a>
       </div>
@@ -104,7 +104,7 @@
       <p>2026 3M Veículos - Todos os direitos reservados</p>
     </footer>
 
-    <script src="/js/config.js?v=20260625-cep-global"></script>
+    <script src="/js/config.js?v=20260729-whatsapp-empresa"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>
