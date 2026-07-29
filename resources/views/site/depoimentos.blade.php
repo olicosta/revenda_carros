@@ -10,7 +10,7 @@
     />
     <title>Depoimentos - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-whatsapp-mobile-baixo" />
-    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
+    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>
     <header class="topo">

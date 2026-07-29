@@ -11,7 +11,7 @@
     <title>3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-card-acoes" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260729-contato-centralizado" />
-    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
+    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
       rel="preload"

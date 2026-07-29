@@ -11,7 +11,7 @@
     <title>Veículos - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260729-card-acoes" />
     <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260729-card-acoes" />
-    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-center" />
+    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>
     <header class="topo">
