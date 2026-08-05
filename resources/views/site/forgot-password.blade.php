@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   @include('site.partials.pwa')
   <title>Recuperar senha | 3M Veículos</title>
-  <link rel="stylesheet" href="/css/style.css?v=20260805-admin-panel-guard" />
+  <link rel="stylesheet" href="/css/style.css?v=20260805-footer-links-text" />
 </head>
 <body class="login-page">
   <main class="customer-portal">

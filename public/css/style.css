@@ -4897,38 +4897,31 @@ footer {
   .site-footer-nav {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
+    gap: 8px 18px;
     padding-bottom: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   }
 
   .site-footer-nav a {
-    min-height: 42px;
+    min-height: 34px;
     display: inline-flex;
     align-items: center;
-    padding: 9px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    font-size: 13px;
-    line-height: 1.25;
-  }
-
-  .site-footer-nav .site-footer-nav-contact {
-    grid-column: span 2;
-  }
-
-  .site-footer-nav .site-footer-nav-legal {
-    min-height: 34px;
     padding: 4px 0;
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: rgba(255, 255, 255, 0.74);
+    color: rgba(255, 255, 255, 0.78);
     font-size: 12.5px;
     font-weight: 800;
+    line-height: 1.25;
   }
 
+  .site-footer-nav .site-footer-nav-contact {
+    grid-column: auto;
+  }
+
+  .site-footer-nav a:hover,
+  .site-footer-nav a:focus-visible,
   .site-footer-nav .site-footer-nav-legal:hover,
   .site-footer-nav .site-footer-nav-legal:focus-visible {
     color: #ffffff;

@@ -9,7 +9,7 @@
       content="Formulário completo de dados para pré-análise de financiamento automotivo."
     />
     <title>Dados para Financiamento - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-admin-panel-guard" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-links-text" />
   </head>
   <body>
     <main class="finance-external-page">

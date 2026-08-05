@@ -8,7 +8,7 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-admin-panel-guard" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-links-text" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260721-admin-users" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
