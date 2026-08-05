@@ -6,7 +6,7 @@
     @include('site.partials.pwa')
     <meta name="description" content="Termos de Uso da 3M Veículos." />
     <title>Termos de Uso - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-gallery-lightbox" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-localizacao-simples" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>

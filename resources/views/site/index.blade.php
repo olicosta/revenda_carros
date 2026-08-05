@@ -9,7 +9,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-gallery-lightbox" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-localizacao-simples" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260729-contato-centralizado" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -265,21 +265,6 @@
           <a href="#" class="btn-primary" target="_blank" rel="noopener" data-mapa-link>
             Abrir rota no Google Maps
           </a>
-        </div>
-
-        <div class="localizacao-resumo" aria-label="Dados de localização e atendimento">
-          <article>
-            <span>Endereço</span>
-            <strong data-loja-endereco>CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094</strong>
-          </article>
-          <article>
-            <span>WhatsApp</span>
-            <a href="https://wa.me/554796207774" data-whatsapp-link data-loja-whatsapp>(47) 96207-7774</a>
-          </article>
-          <article>
-            <span>Atendimento</span>
-            <strong data-loja-horario>Segunda a sábado, das 8h às 18h</strong>
-          </article>
         </div>
       </div>
     </section>
