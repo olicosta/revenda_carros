@@ -1,11 +1,11 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   @include('site.partials.pwa')
   <title>Área do cliente | 3M Veículos</title>
-  <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
+  <link rel="stylesheet" href="/css/style.css?v=20260805-footer-mobile" />
 </head>
 <body class="customer-portal-page">
   <main class="customer-portal">

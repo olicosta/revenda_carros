@@ -8,7 +8,7 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-financeiro-corporativo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-mobile" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260721-admin-users" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
@@ -2358,7 +2358,7 @@
       </div>
     </div>
 
-    <script src="/js/config.js?v=20260729-mapa-preload"></script>
+    <script src="/js/config.js?v=20260805-footer-mobile"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

@@ -9,7 +9,7 @@
       content="Conheça a 3M Veículos, endereço, horário e canais de atendimento."
     />
     <title>Sobre - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-cta-contraste" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-mobile" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>
@@ -104,7 +104,7 @@
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-mapa-preload"></script>
+    <script src="/js/config.js?v=20260805-footer-mobile"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

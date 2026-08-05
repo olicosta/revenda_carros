@@ -378,6 +378,21 @@ function criarLinkWhatsApp(mensagem) {
   return criarLinkWhatsAppNumero(config.whatsapp, mensagem);
 }
 
+function formatarWhatsAppExibicao(numero) {
+  const digitos = String(numero || "").replace(/\D/g, "");
+  const semPais = digitos.startsWith("55") && digitos.length > 10 ? digitos.slice(2) : digitos;
+
+  if (semPais.length === 11) {
+    return semPais.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+  }
+
+  if (semPais.length === 10) {
+    return semPais.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+  }
+
+  return String(numero || "").trim();
+}
+
 function normalizarNumeroWhatsApp(numero) {
   let digitos = String(numero || "").replace(/\D/g, "");
 
@@ -926,7 +941,7 @@ function aplicarConfigLoja() {
   });
 
   document.querySelectorAll("[data-loja-whatsapp]").forEach(function (elemento) {
-    elemento.textContent = config.whatsapp;
+    elemento.textContent = formatarWhatsAppExibicao(config.whatsapp);
   });
 
   document.querySelectorAll("[data-loja-sobre]").forEach(function (elemento) {
@@ -934,7 +949,17 @@ function aplicarConfigLoja() {
   });
 
   document.querySelectorAll("[data-email-link]").forEach(function (link) {
-    link.href = "mailto:" + config.email;
+    const email = String(config.email || "").trim();
+    const blocoEmail = link.closest("[data-footer-email]");
+
+    if (!email) {
+      if (blocoEmail) blocoEmail.hidden = true;
+      link.removeAttribute("href");
+      return;
+    }
+
+    if (blocoEmail) blocoEmail.hidden = false;
+    link.href = "mailto:" + email;
   });
 
   document.querySelectorAll("[data-mapa-link]").forEach(function (link) {
