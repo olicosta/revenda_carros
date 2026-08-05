@@ -8,7 +8,7 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260729-footer-compacto" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-financeiro-corporativo" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260721-admin-users" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
@@ -735,9 +735,9 @@
           <div class="financeiro-cabecalho financeiro-hero">
             <div>
               <span class="admin-eyebrow">Gestão financeira</span>
-              <h2>Painel financeiro</h2>
+              <h2>Financeiro corporativo</h2>
               <p>
-                Controle caixa, recebíveis, saídas e resultado da operação em uma visão única.
+                Gestão de caixa, contas, DRE, conciliação e resultado operacional.
               </p>
             </div>
 
@@ -755,7 +755,7 @@
           <div class="admin-form financeiro-controles financeiro-toolbar">
             <div class="financeiro-filtro">
               <label>
-                Período de venda
+                Competência
                 <input type="month" id="financeiro-mes" />
               </label>
             </div>
@@ -771,12 +771,12 @@
 
           <div class="financeiro-menu" aria-label="Menu financeiro">
             <button type="button" class="financeiro-menu-btn ativo" data-finance-view-target="resumo">Resumo</button>
-            <button type="button" class="financeiro-menu-btn" data-finance-view-target="saidas">Saídas</button>
-            <button type="button" class="financeiro-menu-btn" data-finance-view-target="entradas">Entradas</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="saidas">Despesas</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="entradas">Receitas</button>
             <button type="button" class="financeiro-menu-btn" data-finance-view-target="lancamentos">Lançamentos</button>
-            <button type="button" class="financeiro-menu-btn" data-finance-view-target="dre">DRE e fluxo</button>
-            <button type="button" class="financeiro-menu-btn" data-finance-view-target="conciliacao">Conciliação</button>
-            <button type="button" class="financeiro-menu-btn" data-finance-view-target="notas">Notas fiscais</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="dre">Relatórios</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="conciliacao">Caixa e bancos</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="notas">Fiscal</button>
           </div>
 
           <div class="financeiro-view ativo" data-finance-view="resumo">
