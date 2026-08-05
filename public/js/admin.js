@@ -172,6 +172,23 @@ const selectSaidaVeiculo = document.getElementById("saida-veiculo");
 const listaCaixaFinanceiro = document.getElementById("lista-caixa-financeiro");
 const listaContasReceber = document.getElementById("lista-contas-receber");
 const resumoReceberFinanceiro = document.getElementById("fin-receber-resumo");
+const formLancamentoFinanceiro = document.getElementById("form-lancamento-financeiro");
+const listaLancamentosFinanceiros = document.getElementById("lista-lancamentos-financeiros");
+const resumoLancamentosFinanceiros = document.getElementById("lancamentos-resumo");
+const selectLancamentoTipo = document.getElementById("lancamento-tipo");
+const selectLancamentoCategoria = document.getElementById("lancamento-categoria");
+const selectLancamentoConta = document.getElementById("lancamento-conta");
+const selectLancamentoVeiculo = document.getElementById("lancamento-veiculo");
+const filtroLancamentoTipo = document.getElementById("lancamento-filtro-tipo");
+const filtroLancamentoStatus = document.getElementById("lancamento-filtro-status");
+const btnLancamentoCancelar = document.getElementById("lancamento-cancelar");
+const listaDreFinanceiro = document.getElementById("lista-dre-financeiro");
+const listaFluxoFinanceiro = document.getElementById("lista-fluxo-financeiro");
+const formContaFinanceira = document.getElementById("form-conta-financeira");
+const listaContasFinanceiras = document.getElementById("lista-contas-financeiras");
+const listaConciliacaoFinanceira = document.getElementById("lista-conciliacao-financeira");
+const resumoConciliacaoFinanceira = document.getElementById("conciliacao-resumo");
+const btnContaFinanceiraCancelar = document.getElementById("conta-financeira-cancelar");
 const formLead = document.getElementById("form-lead");
 const listaLeadsAdmin = document.getElementById("lista-leads-admin");
 const paginacaoClientes = document.getElementById("paginacao-clientes");
@@ -233,6 +250,13 @@ const kanbanStatusExpandidos = new Set();
 let historicoVeiculosAdmin = carregarHistoricoVeiculos();
 let solicitacoesFinanciamentoAdmin = [];
 let notasFiscaisAdmin = carregarNotasFiscais();
+let financeiroOperacional = {
+  accounts: [],
+  categories: [],
+  entries: [],
+  report: null,
+  summary: null,
+};
 let resumoDetalheAtual = "estoque";
 let vendaPendenteId = null;
 let clienteModalId = null;
@@ -3986,6 +4010,456 @@ function carregarResumoFinanceiroOperacional() {
     });
 }
 
+function parametrosPeriodoFinanceiro() {
+  const mes = filtroFinanceiroMes && filtroFinanceiroMes.value ? filtroFinanceiroMes.value : "";
+  return mes ? "?month=" + encodeURIComponent(mes) : "";
+}
+
+function preencherSelectsFinanceiroOperacional() {
+  const categorias = financeiroOperacional.categories || [];
+  const contas = financeiroOperacional.accounts || [];
+  const tipoSelecionado = selectLancamentoTipo ? selectLancamentoTipo.value : "";
+
+  if (selectLancamentoCategoria) {
+    const categoriasFiltradas = categorias.filter(function (categoria) {
+      return !tipoSelecionado || categoria.type === tipoSelecionado;
+    });
+    selectLancamentoCategoria.innerHTML =
+      '<option value="">Selecione</option>' +
+      categoriasFiltradas
+        .map(function (categoria) {
+          return (
+            '<option value="' +
+            escaparAtributo(categoria.id) +
+            '">' +
+            escaparHTML(categoria.name) +
+            "</option>"
+          );
+        })
+        .join("");
+  }
+
+  [selectLancamentoConta, document.getElementById("conta-financeira-vinculo")].forEach(function (select) {
+    if (!select) return;
+    select.innerHTML =
+      '<option value="">Conta padrão</option>' +
+      contas
+        .map(function (conta) {
+          return (
+            '<option value="' +
+            escaparAtributo(conta.id) +
+            '">' +
+            escaparHTML(conta.name) +
+            (conta.is_default ? " (padrão)" : "") +
+            "</option>"
+          );
+        })
+        .join("");
+  });
+
+  if (selectLancamentoVeiculo) {
+    selectLancamentoVeiculo.innerHTML =
+      '<option value="">Sem veículo vinculado</option>' +
+      carrosAdmin
+        .map(function (carro) {
+          return (
+            '<option value="' +
+            escaparAtributo(carro.id) +
+            '">' +
+            escaparHTML(carro.nome) +
+            "</option>"
+          );
+        })
+        .join("");
+  }
+}
+
+function carregarFinanceiroOperacional() {
+  if (!formLancamentoFinanceiro && !listaDreFinanceiro && !listaConciliacaoFinanceira) return;
+
+  const periodo = parametrosPeriodoFinanceiro();
+  Promise.all([
+    requisicaoAdminApiAssincrona("GET", "/finance/accounts"),
+    requisicaoAdminApiAssincrona("GET", "/finance/categories"),
+    requisicaoAdminApiAssincrona("GET", "/finance/entries" + periodo),
+    requisicaoAdminApiAssincrona("GET", "/finance/report" + periodo),
+    requisicaoAdminApiAssincrona("GET", "/finance/summary" + periodo),
+  ])
+    .then(function (respostas) {
+      financeiroOperacional.accounts = respostas[0].data || [];
+      financeiroOperacional.categories = respostas[1].data || [];
+      financeiroOperacional.entries = respostas[2].data || [];
+      financeiroOperacional.report = respostas[3].data || null;
+      financeiroOperacional.summary = respostas[4].data || null;
+      preencherSelectsFinanceiroOperacional();
+      renderizarLancamentosFinanceiros();
+      renderizarDreFluxoFinanceiro();
+      renderizarConciliacaoFinanceira();
+    })
+    .catch(function () {
+      if (resumoLancamentosFinanceiros) {
+        resumoLancamentosFinanceiros.textContent =
+          "Não foi possível carregar o financeiro operacional agora.";
+      }
+    });
+}
+
+function classeStatusFinanceiro(status) {
+  if (["pago", "recebido"].includes(status)) return "financeiro-lucro-positivo";
+  if (status === "vencido" || status === "cancelado") return "financeiro-lucro-negativo";
+  return "";
+}
+
+function textoTipoLancamento(tipo) {
+  return tipo === "pagar" ? "A pagar" : "A receber";
+}
+
+function renderizarLancamentosFinanceiros() {
+  if (!listaLancamentosFinanceiros) return;
+
+  const tipo = filtroLancamentoTipo ? filtroLancamentoTipo.value : "";
+  const status = filtroLancamentoStatus ? filtroLancamentoStatus.value : "";
+  const entradas = (financeiroOperacional.entries || []).filter(function (entry) {
+    return (!tipo || entry.direction === tipo) && (!status || entry.status === status);
+  });
+
+  if (resumoLancamentosFinanceiros) {
+    const total = entradas.reduce(function (soma, entry) {
+      return soma + (Number(entry.open_amount) || 0);
+    }, 0);
+    resumoLancamentosFinanceiros.textContent =
+      entradas.length + " lançamento(s), " + formatarMoeda(total) + " em aberto.";
+  }
+
+  listaLancamentosFinanceiros.innerHTML = entradas.length
+    ? entradas
+        .map(function (entry) {
+          return (
+            '<article class="admin-item admin-item-simples financeiro-operacional-item">' +
+            "<div>" +
+            "<h4>" +
+            escaparHTML(entry.description || "Lançamento") +
+            "</h4>" +
+            '<div class="financeiro-item-meta">' +
+            "<span>" +
+            textoTipoLancamento(entry.direction) +
+            "</span>" +
+            "<span>" +
+            escaparHTML(entry.category?.name || "Sem categoria") +
+            "</span>" +
+            "<span>Venc.: " +
+            formatarDataBR(entry.due_at) +
+            "</span>" +
+            "<span>Status: " +
+            escaparHTML(entry.status || "pendente") +
+            "</span>" +
+            "</div>" +
+            '<strong class="' +
+            classeStatusFinanceiro(entry.status) +
+            '">' +
+            formatarMoeda(entry.final_amount || 0) +
+            " | aberto " +
+            formatarMoeda(entry.open_amount || 0) +
+            "</strong>" +
+            (entry.person_name ? "<p>" + escaparHTML(entry.person_name) + "</p>" : "") +
+            "</div>" +
+            '<div class="admin-acoes">' +
+            '<button type="button" class="btn-editar" onclick="editarLancamentoFinanceiro(' +
+            Number(entry.id) +
+            ')">Editar</button>' +
+            ((Number(entry.open_amount) || 0) > 0 && entry.status !== "cancelado"
+              ? '<button type="button" class="btn-status" onclick="baixarLancamentoFinanceiro(' +
+                Number(entry.id) +
+                ')">Baixar</button>'
+              : "") +
+            (entry.status !== "cancelado"
+              ? '<button type="button" class="btn-excluir" onclick="cancelarLancamentoFinanceiro(' +
+                Number(entry.id) +
+                ')">Cancelar</button>'
+              : "") +
+            "</div>" +
+            "</article>"
+          );
+        })
+        .join("")
+    : '<p class="sem-resultados">Nenhum lançamento encontrado para o filtro atual.</p>';
+}
+
+function rotuloDre(chave) {
+  const mapa = {
+    receita_bruta: "Receita bruta",
+    deducoes: "Deduções",
+    receita_liquida: "Receita líquida",
+    custo_veiculos_vendidos: "Custo dos veículos vendidos",
+    resultado_bruto: "Resultado bruto",
+    despesas_comerciais: "Despesas comerciais",
+    despesas_administrativas: "Despesas administrativas",
+    despesas_financeiras: "Despesas financeiras",
+    outras_receitas: "Outras receitas",
+    outras_despesas: "Outras despesas",
+    resultado_operacional: "Resultado operacional",
+    resultado_liquido: "Resultado líquido",
+  };
+  return mapa[chave] || chave;
+}
+
+function renderizarDreFluxoFinanceiro() {
+  const relatorio = financeiroOperacional.report;
+
+  if (listaDreFinanceiro) {
+    const dre = relatorio && relatorio.dre ? relatorio.dre : {};
+    const ordem = [
+      "receita_bruta",
+      "deducoes",
+      "receita_liquida",
+      "custo_veiculos_vendidos",
+      "resultado_bruto",
+      "despesas_comerciais",
+      "despesas_administrativas",
+      "despesas_financeiras",
+      "outras_receitas",
+      "outras_despesas",
+      "resultado_operacional",
+      "resultado_liquido",
+    ];
+    listaDreFinanceiro.innerHTML = ordem
+      .map(function (chave) {
+        return (
+          "<span><b>" +
+          escaparHTML(rotuloDre(chave)) +
+          "</b>" +
+          formatarMoeda(dre[chave] || 0) +
+          "</span>"
+        );
+      })
+      .join("");
+  }
+
+  if (listaFluxoFinanceiro) {
+    const fluxo = relatorio && Array.isArray(relatorio.cashflow) ? relatorio.cashflow : [];
+    listaFluxoFinanceiro.innerHTML = fluxo.length
+      ? fluxo
+          .map(function (dia) {
+            return (
+              '<article class="admin-item admin-item-simples">' +
+              "<div><h4>" +
+              formatarDataBR(dia.date) +
+              "</h4>" +
+              '<div class="financeiro-item-meta">' +
+              "<span>Recebido: " +
+              formatarMoeda(dia.received || 0) +
+              "</span><span>Pago: " +
+              formatarMoeda(dia.paid || 0) +
+              "</span><span>Projetado: " +
+              formatarMoeda(dia.projected_open || 0) +
+              "</span></div></div>" +
+              '<strong class="' +
+              ((dia.balance || 0) < 0 ? "financeiro-lucro-negativo" : "financeiro-lucro-positivo") +
+              '">' +
+              formatarMoeda(dia.balance || 0) +
+              "</strong></article>"
+            );
+          })
+          .join("")
+      : '<p class="sem-resultados">Sem fluxo financeiro para o período.</p>';
+  }
+}
+
+function renderizarConciliacaoFinanceira() {
+  if (listaContasFinanceiras) {
+    const resumo = financeiroOperacional.summary;
+    const saldos = resumo && Array.isArray(resumo.account_balances) ? resumo.account_balances : [];
+    listaContasFinanceiras.innerHTML = saldos.length
+      ? saldos
+          .map(function (conta) {
+            return (
+              "<span><b>" +
+              escaparHTML(conta.name || "Conta") +
+              "</b>" +
+              formatarMoeda(conta.balance || 0) +
+              "</span>"
+            );
+          })
+          .join("")
+      : '<span><b>Conta padrão</b>R$ 0</span>';
+  }
+
+  if (listaConciliacaoFinanceira) {
+    const pendentes = financeiroOperacional.report?.unreconciled || [];
+    if (resumoConciliacaoFinanceira) {
+      resumoConciliacaoFinanceira.textContent =
+        pendentes.length + " lançamento(s) aguardando baixa ou conferência.";
+    }
+    listaConciliacaoFinanceira.innerHTML = pendentes.length
+      ? pendentes
+          .map(function (entry) {
+            return (
+              '<article class="admin-item admin-item-simples">' +
+              "<div><h4>" +
+              escaparHTML(entry.description || "Lançamento") +
+              "</h4>" +
+              '<div class="financeiro-item-meta">' +
+              "<span>" +
+              textoTipoLancamento(entry.direction) +
+              "</span><span>Conta: " +
+              escaparHTML(entry.account?.name || "Padrão") +
+              "</span><span>Venc.: " +
+              formatarDataBR(entry.due_at) +
+              "</span></div></div>" +
+              '<div class="admin-acoes"><button type="button" class="btn-status" onclick="baixarLancamentoFinanceiro(' +
+              Number(entry.id) +
+              ')">Baixar</button></div></article>'
+            );
+          })
+          .join("")
+      : '<p class="sem-resultados">Nenhuma pendência de conciliação neste período.</p>';
+  }
+}
+
+function limparFormularioLancamentoFinanceiro() {
+  if (!formLancamentoFinanceiro) return;
+  formLancamentoFinanceiro.reset();
+  document.getElementById("lancamento-id").value = "";
+  preencherSelectsFinanceiroOperacional();
+}
+
+function payloadLancamentoFinanceiro() {
+  const parcela = String(document.getElementById("lancamento-parcela").value || "1/1").split("/");
+  return {
+    direction: document.getElementById("lancamento-tipo").value,
+    description: document.getElementById("lancamento-descricao").value.trim(),
+    person_name: document.getElementById("lancamento-pessoa").value.trim(),
+    financial_category_id: Number(document.getElementById("lancamento-categoria").value) || null,
+    financial_account_id: Number(document.getElementById("lancamento-conta").value) || null,
+    vehicle_id: Number(document.getElementById("lancamento-veiculo").value) || null,
+    cost_center: document.getElementById("lancamento-centro-custo").value.trim(),
+    competence_date: document.getElementById("lancamento-competencia").value || null,
+    due_at: document.getElementById("lancamento-vencimento").value,
+    original_amount: numeroFinanceiro("lancamento-valor"),
+    paid_amount: numeroFinanceiro("lancamento-pago"),
+    payment_method: document.getElementById("lancamento-pagamento").value,
+    installment_number: Number(parcela[0]) || 1,
+    installments_total: Number(parcela[1]) || 1,
+    status: document.getElementById("lancamento-status").value,
+    notes: document.getElementById("lancamento-observacao").value.trim(),
+  };
+}
+
+async function salvarLancamentoFinanceiro(evento) {
+  evento.preventDefault();
+  const id = Number(document.getElementById("lancamento-id").value) || 0;
+  const metodo = id ? "PUT" : "POST";
+  const caminho = id ? "/finance/entries/" + id : "/finance/entries";
+
+  try {
+    await requisicaoAdminApiAssincrona(metodo, caminho, payloadLancamentoFinanceiro());
+    limparFormularioLancamentoFinanceiro();
+    carregarFinanceiroOperacional();
+    renderizarFinanceiro();
+  } catch (error) {
+    alert(error.message || "Não foi possível salvar o lançamento.");
+  }
+}
+
+function editarLancamentoFinanceiro(id) {
+  const entry = (financeiroOperacional.entries || []).find(function (item) {
+    return Number(item.id) === Number(id);
+  });
+  if (!entry || !formLancamentoFinanceiro) return;
+
+  document.getElementById("lancamento-id").value = entry.id;
+  document.getElementById("lancamento-tipo").value = entry.direction || "receber";
+  preencherSelectsFinanceiroOperacional();
+  document.getElementById("lancamento-status").value = entry.status || "pendente";
+  document.getElementById("lancamento-descricao").value = entry.description || "";
+  document.getElementById("lancamento-pessoa").value = entry.person_name || "";
+  document.getElementById("lancamento-categoria").value = entry.category?.id || "";
+  document.getElementById("lancamento-conta").value = entry.account?.id || "";
+  document.getElementById("lancamento-veiculo").value = entry.vehicle_id || "";
+  document.getElementById("lancamento-centro-custo").value = entry.cost_center || "";
+  document.getElementById("lancamento-competencia").value = entry.competence_date || "";
+  document.getElementById("lancamento-vencimento").value = entry.due_at || "";
+  document.getElementById("lancamento-valor").value = formatarMoeda(entry.original_amount || 0);
+  document.getElementById("lancamento-pago").value = formatarMoeda(entry.paid_amount || 0);
+  document.getElementById("lancamento-pagamento").value = entry.payment_method || "";
+  document.getElementById("lancamento-parcela").value =
+    (entry.installment_number || 1) + "/" + (entry.installments_total || 1);
+  document.getElementById("lancamento-observacao").value = entry.notes || "";
+  formLancamentoFinanceiro.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function baixarLancamentoFinanceiro(id) {
+  const entry = (financeiroOperacional.entries || []).find(function (item) {
+    return Number(item.id) === Number(id);
+  });
+  if (!entry) return;
+  if (!(await confirmar("Registrar baixa deste lançamento?", "Confirmar baixa"))) return;
+
+  const valor = window.prompt("Valor da baixa:", formatarMoeda(entry.open_amount || 0));
+  if (valor === null) return;
+
+  try {
+    await requisicaoAdminApiAssincrona("POST", "/finance/entries/" + id + "/settle", {
+      amount: Number(String(valor).replace(/\D/g, "")) || Number(entry.open_amount) || 0,
+      paid_at: new Date().toISOString().slice(0, 10),
+      financial_account_id: entry.account?.id || null,
+      payment_method: entry.payment_method || "Pix",
+    });
+    carregarFinanceiroOperacional();
+    renderizarFinanceiro();
+  } catch (error) {
+    alert(error.message || "Não foi possível baixar o lançamento.");
+  }
+}
+
+async function cancelarLancamentoFinanceiro(id) {
+  if (!(await confirmar("Cancelar este lançamento e gerar estorno rastreável?", "Cancelar lançamento"))) return;
+  const reason = window.prompt("Informe a justificativa do cancelamento:");
+  if (!reason || reason.trim().length < 5) return;
+
+  try {
+    await requisicaoAdminApiAssincrona("POST", "/finance/entries/" + id + "/cancel", {
+      reason: reason.trim(),
+    });
+    carregarFinanceiroOperacional();
+    renderizarFinanceiro();
+  } catch (error) {
+    alert(error.message || "Não foi possível cancelar o lançamento.");
+  }
+}
+
+function limparFormularioContaFinanceira() {
+  if (!formContaFinanceira) return;
+  formContaFinanceira.reset();
+  document.getElementById("conta-financeira-id").value = "";
+}
+
+async function salvarContaFinanceira(evento) {
+  evento.preventDefault();
+  const id = Number(document.getElementById("conta-financeira-id").value) || 0;
+  const payload = {
+    name: document.getElementById("conta-financeira-nome").value.trim(),
+    type: document.getElementById("conta-financeira-tipo").value,
+    opening_balance: numeroFinanceiro("conta-financeira-saldo"),
+    opening_balance_date: document.getElementById("conta-financeira-data").value || null,
+    status: document.getElementById("conta-financeira-status").value,
+    is_default: document.getElementById("conta-financeira-padrao").checked,
+    notes: document.getElementById("conta-financeira-observacao").value.trim(),
+  };
+
+  try {
+    await requisicaoAdminApiAssincrona(id ? "PUT" : "POST", id ? "/finance/accounts/" + id : "/finance/accounts", payload);
+    limparFormularioContaFinanceira();
+    carregarFinanceiroOperacional();
+  } catch (error) {
+    alert(error.message || "Não foi possível salvar a conta.");
+  }
+}
+
+window.editarLancamentoFinanceiro = editarLancamentoFinanceiro;
+window.baixarLancamentoFinanceiro = baixarLancamentoFinanceiro;
+window.cancelarLancamentoFinanceiro = cancelarLancamentoFinanceiro;
+
 function renderizarFinanceiro() {
   if (!listaFinanceiro) return;
 
@@ -4074,6 +4548,7 @@ function renderizarFinanceiro() {
     aReceber: totalSaldoReceber,
   });
   carregarResumoFinanceiroOperacional();
+  carregarFinanceiroOperacional();
 
   if (listaCaixaFinanceiro) {
     listaCaixaFinanceiro.innerHTML =
@@ -7226,6 +7701,35 @@ if (formSaidaFinanceira) {
     fecharCadastroAdmin("form-saida-financeira");
     renderizarFinanceiro();
   });
+}
+
+if (formLancamentoFinanceiro) {
+  const hoje = new Date().toISOString().slice(0, 10);
+  const vencimento = document.getElementById("lancamento-vencimento");
+  const competencia = document.getElementById("lancamento-competencia");
+  if (vencimento && !vencimento.value) vencimento.value = hoje;
+  if (competencia && !competencia.value) competencia.value = hoje;
+  formLancamentoFinanceiro.addEventListener("submit", salvarLancamentoFinanceiro);
+}
+
+if (btnLancamentoCancelar) {
+  btnLancamentoCancelar.addEventListener("click", limparFormularioLancamentoFinanceiro);
+}
+
+if (selectLancamentoTipo) {
+  selectLancamentoTipo.addEventListener("change", preencherSelectsFinanceiroOperacional);
+}
+
+[filtroLancamentoTipo, filtroLancamentoStatus].forEach(function (campo) {
+  if (campo) campo.addEventListener("change", renderizarLancamentosFinanceiros);
+});
+
+if (formContaFinanceira) {
+  formContaFinanceira.addEventListener("submit", salvarContaFinanceira);
+}
+
+if (btnContaFinanceiraCancelar) {
+  btnContaFinanceiraCancelar.addEventListener("click", limparFormularioContaFinanceira);
 }
 
 if (selectNotaFiscalVeiculo) {

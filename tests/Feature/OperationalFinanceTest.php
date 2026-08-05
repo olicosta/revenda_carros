@@ -145,4 +145,46 @@ class OperationalFinanceTest extends TestCase
             ->assertJsonPath('data.paid_amount', 300)
             ->assertJsonPath('data.open_amount', 700);
     }
+
+    public function test_financial_account_and_report_endpoints_are_operational(): void
+    {
+        $user = User::factory()->create(['role' => 'financeiro']);
+
+        $accountResponse = $this->actingAs($user)->postJson('/api/finance/accounts', [
+            'name' => 'Banco teste',
+            'type' => 'banco',
+            'opening_balance' => 500,
+            'opening_balance_date' => now()->toDateString(),
+            'status' => 'ativa',
+            'is_default' => true,
+        ]);
+
+        $accountResponse->assertCreated()
+            ->assertJsonPath('data.name', 'Banco teste')
+            ->assertJsonPath('data.is_default', true);
+
+        $category = FinancialCategory::query()->firstOrCreate([
+            'name' => 'Despesa operacional',
+            'type' => 'pagar',
+        ], [
+            'dre_group' => 'despesas_administrativas',
+        ]);
+
+        FinancialEntry::query()->create([
+            'direction' => 'pagar',
+            'description' => 'Aluguel',
+            'financial_account_id' => $accountResponse->json('data.id'),
+            'financial_category_id' => $category->id,
+            'competence_date' => now()->toDateString(),
+            'due_at' => now()->toDateString(),
+            'original_amount' => 1200,
+            'final_amount' => 1200,
+            'paid_amount' => 1200,
+            'status' => 'pago',
+        ]);
+
+        $this->actingAs($user)->getJson('/api/finance/report?month='.now()->format('Y-m'))
+            ->assertOk()
+            ->assertJsonPath('data.dre.despesas_administrativas', 1200);
+    }
 }

@@ -40,8 +40,11 @@ Route::middleware(['web', 'auth', AuditMutations::class])->group(function () {
     Route::middleware('panel.role:financeiro')->group(function () {
         Route::get('/finance/summary', [FinanceDataController::class, 'summary']);
         Route::get('/finance/accounts', [FinanceDataController::class, 'accounts']);
+        Route::post('/finance/accounts', [FinanceDataController::class, 'storeAccount']);
+        Route::put('/finance/accounts/{account}', [FinanceDataController::class, 'updateAccount']);
         Route::get('/finance/categories', [FinanceDataController::class, 'categories']);
         Route::get('/finance/entries', [FinanceDataController::class, 'entries']);
+        Route::get('/finance/report', [FinanceDataController::class, 'report']);
         Route::post('/finance/entries', [FinanceDataController::class, 'storeEntry']);
         Route::put('/finance/entries/{entry}', [FinanceDataController::class, 'updateEntry']);
         Route::post('/finance/entries/{entry}/settle', [FinanceDataController::class, 'settleEntry']);

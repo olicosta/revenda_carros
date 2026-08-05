@@ -113,6 +113,20 @@ class FinanceDataController extends Controller
         ]);
     }
 
+    public function storeAccount(Request $request): JsonResponse
+    {
+        $account = FinancialAccount::query()->create($this->accountAttributes($request));
+
+        return response()->json(['data' => $account], 201);
+    }
+
+    public function updateAccount(Request $request, FinancialAccount $account): JsonResponse
+    {
+        $account->update($this->accountAttributes($request, $account));
+
+        return response()->json(['data' => $account->refresh()]);
+    }
+
     public function categories(): JsonResponse
     {
         return response()->json([
@@ -139,11 +153,103 @@ class FinanceDataController extends Controller
             $query->where('status', $request->query('status'));
         }
 
-        if ($request->filled('from') && $request->filled('to')) {
-            $query->whereBetween('competence_date', [$request->query('from'), $request->query('to')]);
+        if ($request->filled('month') || ($request->filled('from') && $request->filled('to'))) {
+            $period = $this->periodFromRequest($request);
+            $query->where(function ($subQuery) use ($period) {
+                $subQuery
+                    ->whereBetween('competence_date', [$period['start'], $period['end']])
+                    ->orWhereBetween('due_at', [$period['start'], $period['end']])
+                    ->orWhereBetween('settled_at', [$period['start'], $period['end']]);
+            });
         }
 
         return response()->json(['data' => $query->limit(500)->get()->map(fn ($entry) => $this->entryPayload($entry))]);
+    }
+
+    public function report(Request $request): JsonResponse
+    {
+        $period = $this->periodFromRequest($request);
+        $entries = FinancialEntry::query()
+            ->with(['account:id,name,type', 'category:id,name,type,dre_group,vehicle_cost'])
+            ->where('status', '!=', 'cancelado')
+            ->where(function ($query) use ($period) {
+                $query
+                    ->whereBetween('competence_date', [$period['start'], $period['end']])
+                    ->orWhereBetween('due_at', [$period['start'], $period['end']])
+                    ->orWhereBetween('settled_at', [$period['start'], $period['end']]);
+            })
+            ->get();
+
+        $dreGroups = [
+            'receita_bruta' => 0,
+            'deducoes' => 0,
+            'receita_liquida' => 0,
+            'custo_veiculos_vendidos' => 0,
+            'resultado_bruto' => 0,
+            'despesas_comerciais' => 0,
+            'despesas_administrativas' => 0,
+            'despesas_financeiras' => 0,
+            'outras_receitas' => 0,
+            'outras_despesas' => 0,
+            'resultado_operacional' => 0,
+            'resultado_liquido' => 0,
+        ];
+
+        foreach ($entries as $entry) {
+            if ($entry->is_transfer) {
+                continue;
+            }
+
+            $group = $entry->category?->dre_group;
+            $amount = (float) $entry->final_amount;
+
+            if ($entry->direction === 'receber') {
+                $dreGroups[$group ?: 'outras_receitas'] += $amount;
+            } elseif ($group) {
+                $dreGroups[$group] += $amount;
+            } else {
+                $dreGroups['outras_despesas'] += $amount;
+            }
+        }
+
+        $dreGroups['receita_liquida'] = $dreGroups['receita_bruta'] - $dreGroups['deducoes'];
+        $dreGroups['resultado_bruto'] = $dreGroups['receita_liquida'] - $dreGroups['custo_veiculos_vendidos'];
+        $dreGroups['resultado_operacional'] = $dreGroups['resultado_bruto']
+            - $dreGroups['despesas_comerciais']
+            - $dreGroups['despesas_administrativas']
+            - $dreGroups['despesas_financeiras']
+            + $dreGroups['outras_receitas']
+            - $dreGroups['outras_despesas'];
+        $dreGroups['resultado_liquido'] = $dreGroups['resultado_operacional'];
+
+        $cashflow = $entries
+            ->groupBy(fn (FinancialEntry $entry) => ($entry->settled_at ?? $entry->due_at ?? $entry->competence_date)?->format('Y-m-d') ?? 'sem-data')
+            ->map(function ($items, $date) {
+                $received = $this->sumPaid($items, 'receber');
+                $paid = $this->sumPaid($items, 'pagar');
+
+                return [
+                    'date' => $date,
+                    'received' => round($received, 2),
+                    'paid' => round($paid, 2),
+                    'projected_open' => round($this->sumOpen($items, 'receber') - $this->sumOpen($items, 'pagar'), 2),
+                    'balance' => round($received - $paid, 2),
+                ];
+            })
+            ->sortBy('date')
+            ->values();
+
+        return response()->json([
+            'data' => [
+                'period' => $period,
+                'dre' => array_map(fn ($value) => round($value, 2), $dreGroups),
+                'cashflow' => $cashflow,
+                'unreconciled' => $entries
+                    ->filter(fn (FinancialEntry $entry) => ! $entry->settled_at && ((float) $entry->open_amount) > 0)
+                    ->map(fn (FinancialEntry $entry) => $this->entryPayload($entry))
+                    ->values(),
+            ],
+        ]);
     }
 
     public function storeEntry(Request $request): JsonResponse
@@ -354,6 +460,35 @@ class FinanceDataController extends Controller
             'status' => $status,
             'updated_by' => $request->user()?->id,
             'created_by' => $entry ? $entry->created_by : $request->user()?->id,
+        ];
+    }
+
+    private function accountAttributes(Request $request, ?FinancialAccount $account = null): array
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'type' => ['required', Rule::in(['caixa', 'banco', 'conta_digital'])],
+            'opening_balance' => ['nullable', 'numeric'],
+            'opening_balance_date' => ['nullable', 'date'],
+            'status' => ['nullable', Rule::in(['ativa', 'inativa'])],
+            'is_default' => ['nullable', 'boolean'],
+            'notes' => ['nullable', 'string'],
+        ]);
+
+        if (($validated['is_default'] ?? false) === true) {
+            FinancialAccount::query()
+                ->when($account, fn ($query) => $query->whereKeyNot($account->id))
+                ->update(['is_default' => false]);
+        }
+
+        return [
+            'name' => $validated['name'],
+            'type' => $validated['type'],
+            'opening_balance' => $validated['opening_balance'] ?? 0,
+            'opening_balance_date' => $validated['opening_balance_date'] ?? null,
+            'status' => $validated['status'] ?? 'ativa',
+            'is_default' => (bool) ($validated['is_default'] ?? $account?->is_default ?? false),
+            'notes' => $validated['notes'] ?? null,
         ];
     }
 

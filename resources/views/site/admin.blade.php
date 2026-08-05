@@ -773,6 +773,9 @@
             <button type="button" class="financeiro-menu-btn ativo" data-finance-view-target="resumo">Resumo</button>
             <button type="button" class="financeiro-menu-btn" data-finance-view-target="saidas">Saídas</button>
             <button type="button" class="financeiro-menu-btn" data-finance-view-target="entradas">Entradas</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="lancamentos">Lançamentos</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="dre">DRE e fluxo</button>
+            <button type="button" class="financeiro-menu-btn" data-finance-view-target="conciliacao">Conciliação</button>
             <button type="button" class="financeiro-menu-btn" data-finance-view-target="notas">Notas fiscais</button>
           </div>
 
@@ -1004,6 +1007,229 @@
                 </div>
 
                 <div id="lista-financeiro" class="admin-lista financeiro-lista"></div>
+              </section>
+            </div>
+          </div>
+
+          <div class="financeiro-view" data-finance-view="lancamentos">
+            <div class="financeiro-operacao-grid financeiro-operacao-grid-amplo">
+              <form id="form-lancamento-financeiro" class="admin-form financeiro-saida-form">
+                <input type="hidden" id="lancamento-id" />
+                <span class="admin-eyebrow">Contas a pagar e receber</span>
+                <h3>Lançamento financeiro</h3>
+
+                <div class="form-grid">
+                  <label>
+                    Tipo
+                    <select id="lancamento-tipo" required>
+                      <option value="receber">Conta a receber</option>
+                      <option value="pagar">Conta a pagar</option>
+                    </select>
+                  </label>
+                  <label>
+                    Status
+                    <select id="lancamento-status">
+                      <option value="pendente">Pendente</option>
+                      <option value="parcial">Parcial</option>
+                      <option value="pago">Pago</option>
+                      <option value="recebido">Recebido</option>
+                      <option value="vencido">Vencido</option>
+                    </select>
+                  </label>
+                  <label>
+                    Descrição
+                    <input type="text" id="lancamento-descricao" placeholder="Ex: parcela financiamento / oficina" required />
+                  </label>
+                  <label>
+                    Pessoa ou empresa
+                    <input type="text" id="lancamento-pessoa" placeholder="Cliente, fornecedor ou banco" />
+                  </label>
+                  <label>
+                    Categoria
+                    <select id="lancamento-categoria" required>
+                      <option value="">Selecione</option>
+                    </select>
+                  </label>
+                  <label>
+                    Conta
+                    <select id="lancamento-conta">
+                      <option value="">Conta padrão</option>
+                    </select>
+                  </label>
+                  <label>
+                    Veículo relacionado
+                    <select id="lancamento-veiculo">
+                      <option value="">Sem veículo vinculado</option>
+                    </select>
+                  </label>
+                  <label>
+                    Centro de custo
+                    <input type="text" id="lancamento-centro-custo" placeholder="Loja, veículo, comercial..." />
+                  </label>
+                  <label>
+                    Competência
+                    <input type="date" id="lancamento-competencia" />
+                  </label>
+                  <label>
+                    Vencimento
+                    <input type="date" id="lancamento-vencimento" required />
+                  </label>
+                  <label>
+                    Valor original
+                    <input type="text" id="lancamento-valor" placeholder="R$ 0" required />
+                  </label>
+                  <label>
+                    Valor já pago/recebido
+                    <input type="text" id="lancamento-pago" placeholder="R$ 0" />
+                  </label>
+                  <label>
+                    Forma de pagamento
+                    <select id="lancamento-pagamento">
+                      <option value="">A definir</option>
+                      <option value="Pix">Pix</option>
+                      <option value="Dinheiro">Dinheiro</option>
+                      <option value="Transferência">Transferência</option>
+                      <option value="Boleto">Boleto</option>
+                      <option value="Cartão">Cartão</option>
+                      <option value="Financiamento">Financiamento</option>
+                    </select>
+                  </label>
+                  <label>
+                    Parcela
+                    <input type="text" id="lancamento-parcela" placeholder="1/1" />
+                  </label>
+                </div>
+
+                <textarea id="lancamento-observacao" rows="3" placeholder="Observações internas, comprovantes pendentes ou regra de recorrência"></textarea>
+
+                <div class="admin-form-acoes">
+                  <button type="submit" class="btn-primary">Salvar lançamento</button>
+                  <button type="button" class="btn-cancelar btn-visivel" id="lancamento-cancelar">Limpar</button>
+                </div>
+              </form>
+
+              <section class="financeiro-relatorio">
+                <div class="financeiro-relatorio-topo">
+                  <div>
+                    <span class="admin-eyebrow">Operacional</span>
+                    <h3>Contas do período</h3>
+                  </div>
+                  <p id="lancamentos-resumo">Carregando lançamentos...</p>
+                </div>
+
+                <div class="financeiro-toolbar financeiro-notas-toolbar">
+                  <label>
+                    Tipo
+                    <select id="lancamento-filtro-tipo">
+                      <option value="">Todos</option>
+                      <option value="receber">A receber</option>
+                      <option value="pagar">A pagar</option>
+                    </select>
+                  </label>
+                  <label>
+                    Status
+                    <select id="lancamento-filtro-status">
+                      <option value="">Todos os status</option>
+                      <option value="pendente">Pendente</option>
+                      <option value="parcial">Parcial</option>
+                      <option value="vencido">Vencido</option>
+                      <option value="pago">Pago</option>
+                      <option value="recebido">Recebido</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div id="lista-lancamentos-financeiros" class="admin-lista financeiro-lista financeiro-lista-operacional"></div>
+              </section>
+            </div>
+          </div>
+
+          <div class="financeiro-view" data-finance-view="dre">
+            <div class="financeiro-resumo-grid">
+              <section class="financeiro-relatorio">
+                <div class="financeiro-relatorio-topo">
+                  <div>
+                    <span class="admin-eyebrow">Competência</span>
+                    <h3>DRE gerencial</h3>
+                  </div>
+                  <p>Resultado por grupos, sem presumir regra tributária fixa.</p>
+                </div>
+                <div id="lista-dre-financeiro" class="financeiro-breakdown financeiro-breakdown-caixa"></div>
+              </section>
+
+              <section class="financeiro-relatorio">
+                <div class="financeiro-relatorio-topo">
+                  <div>
+                    <span class="admin-eyebrow">Caixa</span>
+                    <h3>Fluxo realizado e projetado</h3>
+                  </div>
+                  <p>Entradas, saídas e valores abertos por data.</p>
+                </div>
+                <div id="lista-fluxo-financeiro" class="admin-lista financeiro-lista"></div>
+              </section>
+            </div>
+          </div>
+
+          <div class="financeiro-view" data-finance-view="conciliacao">
+            <div class="financeiro-operacao-grid">
+              <form id="form-conta-financeira" class="admin-form financeiro-saida-form">
+                <input type="hidden" id="conta-financeira-id" />
+                <span class="admin-eyebrow">Caixa e bancos</span>
+                <h3>Conta financeira</h3>
+
+                <div class="form-grid">
+                  <label>
+                    Nome da conta
+                    <input type="text" id="conta-financeira-nome" placeholder="Ex: Caixa loja / Banco" required />
+                  </label>
+                  <label>
+                    Tipo
+                    <select id="conta-financeira-tipo" required>
+                      <option value="caixa">Caixa físico</option>
+                      <option value="banco">Conta bancária</option>
+                      <option value="conta_digital">Conta digital</option>
+                    </select>
+                  </label>
+                  <label>
+                    Saldo inicial
+                    <input type="text" id="conta-financeira-saldo" placeholder="R$ 0" />
+                  </label>
+                  <label>
+                    Data do saldo
+                    <input type="date" id="conta-financeira-data" />
+                  </label>
+                  <label>
+                    Status
+                    <select id="conta-financeira-status">
+                      <option value="ativa">Ativa</option>
+                      <option value="inativa">Inativa</option>
+                    </select>
+                  </label>
+                  <label class="check-inline">
+                    <input type="checkbox" id="conta-financeira-padrao" />
+                    Conta padrão
+                  </label>
+                </div>
+
+                <textarea id="conta-financeira-observacao" rows="3" placeholder="Observações internas da conta"></textarea>
+
+                <div class="admin-form-acoes">
+                  <button type="submit" class="btn-primary">Salvar conta</button>
+                  <button type="button" class="btn-cancelar btn-visivel" id="conta-financeira-cancelar">Limpar</button>
+                </div>
+              </form>
+
+              <section class="financeiro-relatorio">
+                <div class="financeiro-relatorio-topo">
+                  <div>
+                    <span class="admin-eyebrow">Conciliação</span>
+                    <h3>Contas e pendências</h3>
+                  </div>
+                  <p id="conciliacao-resumo">Saldos e lançamentos ainda não baixados.</p>
+                </div>
+
+                <div id="lista-contas-financeiras" class="financeiro-breakdown financeiro-breakdown-caixa"></div>
+                <div id="lista-conciliacao-financeira" class="admin-lista financeiro-lista financeiro-lista-operacional"></div>
               </section>
             </div>
           </div>
@@ -2137,7 +2363,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260805-financeiro-operacional"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260805-financeiro-operacional-ui"></script>
   </body>
 </html>
 
