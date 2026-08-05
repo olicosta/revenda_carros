@@ -10,7 +10,7 @@
     />
     <title>Financiamento - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260805-footer-mobile" />
-    <link rel="stylesheet" href="/css/financiamento-premium.css?v=20260729-layout-sem-vazio" />
+    <link rel="stylesheet" href="/css/financiamento-premium.css?v=20260805-hero-colorido" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>

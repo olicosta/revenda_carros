@@ -5,13 +5,23 @@
     overflow: hidden;
     padding: clamp(58px, 8vw, 104px) 0;
     background:
-        radial-gradient(circle at 78% 18%, rgba(var(--gold-rgb), 0.22), transparent 28%),
-        radial-gradient(circle at 16% 82%, rgba(var(--success-rgb), 0.12), transparent 30%),
-        linear-gradient(135deg, rgba(var(--primary-rgb), 0.96), rgba(var(--secondary-rgb), 0.9)),
-        url("https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80");
+        linear-gradient(145deg, rgba(var(--accent-rgb), 0.18) 0 22%, transparent 22% 100%),
+        linear-gradient(24deg, transparent 0 58%, rgba(var(--gold-rgb), 0.2) 58% 60%, transparent 60% 100%),
+        linear-gradient(118deg, rgba(var(--primary-rgb), 0.98) 0%, rgba(var(--secondary-rgb), 0.98) 46%, rgba(14, 63, 115, 0.94) 100%);
     background-position: center;
     background-size: cover;
     color: #fff;
+}
+
+.finance-premium-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(112deg, transparent 0 12%, rgba(255, 255, 255, 0.06) 12% 12.4%, transparent 12.4% 100%),
+        linear-gradient(128deg, transparent 0 64%, rgba(var(--gold-rgb), 0.18) 64% 65.2%, transparent 65.2% 100%),
+        linear-gradient(90deg, rgba(var(--success-rgb), 0.1), transparent 38%, rgba(var(--accent-rgb), 0.13));
+    pointer-events: none;
 }
 
 .finance-premium-hero::after {
