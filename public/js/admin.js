@@ -2464,11 +2464,16 @@ function renderizarAnalyticsAdmin() {
 
 function abrirAbaAdmin(nomeAba) {
   adminTabs.forEach(function (tab) {
-    tab.classList.toggle("ativa", tab.dataset.adminTab === nomeAba);
+    const ativa = tab.dataset.adminTab === nomeAba;
+    tab.classList.toggle("ativa", ativa);
+    tab.setAttribute("aria-selected", ativa ? "true" : "false");
   });
 
   adminPanels.forEach(function (panel) {
-    panel.classList.toggle("ativo", panel.dataset.adminPanel === nomeAba);
+    const ativo = panel.dataset.adminPanel === nomeAba;
+    panel.classList.toggle("ativo", ativo);
+    panel.hidden = !ativo;
+    panel.setAttribute("aria-hidden", ativo ? "false" : "true");
   });
 }
 
@@ -2545,9 +2550,13 @@ function aplicarPerfilAdmin() {
   const abaAtual = Array.from(adminPanels).find(function (panel) {
     return panel.classList.contains("ativo");
   });
+  const abaInicial =
+    abaAtual && permitidas.indexOf(abaAtual.dataset.adminPanel) !== -1
+      ? abaAtual.dataset.adminPanel
+      : permitidas[0];
 
-  if (abaAtual && permitidas.indexOf(abaAtual.dataset.adminPanel) === -1) {
-    abrirAbaAdmin(permitidas[0]);
+  if (abaInicial) {
+    abrirAbaAdmin(abaInicial);
   }
 }
 

@@ -11917,3 +11917,13 @@ body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-brea
 .financeiro-kpis-notas > * {
   height: 100%;
 }
+
+/* Trava final: painéis inativos do admin nunca devem aparecer fora da aba ativa. */
+body.admin-page .admin-tab-panel,
+body.admin-page .admin-tab-panel[hidden] {
+  display: none !important;
+}
+
+body.admin-page .admin-tab-panel.ativo:not([hidden]) {
+  display: block !important;
+}
