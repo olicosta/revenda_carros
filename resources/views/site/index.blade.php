@@ -9,7 +9,7 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-links-text" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-home-no-map" />
     <link rel="stylesheet" href="/css/home-premium.css?v=20260729-contato-centralizado" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -267,22 +267,19 @@
           </a>
         </div>
 
-        <div class="localizacao-mapa" data-mapa-container>
-          <div class="mapa-placeholder">
-            <span>Mapa</span>
-            <strong>Veja a localização da loja</strong>
-            <p>O mapa é carregado automaticamente antes de você chegar nesta seção.</p>
-            <button type="button" class="btn-primary" data-carregar-mapa>
-              Carregar mapa
-            </button>
-          </div>
-          <iframe
-            title="Mapa da 3M Veículos"
-            loading="eager"
-            referrerpolicy="no-referrer-when-downgrade"
-            data-src="https://www.google.com/maps?q=CENTRO%20II%20-%20R.%20Campos%20S%C3%A1les%2C%20293%20-%20Vila%20Ferroviaria%2C%20Mafra%20-%20SC%2C%2089300-094&output=embed"
-            data-mapa-iframe
-          ></iframe>
+        <div class="localizacao-resumo" aria-label="Dados de localização e atendimento">
+          <article>
+            <span>Endereço</span>
+            <strong data-loja-endereco>CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094</strong>
+          </article>
+          <article>
+            <span>WhatsApp</span>
+            <a href="https://wa.me/554796207774" data-whatsapp-link data-loja-whatsapp>(47) 96207-7774</a>
+          </article>
+          <article>
+            <span>Atendimento</span>
+            <strong data-loja-horario>Segunda a sábado, das 8h às 18h</strong>
+          </article>
         </div>
       </div>
     </section>
