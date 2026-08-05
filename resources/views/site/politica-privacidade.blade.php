@@ -6,7 +6,7 @@
     @include('site.partials.pwa')
     <meta name="description" content="Política de Privacidade da 3M Veículos." />
     <title>Política de Privacidade - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-fin-menu-visible" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-final" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
   </head>
   <body>
@@ -60,7 +60,7 @@
     @include('site.partials.footer')
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260805-footer-mobile"></script>
+    <script src="/js/config.js?v=20260805-footer-final"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

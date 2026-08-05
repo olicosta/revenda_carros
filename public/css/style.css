@@ -4783,6 +4783,14 @@ footer {
   text-decoration: underline;
 }
 
+.site-footer [hidden] {
+  display: none !important;
+}
+
+.site-footer-nowrap {
+  white-space: nowrap;
+}
+
 .site-footer-nav {
   display: flex;
   flex-wrap: wrap;
@@ -4834,11 +4842,11 @@ footer {
 
 @media (max-width: 640px) {
   .site-footer {
-    padding: 28px 0 calc(118px + env(safe-area-inset-bottom));
+    padding: 26px 0 calc(84px + env(safe-area-inset-bottom));
   }
 
   .site-footer-inner {
-    gap: 16px;
+    gap: 14px;
     padding-left: 0;
     border-left: 0;
   }
@@ -4850,14 +4858,14 @@ footer {
 
   .site-footer-info {
     display: grid;
-    gap: 14px;
-    padding-bottom: 16px;
+    gap: 11px;
+    padding-bottom: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   }
 
   .site-footer-info-item {
     display: grid;
-    gap: 3px;
+    gap: 2px;
   }
 
   .site-footer-info-item span {
@@ -4877,18 +4885,20 @@ footer {
   .site-footer-info-item address {
     color: rgba(255, 255, 255, 0.92);
     font-size: 13.5px;
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   .site-footer-address address {
-    max-width: 30ch;
+    display: grid;
+    max-width: 34ch;
+    gap: 1px;
   }
 
   .site-footer-nav {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    padding-bottom: 16px;
+    gap: 9px;
+    padding-bottom: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   }
 
@@ -4904,8 +4914,25 @@ footer {
     line-height: 1.25;
   }
 
-  .site-footer-nav a:nth-last-child(-n + 2) {
+  .site-footer-nav .site-footer-nav-contact {
     grid-column: span 2;
+  }
+
+  .site-footer-nav .site-footer-nav-legal {
+    min-height: 34px;
+    padding: 4px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 12.5px;
+    font-weight: 800;
+  }
+
+  .site-footer-nav .site-footer-nav-legal:hover,
+  .site-footer-nav .site-footer-nav-legal:focus-visible {
+    color: #ffffff;
+    text-decoration: underline;
   }
 
   .site-footer-nav a + a::before {
@@ -4930,7 +4957,7 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .site-footer-nav a:nth-last-child(-n + 2) {
+  .site-footer-nav .site-footer-nav-contact {
     grid-column: auto;
   }
 }

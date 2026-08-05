@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @include('site.partials.pwa')
     <title>Login Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-fin-menu-visible" />
+    <link rel="stylesheet" href="/css/style.css?v=20260805-footer-final" />
   </head>
   <body class="login-page">
     <main class="login-shell">
@@ -77,7 +77,7 @@
       </section>
     </main>
 
-    <script src="/js/config.js?v=20260805-footer-mobile"></script>
+    <script src="/js/config.js?v=20260805-footer-final"></script>
     <script>
       document.querySelector("[data-submit-once]")?.addEventListener("submit", function () {
         const botao = this.querySelector('button[type="submit"]');

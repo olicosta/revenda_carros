@@ -393,6 +393,53 @@ function formatarWhatsAppExibicao(numero) {
   return String(numero || "").trim();
 }
 
+function formatarEnderecoRodape(endereco) {
+  const texto = String(endereco || "").trim();
+  const cep = (texto.match(/(\d{5})-?(\d{3})/) || []).slice(1).join("-");
+  const semCep = texto.replace(/\s*,?\s*\d{5}-?\d{3}\s*$/, "");
+  const partesHifen = semCep
+    .split(/\s+-\s+/)
+    .map(function (parte) {
+      return parte.trim();
+    })
+    .filter(Boolean);
+
+  const bairroRaw = partesHifen[0] || "";
+  const ruaRaw = partesHifen[1] || "";
+  const regiao = partesHifen.slice(2).join(" - ");
+  const regiaoPartes = regiao
+    .split(/\s*,\s*/)
+    .map(function (parte) {
+      return parte.trim();
+    })
+    .filter(Boolean);
+  const complementoRaw = regiaoPartes[0] || "";
+  let cidadeRaw = regiaoPartes[1] || "";
+  let ufRaw = regiaoPartes[2] || "";
+
+  if (!ufRaw && /\s+-\s+/.test(cidadeRaw)) {
+    const cidadeUf = cidadeRaw.split(/\s+-\s+/);
+    cidadeRaw = cidadeUf[0] || "";
+    ufRaw = cidadeUf[1] || "";
+  }
+
+  const bairro = bairroRaw
+    .replace(/^centro\s*ii$/i, "Centro II")
+    .replace(/\bii\b/i, "II");
+  const rua = ruaRaw
+    .replace(/^R\.\s*/i, "Rua ")
+    .replace(/Campos S[aá]les/i, "Campos Sales");
+  const complemento = complementoRaw.replace(/Vila Ferroviaria/i, "Vila Ferroviária");
+  const cidade = cidadeRaw.replace(/\bmafra\b/i, "Mafra");
+  const uf = ufRaw.toUpperCase();
+
+  return {
+    street: [rua, bairro].filter(Boolean).join(" — "),
+    district: [complemento, [cidade, uf].filter(Boolean).join("/")].filter(Boolean).join(" — "),
+    cep: cep ? "CEP " + cep : "",
+  };
+}
+
 function normalizarNumeroWhatsApp(numero) {
   let digitos = String(numero || "").replace(/\D/g, "");
 
@@ -925,6 +972,20 @@ function aplicarConfigLoja() {
   });
 
   document.querySelectorAll("[data-loja-endereco]").forEach(function (elemento) {
+    if (elemento.matches("[data-footer-address]")) {
+      const enderecoRodape = formatarEnderecoRodape(config.endereco);
+
+      Object.keys(enderecoRodape).forEach(function (chave) {
+        const linha = elemento.querySelector('[data-footer-address-line="' + chave + '"]');
+        if (!linha) return;
+
+        linha.textContent = enderecoRodape[chave];
+        linha.hidden = !enderecoRodape[chave];
+      });
+
+      return;
+    }
+
     elemento.textContent = config.endereco;
   });
 
@@ -953,12 +1014,18 @@ function aplicarConfigLoja() {
     const blocoEmail = link.closest("[data-footer-email]");
 
     if (!email) {
-      if (blocoEmail) blocoEmail.hidden = true;
+      if (blocoEmail) {
+        blocoEmail.hidden = true;
+        blocoEmail.setAttribute("aria-hidden", "true");
+      }
       link.removeAttribute("href");
       return;
     }
 
-    if (blocoEmail) blocoEmail.hidden = false;
+    if (blocoEmail) {
+      blocoEmail.hidden = false;
+      blocoEmail.removeAttribute("aria-hidden");
+    }
     link.href = "mailto:" + email;
   });
 
