@@ -60,7 +60,7 @@
     @include('site.partials.footer')
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-footer-compacto"></script>
+    <script src="/js/config.js?v=20260729-mapa-preload"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>

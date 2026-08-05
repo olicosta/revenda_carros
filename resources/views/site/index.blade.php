@@ -271,14 +271,14 @@
           <div class="mapa-placeholder">
             <span>Mapa</span>
             <strong>Veja a localização da loja</strong>
-            <p>Carregue o Google Maps somente quando precisar consultar a rota.</p>
+            <p>O mapa é carregado automaticamente antes de você chegar nesta seção.</p>
             <button type="button" class="btn-primary" data-carregar-mapa>
               Carregar mapa
             </button>
           </div>
           <iframe
             title="Mapa da 3M Veículos"
-            loading="lazy"
+            loading="eager"
             referrerpolicy="no-referrer-when-downgrade"
             data-src="https://www.google.com/maps?q=CENTRO%20II%20-%20R.%20Campos%20S%C3%A1les%2C%20293%20-%20Vila%20Ferroviaria%2C%20Mafra%20-%20SC%2C%2089300-094&output=embed"
             data-mapa-iframe
@@ -291,7 +291,7 @@
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-footer-compacto"></script>
+    <script src="/js/config.js?v=20260729-mapa-preload"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

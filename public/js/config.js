@@ -983,6 +983,19 @@ function prepararMapasSobDemanda() {
 
   if (!iframesMapa.length) return;
 
+  function carregarMapasVisiveisComFolga() {
+    const alturaJanela = window.innerHeight || document.documentElement.clientHeight || 0;
+
+    iframesMapa.forEach(function (iframe) {
+      if (iframe.dataset.carregado === "true") return;
+
+      const rect = iframe.getBoundingClientRect();
+      if (rect.top <= alturaJanela + 1400) {
+        carregarMapaIframe(iframe);
+      }
+    });
+  }
+
   document.querySelectorAll("[data-carregar-mapa]").forEach(function (botao) {
     botao.addEventListener(
       "click",
@@ -993,6 +1006,17 @@ function prepararMapasSobDemanda() {
       { once: true }
     );
   });
+
+  window.addEventListener("scroll", carregarMapasVisiveisComFolga, { passive: true });
+  window.addEventListener("resize", carregarMapasVisiveisComFolga);
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(carregarMapasVisiveisComFolga, { timeout: 1800 });
+  } else {
+    window.setTimeout(carregarMapasVisiveisComFolga, 900);
+  }
+
+  carregarMapasVisiveisComFolga();
 
   if (!("IntersectionObserver" in window)) return;
 
@@ -1006,7 +1030,7 @@ function prepararMapasSobDemanda() {
       });
     },
     {
-      rootMargin: "420px 0px",
+      rootMargin: "1400px 0px",
       threshold: 0.01,
     }
   );

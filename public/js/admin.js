@@ -3900,6 +3900,92 @@ function gerarNotasPendentesDasVendas() {
   renderizarNotasFiscais();
 }
 
+function aplicarResumoFinanceiroOperacional(resumo) {
+  if (!resumo || !resumo.cards) return;
+
+  const cards = resumo.cards;
+  atualizarDashboardTexto("fin-total-estoque", formatarMoeda(cards.capital_estoque || 0));
+  atualizarDashboardTexto("fin-total-vendido", formatarMoeda(cards.receita_vendas || 0));
+  atualizarDashboardTexto("fin-lucro", formatarMoeda(cards.lucro_bruto || 0));
+  atualizarDashboardTexto("fin-ticket", formatarMoeda(cards.ticket_medio || 0));
+  atualizarDashboardTexto("fin-saidas", formatarMoeda(cards.saidas_periodo || 0));
+  atualizarDashboardTexto("fin-resultado-liquido", formatarMoeda(cards.resultado_liquido || 0));
+  atualizarDashboardTexto("fin-caixa-recebido", formatarMoeda(cards.entradas_periodo || 0));
+  atualizarDashboardTexto("fin-saldo-receber", formatarMoeda(cards.contas_a_receber || 0));
+  atualizarDashboardTexto(
+    "fin-estoque-unidades",
+    (cards.veiculos_estoque || 0) + " veículo(s) disponíveis"
+  );
+  atualizarDashboardTexto(
+    "fin-margem",
+    "Margem média de " + formatarPercentual(cards.margem_media || 0) + "%"
+  );
+  atualizarDashboardTexto(
+    "fin-custos",
+    "Contas a pagar: " + formatarMoeda(cards.contas_a_pagar || 0)
+  );
+  atualizarDashboardTexto(
+    "fin-saidas-qtd",
+    "Vencidas: " + formatarMoeda(cards.contas_vencidas || 0)
+  );
+  atualizarDashboardTexto(
+    "fin-resultado-info",
+    (cards.resultado_liquido || 0) >= 0
+      ? "Resultado operacional positivo no período"
+      : "Saídas acima das entradas no período"
+  );
+
+  aplicarCorMetricaFinanceira("fin-resultado-liquido", "resultadoLiquido", cards.resultado_liquido || 0);
+  aplicarCorMetricaFinanceira("fin-total-vendido", "receitaVendida", cards.receita_vendas || 0);
+  aplicarCorMetricaFinanceira("fin-lucro", "lucroBruto", cards.lucro_bruto || 0);
+  aplicarCorMetricaFinanceira("fin-saidas", "saidas", cards.saidas_periodo || 0);
+
+  if (listaCaixaFinanceiro && Array.isArray(resumo.account_balances)) {
+    listaCaixaFinanceiro.innerHTML = resumo.account_balances
+      .map(function (conta) {
+        return (
+          "<span><b>" +
+          escaparHTML(conta.name || "Conta") +
+          "</b>" +
+          formatarMoeda(conta.balance || 0) +
+          "</span>"
+        );
+      })
+      .join("");
+  }
+
+  if (listaAlertasFinanceiros && Array.isArray(resumo.alerts)) {
+    listaAlertasFinanceiros.innerHTML = resumo.alerts.length
+      ? resumo.alerts
+          .map(function (alerta) {
+            return (
+              '<div class="analytics-lista-item alerta-financeiro-item">' +
+              '<span class="analytics-nome">' +
+              escaparHTML(alerta) +
+              "</span>" +
+              "</div>"
+            );
+          })
+          .join("")
+      : '<div class="analytics-lista-item"><span class="analytics-nome">Nenhuma inconsistência encontrada no período.</span></div>';
+  }
+}
+
+function carregarResumoFinanceiroOperacional() {
+  if (!listaFinanceiro || !filtroFinanceiroMes) return;
+
+  const mes = filtroFinanceiroMes.value;
+  const query = mes ? "?month=" + encodeURIComponent(mes) : "";
+
+  requisicaoAdminApiAssincrona("GET", "/finance/summary" + query)
+    .then(function (resposta) {
+      aplicarResumoFinanceiroOperacional(resposta.data);
+    })
+    .catch(function () {
+      // Mantém os cálculos locais como fallback em ambientes ainda sem migrations.
+    });
+}
+
 function renderizarFinanceiro() {
   if (!listaFinanceiro) return;
 
@@ -3987,6 +4073,7 @@ function renderizarFinanceiro() {
     saidas: totalSaidas,
     aReceber: totalSaldoReceber,
   });
+  carregarResumoFinanceiroOperacional();
 
   if (listaCaixaFinanceiro) {
     listaCaixaFinanceiro.innerHTML =

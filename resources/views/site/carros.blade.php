@@ -223,7 +223,7 @@
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260729-footer-compacto"></script>
+    <script src="/js/config.js?v=20260729-mapa-preload"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
     <script data-site-script data-src="/js/catalogo.js?v=20260729-card-acoes"></script>
