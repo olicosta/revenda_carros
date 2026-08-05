@@ -11842,3 +11842,33 @@ body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-brea
     grid-template-columns: 1fr;
   }
 }
+
+/* Alinhamento final de grids e cards em telas públicas/admin. */
+.cards,
+.grid-carros,
+.home-veiculos-grid,
+.finance-step-grid,
+.bancos-grid,
+.depoimentos-grid,
+.dashboard-grid,
+.executivo-grid,
+.financeiro-resumo-grid,
+.financeiro-kpis-principais,
+.financeiro-kpis-secundarios,
+.financeiro-kpis-notas {
+  align-items: stretch;
+}
+
+.cards > *,
+.grid-carros > *,
+.home-veiculos-grid > *,
+.finance-step-grid > *,
+.bancos-grid > *,
+.dashboard-grid > *,
+.executivo-grid > *,
+.financeiro-resumo-grid > *,
+.financeiro-kpis-principais > *,
+.financeiro-kpis-secundarios > *,
+.financeiro-kpis-notas > * {
+  height: 100%;
+}

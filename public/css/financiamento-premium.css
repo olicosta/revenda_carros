@@ -218,10 +218,16 @@
 
 .finance-side {
     display: grid;
-    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
     position: static;
-    align-items: start;
+    align-items: stretch;
+}
+
+.finance-side .finance-info-card {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
 }
 
 .finance-benefits-card ul {
@@ -256,7 +262,9 @@
 
 .bancos-grid-compacto {
     margin-top: 18px;
-    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    flex: 1;
 }
 
 @media (max-width: 900px) {
