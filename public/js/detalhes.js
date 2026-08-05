@@ -277,12 +277,17 @@ if (container && carro) {
     '<div class="galeria-lightbox" id="galeria-lightbox" role="dialog" aria-modal="true" aria-label="Galeria ampliada de ' +
       nomeAtributo +
       '" aria-hidden="true">' +
-      '<button type="button" class="lightbox-fechar" id="lightbox-fechar">Fechar</button>' +
+      '<button type="button" class="lightbox-fechar" id="lightbox-fechar" aria-label="Fechar galeria">×</button>' +
+      '<button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Foto anterior">‹</button>' +
       '<img src="' +
       escaparAtributo(galeria[0]) +
       '" id="lightbox-img" alt="Foto ampliada de ' +
       nomeAtributo +
       '">' +
+      '<button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Próxima foto">›</button>' +
+      '<span class="lightbox-contador" id="lightbox-contador">1 / ' +
+      galeria.length +
+      "</span>" +
     "</div>"
   );
 
@@ -312,15 +317,28 @@ if (container && carro) {
   const lightbox = document.getElementById("galeria-lightbox");
   const lightboxImg = document.getElementById("lightbox-img");
   const lightboxFechar = document.getElementById("lightbox-fechar");
+  const lightboxAnterior = document.getElementById("lightbox-prev");
+  const lightboxProximo = document.getElementById("lightbox-next");
+  const lightboxContador = document.getElementById("lightbox-contador");
   const miniaturas = document.querySelectorAll(".miniatura");
   const btnCompartilhar = document.getElementById("btn-compartilhar-veiculo");
   const btnCopiar = document.getElementById("btn-copiar-veiculo");
+  let toqueInicioX = 0;
+
+  lightboxImg.tabIndex = -1;
 
   function mostrarFoto(index) {
-    fotoAtual = (index + galeria.length) % galeria.length;
+    fotoAtual = Math.max(0, Math.min(index, galeria.length - 1));
     imagemPrincipal.src = galeria[fotoAtual];
     lightboxImg.src = galeria[fotoAtual];
     contadorGaleria.textContent = fotoAtual + 1 + " / " + galeria.length;
+    lightboxContador.textContent = fotoAtual + 1 + " / " + galeria.length;
+
+    botaoAnterior.disabled = fotoAtual === 0;
+    botaoProximo.disabled = fotoAtual === galeria.length - 1;
+    lightboxAnterior.disabled = fotoAtual === 0;
+    lightboxProximo.disabled = fotoAtual === galeria.length - 1;
+    lightboxFechar.hidden = fotoAtual !== galeria.length - 1;
 
     miniaturas.forEach(function (item) {
       item.classList.remove("ativa");
@@ -340,7 +358,7 @@ if (container && carro) {
     lightbox.classList.add("ativo");
     lightbox.setAttribute("aria-hidden", "false");
     document.body.classList.add("lightbox-aberto");
-    lightboxFechar.focus();
+    lightboxImg.focus();
   }
 
   function fecharLightbox() {
@@ -364,6 +382,16 @@ if (container && carro) {
     mostrarFoto(fotoAtual + 1);
   });
 
+  lightboxAnterior.addEventListener("click", function (evento) {
+    evento.stopPropagation();
+    mostrarFoto(fotoAtual - 1);
+  });
+
+  lightboxProximo.addEventListener("click", function (evento) {
+    evento.stopPropagation();
+    mostrarFoto(fotoAtual + 1);
+  });
+
   imagemPrincipal.tabIndex = 0;
   imagemPrincipal.addEventListener("click", abrirLightbox);
   imagemPrincipal.addEventListener("keydown", function (evento) {
@@ -375,7 +403,10 @@ if (container && carro) {
 
   botaoTelaCheia.addEventListener("click", abrirLightbox);
 
-  lightboxFechar.addEventListener("click", fecharLightbox);
+  lightboxFechar.addEventListener("click", function (evento) {
+    evento.stopPropagation();
+    fecharLightbox();
+  });
 
   lightbox.addEventListener("click", function (e) {
     if (e.target === lightbox) {
@@ -383,16 +414,35 @@ if (container && carro) {
     }
   });
 
+  lightbox.addEventListener("touchstart", function (evento) {
+    toqueInicioX = evento.touches[0] ? evento.touches[0].clientX : 0;
+  }, { passive: true });
+
+  lightbox.addEventListener("touchend", function (evento) {
+    const toqueFimX = evento.changedTouches[0] ? evento.changedTouches[0].clientX : 0;
+    const distancia = toqueFimX - toqueInicioX;
+
+    if (Math.abs(distancia) < 42) return;
+
+    if (distancia < 0) {
+      mostrarFoto(fotoAtual + 1);
+    } else {
+      mostrarFoto(fotoAtual - 1);
+    }
+  }, { passive: true });
+
   document.addEventListener("keydown", function (evento) {
-    if (evento.key === "ArrowLeft") {
+    const lightboxAberto = lightbox.classList.contains("ativo");
+
+    if (evento.key === "ArrowLeft" && lightboxAberto) {
       mostrarFoto(fotoAtual - 1);
     }
 
-    if (evento.key === "ArrowRight") {
+    if (evento.key === "ArrowRight" && lightboxAberto) {
       mostrarFoto(fotoAtual + 1);
     }
 
-    if (evento.key === "Escape" && lightbox.classList.contains("ativo")) {
+    if (evento.key === "Escape" && lightboxAberto) {
       fecharLightbox();
     }
   });
@@ -401,6 +451,8 @@ if (container && carro) {
     botaoAnterior.disabled = true;
     botaoProximo.disabled = true;
   }
+
+  mostrarFoto(0);
 
   if (btnCompartilhar) {
     btnCompartilhar.addEventListener("click", function () {

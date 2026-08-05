@@ -390,11 +390,6 @@ if (listaDepoimentosHome) {
         '" alt="Foto da entrega do veículo para ' +
         escaparAtributo(depoimento.cliente) +
         '" loading="lazy" onerror="this.src=\'/img/logo-3m-veiculos.jpg\'">' +
-        '<div class="cliente-info">' +
-        "<strong>" +
-        escaparHTML(depoimento.cliente) +
-        "</strong>" +
-        "</div>" +
         "</div>" +
         "</article>"
       );

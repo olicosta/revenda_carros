@@ -2643,14 +2643,6 @@ body.sistema-modal-aberto {
   display: block;
 }
 
-.cliente-info {
-  display: grid;
-  place-items: center;
-  padding: 20px 18px 22px;
-  margin-bottom: 0;
-  text-align: center;
-}
-
 .depoimento-card p {
   color: var(--muted);
   line-height: 1.7;
@@ -2684,28 +2676,6 @@ body.sistema-modal-aberto {
 .depoimento-card:hover .foto-entrega {
   transform: scale(1.035);
   filter: saturate(1.05) contrast(1.04);
-}
-
-.depoimento-card .cliente-info {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  left: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 58px;
-  padding: 12px 18px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(7, 18, 37, 0.88), rgba(15, 32, 56, 0.72));
-  color: white;
-  box-shadow: 0 16px 32px rgba(7, 18, 37, 0.28);
-  backdrop-filter: blur(10px);
-}
-
-.depoimento-card .cliente-info strong {
-  color: white;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
 }
 
 /* DETALHES */
@@ -2822,19 +2792,112 @@ body.sistema-modal-aberto {
   max-height: 86vh;
   border-radius: 16px;
   object-fit: contain;
+  outline: none;
+  box-shadow: 0 26px 68px rgba(0, 0, 0, 0.38);
 }
 
 .lightbox-fechar {
   position: fixed;
   top: 20px;
   right: 20px;
+  width: 48px;
+  height: 48px;
   border: none;
   border-radius: 999px;
   background: var(--gold);
   color: var(--primary);
-  padding: 12px 16px;
+  padding: 0;
+  font-size: 30px;
+  line-height: 1;
   font-weight: 900;
   cursor: pointer;
+  box-shadow: 0 16px 34px rgba(var(--gold-rgb), 0.24);
+}
+
+.lightbox-fechar[hidden] {
+  display: none !important;
+}
+
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-prev {
+  left: 18px;
+}
+
+.lightbox-next {
+  right: 18px;
+}
+
+.lightbox-nav:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.lightbox-contador {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 900;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 640px) {
+  .galeria-lightbox {
+    padding: 12px;
+  }
+
+  .galeria-lightbox img {
+    max-width: 100%;
+    max-height: 78vh;
+    border-radius: 14px;
+  }
+
+  .lightbox-fechar {
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    font-size: 28px;
+  }
+
+  .lightbox-nav {
+    width: 44px;
+    height: 44px;
+    font-size: 34px;
+  }
+
+  .lightbox-prev {
+    left: 10px;
+  }
+
+  .lightbox-next {
+    right: 10px;
+  }
+
+  .lightbox-contador {
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+  }
 }
 
 .galeria-miniaturas {
@@ -9270,8 +9333,7 @@ section,
 }
 
 .carro-info,
-.showcase-card,
-.cliente-info {
+.showcase-card {
   min-width: 0;
 }
 

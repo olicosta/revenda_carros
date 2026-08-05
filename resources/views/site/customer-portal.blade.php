@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   @include('site.partials.pwa')
   <title>Área do cliente | 3M Veículos</title>
-  <link rel="stylesheet" href="/css/style.css?v=20260805-home-no-map" />
+  <link rel="stylesheet" href="/css/style.css?v=20260805-gallery-lightbox" />
 </head>
 <body class="customer-portal-page">
   <main class="customer-portal">
