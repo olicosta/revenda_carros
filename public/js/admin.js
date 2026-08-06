@@ -7,6 +7,11 @@ const inputGaleriaFiles = document.getElementById("galeria-files");
 const previewGaleriaAdmin = document.getElementById("galeria-preview-admin");
 const previewCardCarro = document.getElementById("preview-card-carro");
 const selectMarca = document.getElementById("marca");
+const textoConclusaoVeiculo = document.getElementById("veiculo-conclusao-texto");
+const barraConclusaoVeiculo = document.getElementById("veiculo-conclusao-barra");
+const textoPendenciasVeiculo = document.getElementById("veiculo-pendencias-texto");
+const buscaOpcionaisVeiculo = document.getElementById("opcionais-busca");
+const opcionaisCheckVeiculo = document.querySelectorAll(".opcional-check");
 const formLoja = document.getElementById("form-loja");
 const formMensagemWhatsapp = document.getElementById("form-mensagem-whatsapp");
 const inputLogoLoja = document.getElementById("loja-logo-file");
@@ -2620,6 +2625,147 @@ function formatarPreco(valor) {
   });
 }
 
+function campoValor(id) {
+  const campo = document.getElementById(id);
+  return campo ? campo.value.trim() : "";
+}
+
+function definirCampo(id, valor) {
+  const campo = document.getElementById(id);
+  if (campo) campo.value = valor || "";
+}
+
+function numeroFinanceiroCampo(id) {
+  return Number(String(campoValor(id)).replace(/\D/g, "")) || 0;
+}
+
+function listaOpcionaisSelecionados() {
+  const selecionados = Array.from(opcionaisCheckVeiculo || [])
+    .filter(function (check) {
+      return check.checked;
+    })
+    .map(function (check) {
+      return check.value.trim();
+    });
+  const digitados = campoValor("opcionais")
+    .split(",")
+    .map(function (item) {
+      return item.trim();
+    })
+    .filter(Boolean);
+
+  return Array.from(new Set(selecionados.concat(digitados)));
+}
+
+function preencherOpcionaisSelecionados(opcionais) {
+  const lista = Array.isArray(opcionais) ? opcionais : [];
+  const usadosNosChecks = [];
+
+  Array.from(opcionaisCheckVeiculo || []).forEach(function (check) {
+    check.checked = lista.includes(check.value);
+    if (check.checked) usadosNosChecks.push(check.value);
+  });
+
+  definirCampo(
+    "opcionais",
+    lista
+      .filter(function (item) {
+        return usadosNosChecks.indexOf(item) === -1;
+      })
+      .join(", ")
+  );
+}
+
+function calcularConclusaoCadastro(carro) {
+  const grupos = [
+    ["marca", "modelo", "anoModelo", "km", "combustivel", "cambio", "cor", "preco"],
+    ["origem", "resultadoLaudo"],
+    ["precoCompra", "preco", "precoMinimo"],
+    ["estadoGeral", "estadoPintura", "estadoPneus", "estadoInterior", "estadoMecanica"],
+    ["opcionais"],
+    ["imagem", "galeria"],
+    ["descricao", "responsavelId"],
+  ];
+  const completos = grupos.filter(function (campos) {
+    const preenchidos = campos.filter(function (campo) {
+      const valor = carro[campo];
+      return Array.isArray(valor) ? valor.filter(Boolean).length > 0 : String(valor || "").trim() !== "";
+    });
+    return preenchidos.length >= Math.ceil(campos.length * 0.6);
+  }).length;
+
+  return Math.round((completos / grupos.length) * 100);
+}
+
+function pendenciasCadastro(carro) {
+  const obrigatorios = [
+    ["marca", "marca"],
+    ["modelo", "modelo"],
+    ["anoModelo", "ano modelo"],
+    ["km", "quilometragem"],
+    ["combustivel", "combustível"],
+    ["cambio", "câmbio"],
+    ["cor", "cor"],
+    ["preco", "preço"],
+    ["origem", "procedência"],
+    ["imagem", "foto principal"],
+    ["descricao", "descrição"],
+    ["responsavelId", "responsável"],
+  ];
+  const pendencias = obrigatorios
+    .filter(function (item) {
+      return !carro[item[0]];
+    })
+    .map(function (item) {
+      return item[1];
+    });
+
+  if (!Array.isArray(carro.galeria) || carro.galeria.filter(Boolean).length < 4) {
+    pendencias.push("mínimo de 4 fotos");
+  }
+
+  return pendencias;
+}
+
+function atualizarProgressoCadastro() {
+  if (!textoConclusaoVeiculo || !barraConclusaoVeiculo || !textoPendenciasVeiculo) return;
+
+  const carro = montarPreviaCadastro();
+  const percentual = calcularConclusaoCadastro(carro);
+  const pendencias = pendenciasCadastro(carro);
+
+  textoConclusaoVeiculo.textContent = percentual + "%";
+  barraConclusaoVeiculo.style.width = percentual + "%";
+  textoPendenciasVeiculo.textContent = pendencias.length
+    ? "Pendências: " + pendencias.slice(0, 4).join(", ") + (pendencias.length > 4 ? "..." : "")
+    : "Pronto para publicação quando estiver disponível.";
+}
+
+function atualizarCamposCondicionaisVeiculo() {
+  const origem = campoValor("origem");
+  const financiamento = campoValor("possui-financiamento");
+  const avarias = campoValor("possui-avarias");
+
+  document.querySelectorAll("[data-condicao-origem]").forEach(function (elemento) {
+    elemento.hidden = elemento.dataset.condicaoOrigem !== origem;
+  });
+  document.querySelectorAll("[data-condicao-financiamento]").forEach(function (elemento) {
+    elemento.hidden = elemento.dataset.condicaoFinanciamento !== financiamento;
+  });
+  document.querySelectorAll("[data-condicao-avaria]").forEach(function (elemento) {
+    elemento.hidden = elemento.dataset.condicaoAvaria !== avarias;
+  });
+}
+
+function aplicarPermissaoFinanceiraVeiculo() {
+  const perfil = (metaAdminRole && metaAdminRole.content) || "gestor";
+  const podeVerFinanceiro = ["gestor", "financeiro"].includes(perfil);
+
+  document.querySelectorAll("[data-sensitive-section]").forEach(function (section) {
+    section.hidden = !podeVerFinanceiro;
+  });
+}
+
 function numeroFinanceiro(id) {
   return Number(String(document.getElementById(id).value).replace(/\D/g, ""));
 }
@@ -2647,12 +2793,7 @@ function calcularComissaoPadraoVendedor(vendedor, carro, valorVenda) {
   }
 
   if (tipo === "percentualLucro" && percentual) {
-    const lucroBase =
-      (Number(valorVenda) || 0) -
-      (Number(carro.precoCompra) || 0) -
-      (Number(carro.custoPreparacao) || 0) -
-      totalSaidasVinculadasAoVeiculo(carro.id) -
-      (Number(carro.taxas) || 0);
+    const lucroBase = (Number(valorVenda) || 0) - custoTotalCarro({ ...carro, comissao: 0 });
 
     return calcularComissaoPorTaxa(Math.max(lucroBase, 0), percentual);
   }
@@ -2695,7 +2836,13 @@ function totalSaidasVinculadasAoVeiculo(carroId, mes) {
 function custoTotalCarro(carro, mes) {
   return (
     (Number(carro.precoCompra) || 0) +
+    (Number(carro.custoDocumental) || 0) +
+    (Number(carro.custoTransporte) || 0) +
+    (Number(carro.custoManutencao) || 0) +
+    (Number(carro.custoEstetica) || 0) +
     (Number(carro.custoPreparacao) || 0) +
+    (Number(carro.custoDespachante) || 0) +
+    (Number(carro.outrosCustos) || 0) +
     totalSaidasVinculadasAoVeiculo(carro.id, mes) +
     (Number(carro.comissao) || 0) +
     (Number(carro.taxas) || 0)
@@ -2765,7 +2912,13 @@ function renderizarLucroFormulario() {
   const lucro =
     valorVenda -
     numeroFinanceiro("preco-compra") -
+    numeroFinanceiroCampo("custo-documental") -
+    numeroFinanceiroCampo("custo-transporte") -
+    numeroFinanceiroCampo("custo-manutencao") -
+    numeroFinanceiroCampo("custo-estetica") -
     numeroFinanceiro("custo-preparacao") -
+    numeroFinanceiroCampo("custo-despachante") -
+    numeroFinanceiroCampo("outros-custos") -
     numeroFinanceiro("comissao") -
     numeroFinanceiro("taxas");
 
@@ -2789,17 +2942,22 @@ function formatarPercentual(valor) {
 function limparFormulario() {
   form.reset();
   document.getElementById("carro-id").value = "";
+  definirCampo("responsavel-id", document.querySelector('meta[name="admin-user-id"]')?.content || "");
   imagemBase64 = "";
   galeriaUploadBase64 = [];
   previewImg.src = "";
   previewImg.style.display = "none";
   document.getElementById("data-entrada").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("status").value = "Cadastro incompleto";
   document.getElementById("preparacao-status").value = "Aguardando revisão";
   document.getElementById("checklist-anuncio").value = "Pendente";
+  preencherOpcionaisSelecionados([]);
+  atualizarCamposCondicionaisVeiculo();
+  atualizarProgressoCadastro();
   renderizarGaleriaAdmin();
   renderizarPreviewCard();
   btnSalvar.textContent = "Cadastrar veículo";
-  tituloForm.textContent = "Cadastrar veículo";
+  tituloForm.textContent = "Cadastro rápido de veículo";
   btnCancelar.style.display = "none";
   fecharCadastroAdmin("form-carro");
 }
@@ -2826,9 +2984,43 @@ function limparFormularioParceria() {
   fecharCadastroAdmin("form-parceria");
 }
 
+function montarPreviaCadastro() {
+  const marca = selectMarca.value.trim();
+  const modelo = campoValor("modelo");
+  const imagemPrincipal =
+    imagemBase64 ||
+    previewImg.getAttribute("src") ||
+    "";
+
+  return {
+    marca: marca,
+    modelo: modelo,
+    anoModelo: campoValor("ano-modelo") || campoValor("ano"),
+    km: campoValor("km"),
+    combustivel: campoValor("combustivel"),
+    cambio: campoValor("cambio"),
+    cor: campoValor("cor"),
+    preco: campoValor("preco"),
+    origem: campoValor("origem"),
+    resultadoLaudo: campoValor("resultado-laudo"),
+    precoCompra: campoValor("preco-compra"),
+    precoMinimo: campoValor("preco-minimo"),
+    estadoGeral: campoValor("estado-geral"),
+    estadoPintura: campoValor("estado-pintura"),
+    estadoPneus: campoValor("estado-pneus"),
+    estadoInterior: campoValor("estado-interior"),
+    estadoMecanica: campoValor("estado-mecanica"),
+    opcionais: listaOpcionaisSelecionados(),
+    imagem: imagemPrincipal,
+    galeria: imagemPrincipal ? [imagemPrincipal].concat(galeriaUploadBase64) : galeriaUploadBase64,
+    descricao: campoValor("descricao"),
+    responsavelId: campoValor("responsavel-id"),
+  };
+}
+
 function montarCarro(idExistente) {
   const marca = selectMarca.value.trim();
-  const modelo = document.getElementById("modelo").value.trim();
+  const modelo = campoValor("modelo");
   const vendedorSelecionado = vendedorPorId(document.getElementById("vendedor-venda").value);
   const carroExistente = carrosAdmin.find(function (carro) {
     return Number(carro.id) === Number(idExistente);
@@ -2844,36 +3036,67 @@ function montarCarro(idExistente) {
     imagemBase64 ||
     (carroExistente && carroExistente.imagem) ||
     "https://via.placeholder.com/700x450?text=Sem+imagem";
+  const anoModelo = campoValor("ano-modelo") || campoValor("ano");
+  const conclusaoCadastro = calcularConclusaoCadastro(montarPreviaCadastro());
+  const statusFormulario = campoValor("status");
 
   return {
     id: idExistente
       ? Number(idExistente)
       : gerarIdUnico([carrosAdmin, depoimentosAdmin, parceriasAdmin]),
+    codigoEstoque: campoValor("codigo-estoque"),
+    placa: campoValor("placa").toUpperCase().replace(/[^A-Z0-9]/g, ""),
     marca: marca,
     modelo: modelo,
-    nome: marca + " " + modelo,
-    ano: document.getElementById("ano").value,
-    km: document.getElementById("km").value,
-    cambio: document.getElementById("cambio").value,
-    tipo: document.getElementById("tipo").value,
-    status: document.getElementById("status").value,
-    combustivel: document.getElementById("combustivel").value || "-",
-    cor: document.getElementById("cor").value || "-",
-    portas: document.getElementById("portas").value || "-",
-    placaFinal: document.getElementById("placa-final").value || "-",
+    versao: campoValor("versao"),
+    nome: [marca, modelo, campoValor("versao")].filter(Boolean).join(" "),
+    ano: anoModelo,
+    anoFabricacao: campoValor("ano-fabricacao"),
+    anoModelo: anoModelo,
+    km: campoValor("km"),
+    cambio: campoValor("cambio"),
+    tipo: campoValor("tipo"),
+    condicao: campoValor("condicao"),
+    status: statusFormulario === "Disponível" && conclusaoCadastro < 65 ? "Cadastro incompleto" : statusFormulario,
+    combustivel: campoValor("combustivel") || "-",
+    cor: campoValor("cor") || "-",
+    corInterna: campoValor("cor-interna"),
+    motorizacao: campoValor("motorizacao"),
+    potencia: campoValor("potencia"),
+    portas: campoValor("portas") || "-",
+    placaFinal: campoValor("placa-final") || "-",
+    lugares: campoValor("lugares"),
+    carroceria: campoValor("carroceria"),
+    categoria: campoValor("categoria"),
+    unidade: campoValor("unidade"),
+    responsavelId: campoValor("responsavel-id"),
+    responsavelNome: campoValor("responsavel-nome"),
     dataEntrada:
-      document.getElementById("data-entrada").value ||
+      campoValor("data-entrada") ||
       (carroExistente && carroExistente.dataEntrada) ||
       new Date().toISOString().slice(0, 10),
-    preparacaoStatus: document.getElementById("preparacao-status").value,
-    checklistAnuncio: document.getElementById("checklist-anuncio").value,
+    preparacaoStatus: campoValor("preparacao-status"),
+    checklistAnuncio: campoValor("checklist-anuncio"),
     precoCompra: numeroFinanceiro("preco-compra"),
+    custoDocumental: numeroFinanceiroCampo("custo-documental"),
+    custoTransporte: numeroFinanceiroCampo("custo-transporte"),
+    custoManutencao: numeroFinanceiroCampo("custo-manutencao"),
+    custoEstetica: numeroFinanceiroCampo("custo-estetica"),
     custoPreparacao: numeroFinanceiro("custo-preparacao"),
+    custoDespachante: numeroFinanceiroCampo("custo-despachante"),
+    outrosCustos: numeroFinanceiroCampo("outros-custos"),
+    valorFipe: numeroFinanceiroCampo("valor-fipe"),
+    dataFipe: campoValor("data-fipe"),
+    precoSugerido: numeroFinanceiroCampo("preco-sugerido"),
+    precoMinimo: numeroFinanceiroCampo("preco-minimo"),
+    descontoMaximo: numeroFinanceiroCampo("desconto-maximo"),
     comissaoPercentual: numeroPercentual("comissao-percentual"),
     comissao: numeroFinanceiro("comissao"),
     taxas: numeroFinanceiro("taxas"),
     valorVenda: numeroFinanceiro("valor-venda"),
-    dataVenda: document.getElementById("data-venda").value,
+    aceitaTroca: campoValor("aceita-troca"),
+    aceitaFinanciamento: campoValor("aceita-financiamento"),
+    dataVenda: campoValor("data-venda"),
     vendedorId: vendedorSelecionado ? vendedorSelecionado.id : "",
     vendedorNome: vendedorSelecionado ? vendedorSelecionado.nome : "",
     temTroca: carroExistente ? Boolean(carroExistente.temTroca) : false,
@@ -2882,25 +3105,61 @@ function montarCarro(idExistente) {
     valorRecebido: carroExistente ? Number(carroExistente.valorRecebido) || 0 : 0,
     saldoReceber: carroExistente ? Number(carroExistente.saldoReceber) || 0 : 0,
     trocaEstoqueId: carroExistente ? carroExistente.trocaEstoqueId || "" : "",
-    origem: carroExistente ? carroExistente.origem || "" : "",
+    origem: campoValor("origem") || (carroExistente ? carroExistente.origem || "" : ""),
     origemTrocaVendaId: carroExistente ? carroExistente.origemTrocaVendaId || "" : "",
     origemTrocaVeiculo: carroExistente ? carroExistente.origemTrocaVeiculo || "" : "",
+    proprietarioAnterior: campoValor("proprietario-anterior"),
+    quantidadeProprietarios: campoValor("quantidade-proprietarios"),
+    manual: campoValor("manual"),
+    chaveReserva: campoValor("chave-reserva"),
+    ipvaPago: campoValor("ipva-pago"),
+    licenciamentoEmDia: campoValor("licenciamento-em-dia"),
+    possuiFinanciamento: campoValor("possui-financiamento"),
+    possuiGravame: campoValor("possui-gravame"),
+    passagemLeilao: campoValor("passagem-leilao"),
+    resultadoLaudo: campoValor("resultado-laudo"),
+    dataLaudo: campoValor("data-laudo"),
+    empresaLaudo: campoValor("empresa-laudo"),
+    observacoesDocumentais: campoValor("observacoes-documentais"),
+    consignacaoProprietario: campoValor("consignacao-proprietario"),
+    consignacaoTelefone: campoValor("consignacao-telefone"),
+    consignacaoDocumento: campoValor("consignacao-documento"),
+    consignacaoValor: numeroFinanceiroCampo("consignacao-valor"),
+    consignacaoComissao: numeroFinanceiroCampo("consignacao-comissao"),
+    consignacaoVencimento: campoValor("consignacao-vencimento"),
+    financeiraGravame: campoValor("financeira-gravame"),
+    saldoDevedor: numeroFinanceiroCampo("saldo-devedor"),
+    dataQuitacao: campoValor("data-quitacao"),
+    estadoGeral: campoValor("estado-geral"),
+    estadoPintura: campoValor("estado-pintura"),
+    estadoPneus: campoValor("estado-pneus"),
+    estadoInterior: campoValor("estado-interior"),
+    estadoMecanica: campoValor("estado-mecanica"),
+    estadoEletrica: campoValor("estado-eletrica"),
+    percentualPneus: campoValor("percentual-pneus"),
+    ultimaRevisao: campoValor("ultima-revisao"),
+    proximaRevisao: campoValor("proxima-revisao"),
+    ultimaTrocaOleo: campoValor("ultima-troca-oleo"),
+    possuiAvarias: campoValor("possui-avarias"),
+    descricaoAvarias: campoValor("descricao-avarias"),
+    observacoesTecnicas: campoValor("observacoes-tecnicas"),
+    observacoesInternas: campoValor("observacoes-internas"),
     blindado: document.getElementById("blindado").checked,
     destaque: document.getElementById("destaque").checked,
     descricao:
-      document.getElementById("descricao").value ||
+      campoValor("descricao") ||
       "Veículo revisado, com procedência e pronto para negociação.",
-    opcionais: document
-      .getElementById("opcionais")
-      .value.split(",")
-      .map(function (item) {
-        return item.trim();
-      })
-      .filter(Boolean),
-    preco: formatarPreco(document.getElementById("preco").value),
+    opcionais: listaOpcionaisSelecionados(),
+    preco: formatarPreco(campoValor("preco")),
     imagem: imagemPrincipal,
     galeria: [imagemPrincipal].concat(galeriaUploadBase64, fotosExtras),
     oferta: document.getElementById("oferta").checked,
+    tituloAnuncio: campoValor("titulo-anuncio"),
+    garantia: campoValor("garantia"),
+    publicarSite: campoValor("publicar-site"),
+    dataPublicacao: campoValor("data-publicacao"),
+    conclusaoCadastro: conclusaoCadastro,
+    pendenciasCadastro: pendenciasCadastro(montarPreviaCadastro()),
   };
 }
 
@@ -3091,6 +3350,9 @@ function renderizarAdmin() {
       (carro.oferta ? "Oferta ativa" : "Sem oferta") +
       "</p>" +
       '<div class="financeiro-item-meta">' +
+      "<span>Cadastro: " +
+      (carro.conclusaoCadastro || calcularConclusaoCadastro(carro)) +
+      "% concluído</span>" +
       "<span>Preparação: " +
       escaparHTML(carro.preparacaoStatus || "Não informado") +
       "</span>" +
@@ -3099,6 +3361,14 @@ function renderizarAdmin() {
       "</span>" +
       (carro.dataEntrada ? "<span>Estoque: " + diasDesde(carro.dataEntrada) + " dias</span>" : "") +
       "</div>" +
+      '<div class="veiculo-card-progress"><i style="width:' +
+      Math.min(100, Math.max(0, carro.conclusaoCadastro || calcularConclusaoCadastro(carro))) +
+      '%"></i></div>' +
+      ((carro.pendenciasCadastro || []).length
+        ? '<p class="veiculo-card-pendencias">Pendências: ' +
+          escaparHTML((carro.pendenciasCadastro || []).slice(0, 3).join(", ")) +
+          "</p>"
+        : "") +
       "</div>" +
       '<div class="admin-acoes">' +
       '<button type="button" class="btn-status" onclick="alterarStatusCarro(' +
@@ -3445,6 +3715,11 @@ function alterarStatusCarro(id, status) {
   if (!carroVenda) return;
 
   if (status === "Vendido") {
+    if ((carroVenda.conclusaoCadastro || calcularConclusaoCadastro(carroVenda)) < 65) {
+      alert("Complete os dados mínimos antes de marcar este veículo como vendido.");
+      return;
+    }
+
     abrirModalVenda(carroVenda);
     return;
   }
@@ -6451,39 +6726,107 @@ function editarCarro(id) {
   }
 
   selectMarca.value = carro.marca || carro.nome.split(" ")[0];
+  definirCampo("codigo-estoque", carro.codigoEstoque || "");
+  definirCampo("placa", carro.placa || "");
   document.getElementById("modelo").value =
     carro.modelo || carro.nome.replace((carro.marca || "") + " ", "");
-  document.getElementById("ano").value = carro.ano;
+  definirCampo("versao", carro.versao || "");
+  definirCampo("ano-fabricacao", carro.anoFabricacao || carro.ano || "");
+  definirCampo("ano-modelo", carro.anoModelo || carro.ano || "");
+  document.getElementById("ano").value = carro.anoModelo || carro.ano;
   document.getElementById("km").value = carro.km;
   document.getElementById("cambio").value = carro.cambio;
   document.getElementById("tipo").value = carro.tipo;
+  definirCampo("origem", carro.origem || "");
+  definirCampo("condicao", carro.condicao || "");
   document.getElementById("status").value = carro.status;
   document.getElementById("preco").value = formatarCampoMoedaValor(carro.preco);
+  definirCampo("unidade", carro.unidade || "");
+  definirCampo("responsavel-id", carro.responsavelId || document.querySelector('meta[name="admin-user-id"]')?.content || "");
   document.getElementById("data-entrada").value = carro.dataEntrada || "";
   document.getElementById("preparacao-status").value =
     carro.preparacaoStatus || "Aguardando revisão";
   document.getElementById("checklist-anuncio").value = carro.checklistAnuncio || "Pendente";
   document.getElementById("combustivel").value = carro.combustivel || "";
   document.getElementById("cor").value = carro.cor || "";
+  definirCampo("cor-interna", carro.corInterna || "");
+  definirCampo("motorizacao", carro.motorizacao || "");
+  definirCampo("potencia", carro.potencia || "");
   document.getElementById("portas").value = carro.portas || "";
   document.getElementById("placa-final").value = carro.placaFinal || "";
+  definirCampo("lugares", carro.lugares || "");
+  definirCampo("carroceria", carro.carroceria || "");
+  definirCampo("categoria", carro.categoria || "");
+  definirCampo("observacoes-internas", carro.observacoesInternas || "");
+  definirCampo("proprietario-anterior", carro.proprietarioAnterior || "");
+  definirCampo("quantidade-proprietarios", carro.quantidadeProprietarios || "");
+  definirCampo("manual", carro.manual || "");
+  definirCampo("chave-reserva", carro.chaveReserva || "");
+  definirCampo("ipva-pago", carro.ipvaPago || "");
+  definirCampo("licenciamento-em-dia", carro.licenciamentoEmDia || "");
+  definirCampo("possui-financiamento", carro.possuiFinanciamento || "");
+  definirCampo("possui-gravame", carro.possuiGravame || "");
+  definirCampo("passagem-leilao", carro.passagemLeilao || "");
+  definirCampo("resultado-laudo", carro.resultadoLaudo || "");
+  definirCampo("data-laudo", carro.dataLaudo || "");
+  definirCampo("empresa-laudo", carro.empresaLaudo || "");
+  definirCampo("observacoes-documentais", carro.observacoesDocumentais || "");
+  definirCampo("consignacao-proprietario", carro.consignacaoProprietario || "");
+  definirCampo("consignacao-telefone", carro.consignacaoTelefone || "");
+  definirCampo("consignacao-documento", carro.consignacaoDocumento || "");
+  definirCampo("consignacao-valor", formatarCampoMoedaValor(carro.consignacaoValor));
+  definirCampo("consignacao-comissao", formatarCampoMoedaValor(carro.consignacaoComissao));
+  definirCampo("consignacao-vencimento", carro.consignacaoVencimento || "");
+  definirCampo("financeira-gravame", carro.financeiraGravame || "");
+  definirCampo("saldo-devedor", formatarCampoMoedaValor(carro.saldoDevedor));
+  definirCampo("data-quitacao", carro.dataQuitacao || "");
+  definirCampo("estado-geral", carro.estadoGeral || "");
+  definirCampo("estado-pintura", carro.estadoPintura || "");
+  definirCampo("estado-pneus", carro.estadoPneus || "");
+  definirCampo("estado-interior", carro.estadoInterior || "");
+  definirCampo("estado-mecanica", carro.estadoMecanica || "");
+  definirCampo("estado-eletrica", carro.estadoEletrica || "");
+  definirCampo("percentual-pneus", carro.percentualPneus || "");
+  definirCampo("ultima-revisao", carro.ultimaRevisao || "");
+  definirCampo("proxima-revisao", carro.proximaRevisao || "");
+  definirCampo("ultima-troca-oleo", carro.ultimaTrocaOleo || "");
+  definirCampo("possui-avarias", carro.possuiAvarias || "");
+  definirCampo("descricao-avarias", carro.descricaoAvarias || "");
+  definirCampo("observacoes-tecnicas", carro.observacoesTecnicas || "");
   document.getElementById("preco-compra").value = formatarCampoMoedaValor(
     carro.precoCompra
   );
+  definirCampo("custo-documental", formatarCampoMoedaValor(carro.custoDocumental));
+  definirCampo("custo-transporte", formatarCampoMoedaValor(carro.custoTransporte));
+  definirCampo("custo-manutencao", formatarCampoMoedaValor(carro.custoManutencao));
+  definirCampo("custo-estetica", formatarCampoMoedaValor(carro.custoEstetica));
   document.getElementById("custo-preparacao").value = formatarCampoMoedaValor(
     carro.custoPreparacao
   );
+  definirCampo("custo-despachante", formatarCampoMoedaValor(carro.custoDespachante));
+  definirCampo("outros-custos", formatarCampoMoedaValor(carro.outrosCustos));
+  definirCampo("valor-fipe", formatarCampoMoedaValor(carro.valorFipe));
+  definirCampo("data-fipe", carro.dataFipe || "");
+  definirCampo("preco-sugerido", formatarCampoMoedaValor(carro.precoSugerido));
+  definirCampo("preco-minimo", formatarCampoMoedaValor(carro.precoMinimo));
+  definirCampo("desconto-maximo", formatarCampoMoedaValor(carro.descontoMaximo));
   document.getElementById("comissao-percentual").value = carro.comissaoPercentual || "";
   document.getElementById("comissao").value = formatarCampoMoedaValor(carro.comissao);
   document.getElementById("taxas").value = formatarCampoMoedaValor(carro.taxas);
   document.getElementById("valor-venda").value = formatarCampoMoedaValor(
     carro.valorVenda
   );
+  definirCampo("aceita-troca", carro.aceitaTroca || "");
+  definirCampo("aceita-financiamento", carro.aceitaFinanciamento || "");
   document.getElementById("data-venda").value = carro.dataVenda || "";
   preencherVendedoresVenda();
   document.getElementById("vendedor-venda").value = carro.vendedorId || "";
   document.getElementById("descricao").value = carro.descricao || "";
-  document.getElementById("opcionais").value = (carro.opcionais || []).join(", ");
+  preencherOpcionaisSelecionados(carro.opcionais || []);
+  definirCampo("titulo-anuncio", carro.tituloAnuncio || "");
+  definirCampo("garantia", carro.garantia || "");
+  definirCampo("publicar-site", carro.publicarSite || "");
+  definirCampo("data-publicacao", carro.dataPublicacao || "");
   document.getElementById("galeria-urls").value = (carro.galeria || [])
     .filter(function (imagem) {
       return imagem !== carro.imagem && !String(imagem).startsWith("data:image");
@@ -6501,6 +6844,8 @@ function editarCarro(id) {
   renderizarGaleriaAdmin();
   renderizarPreviewCard();
   renderizarLucroFormulario();
+  atualizarCamposCondicionaisVeiculo();
+  atualizarProgressoCadastro();
   imagemBase64 = "";
   btnSalvar.textContent = "Salvar alteracoes";
   tituloForm.textContent = "Editar veículo";
@@ -6705,6 +7050,25 @@ form.addEventListener("submit", function (e) {
 
   const idExistente = document.getElementById("carro-id").value;
   const carroAtualizado = montarCarro(idExistente);
+  const placaDuplicada = carroAtualizado.placa
+    ? carrosAdmin.find(function (carro) {
+        return (
+          Number(carro.id) !== Number(carroAtualizado.id) &&
+          String(carro.placa || "").toUpperCase() === carroAtualizado.placa &&
+          ["Vendido", "Arquivado", "Retirado"].indexOf(carro.status) === -1
+        );
+      })
+    : null;
+
+  if (placaDuplicada) {
+    alert("Já existe um veículo ativo com esta placa: " + placaDuplicada.nome + ".");
+    return;
+  }
+
+  if (carroAtualizado.status === "Vendido" && carroAtualizado.conclusaoCadastro < 65) {
+    alert("Complete os dados mínimos antes de marcar este veículo como vendido.");
+    return;
+  }
 
   if (idExistente) {
     carrosAdmin = carrosAdmin.map(function (carro) {
@@ -6735,6 +7099,19 @@ form.addEventListener("input", renderizarPreviewCard);
 form.addEventListener("change", renderizarPreviewCard);
 form.addEventListener("input", renderizarLucroFormulario);
 form.addEventListener("change", renderizarLucroFormulario);
+form.addEventListener("input", atualizarProgressoCadastro);
+form.addEventListener("change", atualizarProgressoCadastro);
+form.addEventListener("change", atualizarCamposCondicionaisVeiculo);
+
+if (buscaOpcionaisVeiculo) {
+  buscaOpcionaisVeiculo.addEventListener("input", function () {
+    const termo = normalizarTextoAdmin(buscaOpcionaisVeiculo.value);
+
+    document.querySelectorAll(".opcionais-categorias label").forEach(function (label) {
+      label.hidden = termo !== "" && !normalizarTextoAdmin(label.textContent).includes(termo);
+    });
+  });
+}
 
 if (selectVendedorVenda) {
   selectVendedorVenda.addEventListener("change", function () {
@@ -8356,5 +8733,8 @@ renderizarInstagram();
 carregarContasAdmin();
 renderizarContasAdmin();
 aplicarPerfilAdmin();
+aplicarPermissaoFinanceiraVeiculo();
+atualizarCamposCondicionaisVeiculo();
+atualizarProgressoCadastro();
 
 

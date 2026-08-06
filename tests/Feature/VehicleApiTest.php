@@ -169,6 +169,55 @@ class VehicleApiTest extends TestCase
         $this->assertDatabaseMissing('sales', ['vehicle_id' => 20]);
     }
 
+    public function test_quick_registration_can_save_incomplete_vehicle(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->postJson('/api/vehicles', [
+            'nome' => 'Fiat Pulse Drive',
+            'placa' => 'ABC1D23',
+            'marca' => 'Fiat',
+            'modelo' => 'Pulse',
+            'versao' => 'Drive',
+            'anoFabricacao' => 2023,
+            'anoModelo' => 2024,
+            'km' => '12.000 km',
+            'combustivel' => 'Flex',
+            'cambio' => 'Automático',
+            'cor' => 'Branca',
+            'origem' => 'Compra direta',
+            'preco' => 'R$ 91.000',
+            'status' => 'Cadastro incompleto',
+        ])->assertCreated()
+            ->assertJsonPath('data.status', 'Cadastro incompleto')
+            ->assertJsonPath('data.placa', 'ABC1D23');
+
+        $this->assertDatabaseHas('vehicles', [
+            'plate' => 'ABC1D23',
+            'brand' => 'Fiat',
+            'version' => 'Drive',
+            'status' => 'Cadastro incompleto',
+            'sale_price' => 91000,
+        ]);
+    }
+
+    public function test_active_plate_cannot_be_duplicated(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        Vehicle::query()->create([
+            'name' => 'Veículo ativo',
+            'plate' => 'ABC1D23',
+            'status' => 'Disponível',
+        ]);
+
+        $this->postJson('/api/vehicles', [
+            'nome' => 'Outro veículo',
+            'placa' => 'abc-1d23',
+            'status' => 'Cadastro incompleto',
+        ])->assertStatus(422);
+    }
+
     private function tinyPng(): string
     {
         return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';

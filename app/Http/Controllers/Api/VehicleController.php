@@ -9,6 +9,7 @@ use App\Models\Seller;
 use App\Models\StoreSetting;
 use App\Models\Testimonial;
 use App\Models\Vehicle;
+use App\Models\VehicleHistory;
 use App\Services\ImageStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -92,6 +93,10 @@ class VehicleController extends Controller
                 $id ? ['id' => $id, ...$attributes] : $attributes
             );
             $this->syncSaleForVehicle($vehicle, $payload);
+            $this->recordVehicleHistory($vehicle, 'Cadastro', 'Veículo cadastrado no estoque.', [
+                'status' => $vehicle->status,
+                'completion' => $vehicle->completion_percentage,
+            ]);
 
             return $vehicle;
         });
@@ -104,8 +109,19 @@ class VehicleController extends Controller
         $oldImages = $this->vehicleImages($vehicle);
         $payload = $this->prepareVehicleImages($this->validateVehicle($request, $vehicle));
         DB::transaction(function () use ($vehicle, $payload) {
-            $vehicle->update($this->toAttributes($payload));
+            $before = $vehicle->only([
+                'purchase_price',
+                'sale_price',
+                'preparation_cost',
+                'fees_cost',
+                'commission_rate',
+                'status',
+            ]);
+            $attributes = $this->toAttributes($payload);
+            $attributes['record_version'] = $vehicle->record_version + 1;
+            $vehicle->update($attributes);
             $this->syncSaleForVehicle($vehicle, $payload);
+            $this->recordVehicleChanges($vehicle->refresh(), $before);
         });
         $this->deleteUnusedImages($oldImages, $this->vehicleImages($vehicle->refresh()));
 
@@ -193,7 +209,12 @@ class VehicleController extends Controller
             'nome' => ['required', 'string', 'max:255'],
             'marca' => ['nullable', 'string', 'max:100'],
             'modelo' => ['nullable', 'string', 'max:150'],
+            'versao' => ['nullable', 'string', 'max:150'],
+            'placa' => ['nullable', 'string', 'max:20'],
+            'codigoEstoque' => ['nullable', 'string', 'max:80'],
             'ano' => ['nullable'],
+            'anoFabricacao' => ['nullable'],
+            'anoModelo' => ['nullable'],
             'status' => ['nullable', 'string', 'max:50'],
             'preco' => ['nullable'],
             'imagem' => ['nullable', 'string'],
@@ -202,7 +223,22 @@ class VehicleController extends Controller
             'opcionais' => ['nullable', 'array'],
         ]);
 
-        return array_replace($request->all(), $validated);
+        $payload = array_replace($request->all(), $validated);
+        $plate = $this->normalizePlate($payload['placa'] ?? null);
+
+        if ($plate !== null) {
+            $duplicate = Vehicle::query()
+                ->whereRaw('upper(plate) = ?', [$plate])
+                ->when($vehicle, fn ($query) => $query->whereKeyNot($vehicle->id))
+                ->whereNotIn('status', ['Vendido', 'Arquivado', 'Retirado'])
+                ->exists();
+
+            if ($duplicate) {
+                abort(422, 'Já existe um veículo ativo cadastrado com esta placa.');
+            }
+        }
+
+        return $payload;
     }
 
     private function prepareVehicleImages(array $vehicle): array
@@ -241,9 +277,22 @@ class VehicleController extends Controller
 
         return [
             'name' => $name ?: 'Veículo sem nome',
+            'stock_code' => $this->nullableString($vehicle['codigoEstoque'] ?? null),
+            'plate' => $this->normalizePlate($vehicle['placa'] ?? null),
             'brand' => $brand ?: null,
             'model' => $model ?: null,
-            'year' => $this->nullableInteger($vehicle['ano'] ?? null),
+            'version' => $this->nullableString($vehicle['versao'] ?? null),
+            'year' => $this->nullableInteger($vehicle['anoModelo'] ?? $vehicle['ano'] ?? null),
+            'manufacture_year' => $this->nullableInteger($vehicle['anoFabricacao'] ?? null),
+            'model_year' => $this->nullableInteger($vehicle['anoModelo'] ?? $vehicle['ano'] ?? null),
+            'condition' => $this->nullableString($vehicle['condicao'] ?? null),
+            'origin' => $this->nullableString($vehicle['origem'] ?? null),
+            'store_unit' => $this->nullableString($vehicle['unidade'] ?? null),
+            'responsible_user_id' => $this->nullableInteger($vehicle['responsavelId'] ?? null),
+            'entry_date' => $this->nullableDate($vehicle['dataEntrada'] ?? null),
+            'available_at' => $this->nullableDate($vehicle['dataDisponibilizacao'] ?? null),
+            'reserved_at' => $this->nullableDate($vehicle['dataReserva'] ?? null),
+            'delivered_at' => $this->nullableDate($vehicle['dataEntrega'] ?? null),
             'mileage' => $this->moneyNumber($vehicle['km'] ?? 0),
             'transmission' => $this->nullableString($vehicle['cambio'] ?? null),
             'fuel' => $this->nullableString($vehicle['combustivel'] ?? null),
@@ -253,7 +302,8 @@ class VehicleController extends Controller
             'preparation_cost' => $this->decimalNumber($vehicle['custoPreparacao'] ?? 0),
             'fees_cost' => $this->decimalNumber($vehicle['taxas'] ?? 0),
             'commission_rate' => $this->decimalNumber($vehicle['comissaoPercentual'] ?? 0),
-            'status' => $this->nullableString($vehicle['status'] ?? null) ?: 'Disponível',
+            'status' => $this->normalizeStatus($vehicle),
+            'completion_percentage' => $this->completionPercentage($vehicle),
             'featured' => (bool) ($vehicle['destaque'] ?? false),
             'offer' => (bool) ($vehicle['oferta'] ?? false),
             'description' => $this->nullableString($vehicle['descricao'] ?? null),
@@ -261,6 +311,72 @@ class VehicleController extends Controller
             'gallery' => array_values($vehicle['galeria'] ?? []),
             'options' => array_values($vehicle['opcionais'] ?? []),
             'metadata' => $vehicle,
+            'documentation' => $this->jsonSection($vehicle, [
+                'proprietarioAnterior',
+                'quantidadeProprietarios',
+                'manual',
+                'chaveReserva',
+                'ipvaPago',
+                'licenciamentoEmDia',
+                'possuiMultas',
+                'possuiFinanciamento',
+                'possuiGravame',
+                'restricaoJudicial',
+                'restricaoAdministrativa',
+                'sinistro',
+                'passagemLeilao',
+                'locadora',
+                'aplicativo',
+                'resultadoLaudo',
+                'dataLaudo',
+                'empresaLaudo',
+                'observacoesDocumentais',
+            ]),
+            'condition_report' => $this->jsonSection($vehicle, [
+                'estadoGeral',
+                'estadoPintura',
+                'estadoPneus',
+                'estadoInterior',
+                'estadoMecanica',
+                'estadoEletrica',
+                'percentualPneus',
+                'ultimaRevisao',
+                'proximaRevisao',
+                'ultimaTrocaOleo',
+                'possuiAvarias',
+                'descricaoAvarias',
+                'observacoesTecnicas',
+            ]),
+            'financial_details' => $this->jsonSection($vehicle, [
+                'custoDocumental',
+                'custoTransporte',
+                'custoManutencao',
+                'custoEstetica',
+                'custoDespachante',
+                'outrosCustos',
+                'valorFipe',
+                'dataFipe',
+                'precoSugerido',
+                'precoMinimo',
+                'descontoMaximo',
+                'aceitaTroca',
+                'aceitaFinanciamento',
+            ]),
+            'preparation' => $this->jsonSection($vehicle, [
+                'preparacaoStatus',
+                'checklistEntrada',
+                'checklistAnuncio',
+            ]),
+            'publication' => $this->jsonSection($vehicle, [
+                'tituloAnuncio',
+                'descricaoComercial',
+                'destaques',
+                'garantia',
+                'publicarSite',
+                'dataPublicacao',
+                'dataUltimaAtualizacao',
+            ]),
+            'validation_status' => $this->validationStatus($vehicle),
         ];
     }
 
@@ -270,10 +386,25 @@ class VehicleController extends Controller
 
         return array_merge($legacy, [
             'id' => $vehicle->id,
+            'codigoEstoque' => $vehicle->stock_code ?? '',
+            'placa' => $vehicle->plate ?? '',
             'nome' => $vehicle->name,
             'marca' => $vehicle->brand ?? '',
             'modelo' => $vehicle->model ?? '',
-            'ano' => $vehicle->year ?? '',
+            'versao' => $vehicle->version ?? '',
+            'ano' => $vehicle->model_year ?? $vehicle->year ?? '',
+            'anoFabricacao' => $vehicle->manufacture_year ?? '',
+            'anoModelo' => $vehicle->model_year ?? $vehicle->year ?? '',
+            'condicao' => $vehicle->condition ?? '',
+            'origem' => $vehicle->origin ?? ($legacy['origem'] ?? ''),
+            'unidade' => $vehicle->store_unit ?? '',
+            'responsavelId' => $vehicle->responsible_user_id ?? '',
+            'dataEntrada' => $vehicle->entry_date?->toDateString() ?? ($legacy['dataEntrada'] ?? ''),
+            'dataDisponibilizacao' => $vehicle->available_at?->toDateString() ?? '',
+            'dataReserva' => $vehicle->reserved_at?->toDateString() ?? '',
+            'dataEntrega' => $vehicle->delivered_at?->toDateString() ?? '',
+            'conclusaoCadastro' => $vehicle->completion_percentage,
+            'pendenciasCadastro' => $vehicle->validation_status['pending'] ?? [],
             'km' => $legacy['km'] ?? number_format($vehicle->mileage, 0, ',', '.').' km',
             'cambio' => $vehicle->transmission ?? '-',
             'combustivel' => $vehicle->fuel ?? '-',
@@ -290,6 +421,11 @@ class VehicleController extends Controller
             'imagem' => $vehicle->cover_image_path ?? '',
             'galeria' => $vehicle->gallery ?? [],
             'opcionais' => $vehicle->options ?? [],
+            ...($vehicle->documentation ?? []),
+            ...($vehicle->condition_report ?? []),
+            ...($vehicle->financial_details ?? []),
+            ...($vehicle->preparation ?? []),
+            ...($vehicle->publication ?? []),
         ]);
     }
 
@@ -325,6 +461,114 @@ class VehicleController extends Controller
         $value = trim((string) ($value ?? ''));
 
         return $value === '' ? null : $value;
+    }
+
+    private function nullableDate(mixed $value): ?string
+    {
+        $value = trim((string) ($value ?? ''));
+
+        return preg_match('/^\d{4}-\d{2}-\d{2}$/', $value) ? $value : null;
+    }
+
+    private function normalizePlate(mixed $value): ?string
+    {
+        $plate = preg_replace('/[^A-Z0-9]/', '', strtoupper((string) ($value ?? '')));
+
+        return $plate === '' ? null : $plate;
+    }
+
+    private function normalizeStatus(array $vehicle): string
+    {
+        $status = $this->nullableString($vehicle['status'] ?? null);
+
+        if (! $status) {
+            return 'Cadastro incompleto';
+        }
+
+        return $status;
+    }
+
+    private function completionPercentage(array $vehicle): int
+    {
+        $groups = [
+            'dadosBasicos' => ['marca', 'modelo', 'anoModelo', 'km', 'combustivel', 'cambio', 'cor', 'preco'],
+            'documentacao' => ['origem', 'resultadoLaudo'],
+            'financeiro' => ['precoCompra', 'preco', 'precoMinimo'],
+            'conservacao' => ['estadoGeral', 'estadoPintura', 'estadoPneus', 'estadoInterior', 'estadoMecanica'],
+            'opcionais' => ['opcionais'],
+            'fotos' => ['imagem', 'galeria'],
+            'anuncio' => ['descricao', 'responsavelId'],
+        ];
+
+        $score = 0;
+        $total = count($groups);
+
+        foreach ($groups as $fields) {
+            $filled = collect($fields)->filter(function (string $field) use ($vehicle) {
+                $value = $vehicle[$field] ?? ($field === 'anoModelo' ? ($vehicle['ano'] ?? null) : null);
+
+                return is_array($value) ? count(array_filter($value)) > 0 : trim((string) $value) !== '';
+            })->count();
+
+            if ($filled >= ceil(count($fields) * 0.6)) {
+                $score++;
+            }
+        }
+
+        return (int) round(($score / $total) * 100);
+    }
+
+    private function validationStatus(array $vehicle): array
+    {
+        $required = [
+            'marca' => 'marca',
+            'modelo' => 'modelo',
+            'anoModelo' => 'ano modelo',
+            'km' => 'quilometragem',
+            'combustivel' => 'combustível',
+            'cambio' => 'câmbio',
+            'cor' => 'cor',
+            'preco' => 'preço',
+            'origem' => 'procedência',
+            'imagem' => 'foto principal',
+            'descricao' => 'descrição',
+            'responsavelId' => 'responsável',
+        ];
+        $pending = [];
+
+        foreach ($required as $field => $label) {
+            $value = $vehicle[$field] ?? null;
+            if ($field === 'anoModelo' && ($value === null || $value === '')) {
+                $value = $vehicle['ano'] ?? null;
+            }
+            if (is_array($value) ? count(array_filter($value)) === 0 : trim((string) $value) === '') {
+                $pending[] = $label;
+            }
+        }
+
+        $gallery = is_array($vehicle['galeria'] ?? null) ? array_filter($vehicle['galeria']) : [];
+        if (count($gallery) < 4) {
+            $pending[] = 'mínimo de 4 fotos';
+        }
+
+        return [
+            'completion' => $this->completionPercentage($vehicle),
+            'pending' => array_values(array_unique($pending)),
+            'publishable' => $pending === [] && ($vehicle['status'] ?? '') === 'Disponível',
+        ];
+    }
+
+    private function jsonSection(array $vehicle, array $fields): array
+    {
+        $data = [];
+
+        foreach ($fields as $field) {
+            if (array_key_exists($field, $vehicle)) {
+                $data[$field] = $vehicle[$field];
+            }
+        }
+
+        return $data;
     }
 
     private function formatCurrency(float $value): string
@@ -400,6 +644,49 @@ class VehicleController extends Controller
                 'metadata' => $legacy,
             ]
         );
+    }
+
+    private function recordVehicleChanges(Vehicle $vehicle, array $before): void
+    {
+        $tracked = [
+            'purchase_price' => 'valor de compra',
+            'sale_price' => 'preço de venda',
+            'preparation_cost' => 'custo de preparação',
+            'fees_cost' => 'taxas',
+            'commission_rate' => 'taxa de comissão',
+            'status' => 'status',
+        ];
+
+        foreach ($tracked as $field => $label) {
+            $old = $before[$field] ?? null;
+            $new = $vehicle->{$field};
+
+            if ((string) $old === (string) $new) {
+                continue;
+            }
+
+            $this->recordVehicleHistory($vehicle, 'Alteração', 'Alteração em '.$label.'.', [
+                'field' => $field,
+                'label' => $label,
+                'old' => $old,
+                'new' => $new,
+            ]);
+        }
+    }
+
+    private function recordVehicleHistory(Vehicle $vehicle, string $type, string $description, array $metadata = []): void
+    {
+        VehicleHistory::query()->create([
+            'vehicle_id' => $vehicle->id,
+            'type' => $type,
+            'description' => $description,
+            'metadata' => [
+                ...$metadata,
+                'user_id' => request()->user()?->id,
+                'user_name' => request()->user()?->name,
+                'record_version' => $vehicle->record_version,
+            ],
+        ]);
     }
 
     private function vehicleImages(Vehicle $vehicle): array

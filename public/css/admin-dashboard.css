@@ -374,3 +374,198 @@ body.admin-page .admin-tab-panel[data-admin-panel="financeiro"] .financeiro-kpi-
     grid-column: 1 / -1;
   }
 }
+
+body.admin-page .veiculo-workspace-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 18px;
+  align-items: stretch;
+  margin-bottom: 18px;
+}
+
+body.admin-page .veiculo-workspace-header > div {
+  min-width: 0;
+}
+
+body.admin-page .veiculo-workspace-header h2 {
+  margin: 6px 0 8px;
+  color: var(--admin-text);
+}
+
+body.admin-page .veiculo-workspace-header p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+body.admin-page .veiculo-progress-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(37, 99, 235, 0.16), transparent 36%),
+    linear-gradient(145deg, #ffffff, #f8fbfd);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+body.admin-page .veiculo-progress-card span,
+body.admin-page .veiculo-section-status {
+  color: var(--admin-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.admin-page .veiculo-progress-card strong {
+  color: #0f172a;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+body.admin-page .veiculo-progress-card small {
+  color: var(--admin-muted);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+body.admin-page .veiculo-progress-bar,
+body.admin-page .veiculo-card-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5edf6;
+}
+
+body.admin-page .veiculo-progress-bar i,
+body.admin-page .veiculo-card-progress i {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2563eb, #16a34a);
+  transition: width 0.25s ease;
+}
+
+body.admin-page .veiculo-form-pro {
+  display: grid;
+  gap: 14px;
+}
+
+body.admin-page .veiculo-form-section {
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid rgba(203, 213, 225, 0.88);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.05);
+}
+
+body.admin-page .veiculo-form-section-destaque {
+  border-top: 4px solid #2563eb;
+}
+
+body.admin-page .veiculo-section-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+body.admin-page .veiculo-section-top h3,
+body.admin-page .veiculo-form-section summary {
+  color: var(--admin-text);
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+body.admin-page .veiculo-section-top h3 {
+  margin: 4px 0 6px;
+}
+
+body.admin-page .veiculo-section-top p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+body.admin-page .veiculo-form-section summary {
+  cursor: pointer;
+  list-style-position: outside;
+}
+
+body.admin-page .veiculo-form-section[open] summary {
+  margin-bottom: 16px;
+}
+
+body.admin-page .campo-condicional[hidden],
+body.admin-page [data-sensitive-section][hidden] {
+  display: none !important;
+}
+
+body.admin-page .opcionais-categorias {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+
+body.admin-page .opcionais-categorias fieldset {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+body.admin-page .opcionais-categorias legend {
+  padding: 0 6px;
+  color: #0f172a;
+  font-weight: 900;
+}
+
+body.admin-page .opcionais-categorias label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--admin-muted);
+  font-weight: 800;
+}
+
+body.admin-page .veiculo-card-progress {
+  margin-top: 10px;
+}
+
+body.admin-page .veiculo-card-pendencias {
+  margin: 8px 0 0 !important;
+  color: #b45309 !important;
+  font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+  body.admin-page .opcionais-categorias {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  body.admin-page .veiculo-workspace-header,
+  body.admin-page .opcionais-categorias {
+    grid-template-columns: 1fr;
+  }
+
+  body.admin-page .veiculo-section-top {
+    display: grid;
+  }
+
+  body.admin-page .veiculo-form-section {
+    padding: 14px;
+    border-radius: 14px;
+  }
+}

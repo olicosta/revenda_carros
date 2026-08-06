@@ -9,7 +9,7 @@
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260805-localizacao-simples" />
-    <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260721-admin-users" />
+    <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260805-veiculo-progressivo" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body class="admin-page">
@@ -438,23 +438,62 @@
 
         <div class="admin-tab-panel" data-admin-panel="veiculos">
 
-        <h2 id="admin-form-titulo">Cadastrar veículo</h2>
+        <div class="veiculo-workspace-header">
+          <div>
+            <span class="admin-eyebrow">Estoque</span>
+            <h2 id="admin-form-titulo">Cadastro rápido de veículo</h2>
+            <p>Salve o essencial primeiro. A ficha completa pode ser concluída por etapas, sem travar a rotina da loja.</p>
+          </div>
+          <div class="veiculo-progress-card" aria-live="polite">
+            <span>Conclusão do cadastro</span>
+            <strong id="veiculo-conclusao-texto">0%</strong>
+            <div class="veiculo-progress-bar"><i id="veiculo-conclusao-barra"></i></div>
+            <small id="veiculo-pendencias-texto">Pendências serão exibidas aqui.</small>
+          </div>
+        </div>
 
-        <form id="form-carro" class="admin-form">
+        <form id="form-carro" class="admin-form veiculo-form-pro">
           <input type="hidden" id="carro-id" />
+          <input type="hidden" id="responsavel-id" value="{{ auth()->id() }}" />
 
+          <section class="veiculo-form-section veiculo-form-section-destaque">
+            <div class="veiculo-section-top">
+              <div>
+                <span class="admin-eyebrow">Cadastro rápido</span>
+                <h3>Dados essenciais</h3>
+                <p>Esses campos colocam o veículo no estoque como cadastro incompleto quando ainda faltar informação.</p>
+              </div>
+              <span class="veiculo-section-status">Salvamento imediato</span>
+            </div>
           <div class="form-grid">
+            <input type="text" id="codigo-estoque" placeholder="Código interno do estoque" />
+            <input type="text" id="placa" placeholder="Placa" required maxlength="8" />
             <select id="marca" required>
               <option value="">Marca</option>
             </select>
             <input type="text" id="modelo" placeholder="Modelo" required />
-            <input type="number" id="ano" placeholder="Ano" required />
+            <input type="text" id="versao" placeholder="Versão" />
+            <input type="number" id="ano-fabricacao" placeholder="Ano fabricação" min="1950" max="2100" />
+            <input type="number" id="ano-modelo" placeholder="Ano modelo" min="1950" max="2100" required />
+            <input type="number" id="ano" placeholder="Ano legado" hidden />
             <input type="text" id="km" placeholder="Km" required />
+            <select id="combustivel" required>
+              <option value="">Combustível</option>
+              <option value="Flex">Flex</option>
+              <option value="Gasolina">Gasolina</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Álcool">Álcool</option>
+              <option value="Híbrido">Híbrido</option>
+              <option value="Elétrico">Elétrico</option>
+            </select>
             <select id="cambio" required>
               <option value="">Câmbio</option>
               <option value="Automático">Automático</option>
               <option value="Manual">Manual</option>
+              <option value="CVT">CVT</option>
+              <option value="Automatizado">Automatizado</option>
             </select>
+            <input type="text" id="cor" placeholder="Cor externa" required />
             <select id="tipo" required>
               <option value="">Tipo</option>
               <option value="Hatch">Hatch</option>
@@ -465,13 +504,47 @@
               <option value="Esportivo">Esportivo</option>
               <option value="Outros">Outros</option>
             </select>
+            <select id="origem">
+              <option value="">Origem do veículo</option>
+              <option value="Compra direta">Compra direta</option>
+              <option value="Troca">Troca</option>
+              <option value="Consignação">Consignação</option>
+              <option value="Leilão">Leilão</option>
+              <option value="Repasse">Repasse</option>
+            </select>
             <select id="status" required>
+              <option value="Cadastro incompleto">Cadastro incompleto</option>
+              <option value="Em avaliação">Em avaliação</option>
+              <option value="Aguardando documentação">Aguardando documentação</option>
+              <option value="Em preparação">Em preparação</option>
               <option value="Disponível">Disponível</option>
               <option value="Reservado">Reservado</option>
+              <option value="Em negociação">Em negociação</option>
               <option value="Vendido">Vendido</option>
+              <option value="Consignado">Consignado</option>
+              <option value="Repasse">Repasse</option>
+              <option value="Retirado">Retirado</option>
+              <option value="Arquivado">Arquivado</option>
             </select>
             <input type="text" id="preco" placeholder="Preço" required />
+            <input type="text" id="unidade" placeholder="Loja / unidade" />
+            <input type="text" id="responsavel-nome" value="{{ auth()->user()->name ?? 'Responsável atual' }}" disabled />
             <input type="date" id="data-entrada" title="Data de entrada no estoque" />
+          </div>
+          </section>
+
+          <details class="veiculo-form-section" open>
+            <summary>Dados do veículo</summary>
+            <div class="form-grid">
+            <select id="condicao">
+              <option value="">Condição</option>
+              <option value="Novo">Novo</option>
+              <option value="Seminovo">Seminovo</option>
+              <option value="Usado">Usado</option>
+            </select>
+            <input type="text" id="cor-interna" placeholder="Cor interna" />
+            <input type="text" id="motorizacao" placeholder="Motorização" />
+            <input type="text" id="potencia" placeholder="Potência" />
             <select id="preparacao-status">
               <option value="Aguardando revisão">Aguardando revisão</option>
               <option value="Em preparação">Em preparação</option>
@@ -483,32 +556,115 @@
               <option value="Pendente">Checklist do anúncio pendente</option>
               <option value="Completo">Checklist do anúncio completo</option>
             </select>
-            <input type="text" id="combustivel" placeholder="Combustível" />
-            <input type="text" id="cor" placeholder="Cor" />
             <input type="number" id="portas" placeholder="Portas" />
             <input type="text" id="placa-final" placeholder="Final da placa" />
+            <input type="number" id="lugares" placeholder="Lugares" />
+            <input type="text" id="carroceria" placeholder="Carroceria" />
+            <input type="text" id="categoria" placeholder="Categoria" />
+            </div>
+            <textarea id="observacoes-internas" placeholder="Observações internas" rows="3"></textarea>
+          </details>
+
+          <details class="veiculo-form-section">
+            <summary>Procedência e documentação</summary>
+            <div class="form-grid">
+              <input type="text" id="proprietario-anterior" placeholder="Proprietário anterior" />
+              <input type="number" id="quantidade-proprietarios" placeholder="Qtd. proprietários" min="0" />
+              <select id="manual"><option value="">Possui manual?</option><option>Sim</option><option>Não</option></select>
+              <select id="chave-reserva"><option value="">Chave reserva?</option><option>Sim</option><option>Não</option></select>
+              <select id="ipva-pago"><option value="">IPVA pago?</option><option>Sim</option><option>Não</option></select>
+              <select id="licenciamento-em-dia"><option value="">Licenciamento em dia?</option><option>Sim</option><option>Não</option></select>
+              <select id="possui-financiamento"><option value="">Possui financiamento?</option><option>Não</option><option>Sim</option></select>
+              <select id="possui-gravame"><option value="">Possui gravame?</option><option>Não</option><option>Sim</option></select>
+              <select id="passagem-leilao"><option value="">Passagem por leilão?</option><option>Não</option><option>Sim</option></select>
+              <select id="resultado-laudo"><option value="">Resultado do laudo</option><option>Aprovado</option><option>Aprovado com apontamentos</option><option>Reprovado</option><option>Não realizado</option></select>
+              <input type="date" id="data-laudo" title="Data do laudo" />
+              <input type="text" id="empresa-laudo" placeholder="Empresa responsável pelo laudo" />
+            </div>
+            <div class="form-grid campo-condicional" data-condicao-origem="Consignação">
+              <input type="text" id="consignacao-proprietario" placeholder="Proprietário consignante" />
+              <input type="text" id="consignacao-telefone" placeholder="Telefone do proprietário" />
+              <input type="text" id="consignacao-documento" placeholder="CPF ou CNPJ" />
+              <input type="text" id="consignacao-valor" placeholder="Valor pretendido pelo proprietário" />
+              <input type="text" id="consignacao-comissao" placeholder="Comissão da revenda" />
+              <input type="date" id="consignacao-vencimento" title="Vencimento da consignação" />
+            </div>
+            <div class="form-grid campo-condicional" data-condicao-financiamento="Sim">
+              <input type="text" id="financeira-gravame" placeholder="Instituição financeira" />
+              <input type="text" id="saldo-devedor" placeholder="Saldo devedor" />
+              <input type="date" id="data-quitacao" title="Previsão de quitação" />
+            </div>
+            <textarea id="observacoes-documentais" placeholder="Observações documentais" rows="3"></textarea>
+          </details>
+
+          <details class="veiculo-form-section">
+            <summary>Estado de conservação</summary>
+            <div class="form-grid">
+              <select id="estado-geral"><option value="">Estado geral</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular</option><option>Necessita reparo</option></select>
+              <select id="estado-pintura"><option value="">Pintura</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular</option><option>Necessita reparo</option></select>
+              <select id="estado-pneus"><option value="">Pneus</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular</option><option>Necessita reparo</option></select>
+              <select id="estado-interior"><option value="">Interior</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular</option><option>Necessita reparo</option></select>
+              <select id="estado-mecanica"><option value="">Mecânica</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular</option><option>Necessita reparo</option></select>
+              <select id="estado-eletrica"><option value="">Elétrica</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular</option><option>Necessita reparo</option></select>
+              <input type="number" id="percentual-pneus" placeholder="% estimado dos pneus" min="0" max="100" />
+              <input type="date" id="ultima-revisao" title="Última revisão" />
+              <input type="date" id="proxima-revisao" title="Próxima revisão" />
+              <input type="date" id="ultima-troca-oleo" title="Última troca de óleo" />
+              <select id="possui-avarias"><option value="">Possui avarias?</option><option>Não</option><option>Sim</option></select>
+            </div>
+            <textarea id="descricao-avarias" class="campo-condicional" data-condicao-avaria="Sim" placeholder="Descrição das avarias e prioridade do reparo" rows="3"></textarea>
+            <textarea id="observacoes-tecnicas" placeholder="Observações técnicas" rows="3"></textarea>
+          </details>
+
+          <details class="veiculo-form-section" data-sensitive-section>
+            <summary>Financeiro do veículo</summary>
+            <div class="form-grid">
             <input type="text" id="preco-compra" placeholder="Preço de compra" />
+            <input type="text" id="custo-documental" placeholder="Custo documental" />
+            <input type="text" id="custo-transporte" placeholder="Custo de transporte" />
+            <input type="text" id="custo-manutencao" placeholder="Custo de manutenção" />
+            <input type="text" id="custo-estetica" placeholder="Custo de estética" />
             <input type="text" id="custo-preparacao" placeholder="Custo de preparação" />
+            <input type="text" id="custo-despachante" placeholder="Custo despachante" />
+            <input type="text" id="outros-custos" placeholder="Outros custos" />
+            <input type="text" id="valor-fipe" placeholder="Valor FIPE" />
+            <input type="date" id="data-fipe" title="Data consulta FIPE" />
+            <input type="text" id="preco-sugerido" placeholder="Preço sugerido" />
+            <input type="text" id="preco-minimo" placeholder="Preço mínimo autorizado" />
+            <input type="text" id="desconto-maximo" placeholder="Desconto máximo permitido" />
             <input type="text" id="comissao-percentual" placeholder="Taxa comissão vendedor (%)" />
             <input type="text" id="comissao" placeholder="Comissão vendedor R$" />
             <input type="text" id="taxas" placeholder="Taxas" />
             <input type="text" id="valor-venda" placeholder="Preço de venda" />
+            <select id="aceita-troca"><option value="">Aceita troca?</option><option>Sim</option><option>Não</option></select>
+            <select id="aceita-financiamento"><option value="">Aceita financiamento?</option><option>Sim</option><option>Não</option></select>
             <input type="date" id="data-venda" title="Data da venda" />
             <select id="vendedor-venda">
               <option value="">Vendedor da venda</option>
             </select>
-            <input
-              type="text"
-              id="opcionais"
-              placeholder="Opcionais separados por vírgula"
-            />
-          </div>
 
           <div class="lucro-form-card">
             <span>Lucro obtido</span>
             <strong id="lucro-formulario">R$ 0</strong>
             <small>Preço de venda - compra - preparação - comissão do vendedor - taxas</small>
           </div>
+            </div>
+          </details>
+
+          <details class="veiculo-form-section">
+            <summary>Opcionais</summary>
+            <input type="search" id="opcionais-busca" placeholder="Buscar opcional" />
+            <div class="opcionais-categorias">
+              <fieldset><legend>Segurança</legend><label><input type="checkbox" class="opcional-check" value="Airbags" /> Airbags</label><label><input type="checkbox" class="opcional-check" value="Freios ABS" /> Freios ABS</label><label><input type="checkbox" class="opcional-check" value="Controle de estabilidade" /> Controle de estabilidade</label><label><input type="checkbox" class="opcional-check" value="Isofix" /> Isofix</label></fieldset>
+              <fieldset><legend>Conforto</legend><label><input type="checkbox" class="opcional-check" value="Ar-condicionado" /> Ar-condicionado</label><label><input type="checkbox" class="opcional-check" value="Bancos em couro" /> Bancos em couro</label><label><input type="checkbox" class="opcional-check" value="Direção elétrica" /> Direção elétrica</label><label><input type="checkbox" class="opcional-check" value="Teto solar" /> Teto solar</label></fieldset>
+              <fieldset><legend>Tecnologia</legend><label><input type="checkbox" class="opcional-check" value="Central multimídia" /> Central multimídia</label><label><input type="checkbox" class="opcional-check" value="Apple CarPlay" /> Apple CarPlay</label><label><input type="checkbox" class="opcional-check" value="Android Auto" /> Android Auto</label><label><input type="checkbox" class="opcional-check" value="Câmera de ré" /> Câmera de ré</label></fieldset>
+              <fieldset><legend>Exterior</legend><label><input type="checkbox" class="opcional-check" value="Rodas de liga leve" /> Rodas de liga leve</label><label><input type="checkbox" class="opcional-check" value="Faróis de LED" /> Faróis de LED</label><label><input type="checkbox" class="opcional-check" value="Rack de teto" /> Rack de teto</label><label><input type="checkbox" class="opcional-check" value="Engate" /> Engate</label></fieldset>
+            </div>
+            <input type="text" id="opcionais" placeholder="Outros opcionais separados por vírgula" />
+          </details>
+
+          <details class="veiculo-form-section" open>
+            <summary>Fotos e anúncio</summary>
 
           <textarea
             id="descricao"
@@ -521,6 +677,12 @@
             placeholder="Fotos extras do veículo por URL, uma por linha. Ex: frente, traseira, interior, painel"
             rows="3"
           ></textarea>
+          <div class="form-grid">
+            <input type="text" id="titulo-anuncio" placeholder="Título do anúncio" />
+            <input type="text" id="garantia" placeholder="Garantia" />
+            <select id="publicar-site"><option value="">Publicar no site?</option><option>Não</option><option>Sim</option></select>
+            <input type="date" id="data-publicacao" title="Data de publicação" />
+          </div>
 
           <label class="upload-box">
             Selecionar imagem do veículo
@@ -557,10 +719,11 @@
             <input type="checkbox" id="blindado" />
             Veículo blindado
           </label>
+          </details>
 
           <div class="admin-form-acoes">
             <button type="submit" class="btn-primary" id="btn-salvar">
-              Cadastrar veículo
+              Salvar veículo no estoque
             </button>
             <button type="button" class="btn-cancelar" id="btn-cancelar">
               Cancelar edição
@@ -578,9 +741,18 @@
           />
           <select id="status-admin-carros">
             <option value="">Todos os status</option>
+            <option value="Cadastro incompleto">Cadastro incompleto</option>
+            <option value="Em avaliação">Em avaliação</option>
+            <option value="Aguardando documentação">Aguardando documentação</option>
+            <option value="Em preparação">Em preparação</option>
             <option value="Disponível">Disponível</option>
             <option value="Reservado">Reservado</option>
+            <option value="Em negociação">Em negociação</option>
             <option value="Vendido">Vendido</option>
+            <option value="Consignado">Consignado</option>
+            <option value="Repasse">Repasse</option>
+            <option value="Retirado">Retirado</option>
+            <option value="Arquivado">Arquivado</option>
           </select>
         </div>
         <div id="lista-admin" class="admin-lista"></div>
@@ -2358,12 +2530,12 @@
       </div>
     </div>
 
-    <script src="/js/config.js?v=20260805-admin-panel-guard"></script>
+    <script src="/js/config.js?v=20260805-veiculo-progressivo"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260805-admin-panel-guard"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260805-veiculo-progressivo"></script>
   </body>
 </html>
 
