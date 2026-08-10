@@ -2,8 +2,8 @@
   nome: "3M Veículos",
   subtitulo: "Revenda de Veículos",
   whatsapp: "+55 47 9620-7774",
-  endereco: "CENTRO II - R. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094",
-  horario: "Segunda a sábado, das 8h às 18h",
+  endereco: "Rua Campos Sales, 293 - Centro II, Vila Ferroviária, Mafra - SC, 89300-094",
+  horario: "Segunda a Sexta, das 8h30 às 18h. Sábado 08h30 às 12h",
   instagram: "@3mveiculos",
   email: "contato@3mveiculos.com.br",
   sobre:
@@ -11,6 +11,8 @@
   logo: "img/logo-3m-veiculos.jpg",
   mensagemVeiculo:
     "Olá, tenho interesse neste veículo:\n\nModelo: {nome}\nAno: {ano}\nKm: {km}\nCâmbio: {cambio}\nTipo: {tipo}\nCor: {cor}\nCombustível: {combustivel}\nPreço: {preco}\nStatus: {status}",
+  mensagemFinanciamentoInteresse:
+    "Olá, tenho interesse em financiamento:\n\nNome: {nome}\nWhatsApp: {whatsapp}\nVeículo: {veiculo}\nEntrada aproximada: {entrada}\nTem carro para troca: {temTroca}\nCarro na troca: {carroTroca}\n\nApós o primeiro contato, podem me enviar o link completo para preencher os dados da simulação.\nLink completo da loja: {linkCompleto}",
 };
 
 const alertaNativo = window.alert.bind(window);
@@ -327,7 +329,9 @@ function carregarDadosSite() {
     if (settings && settings.data) {
       window.siteDataCache.settings = settings.data;
       if (settings.data.store) {
-        localStorage.setItem("lojaConfig", JSON.stringify({ ...lojaConfig, ...settings.data.store }));
+        const storeNormalizada = normalizarConfigLoja(settings.data.store);
+        window.siteDataCache.settings.store = storeNormalizada;
+        localStorage.setItem("lojaConfig", JSON.stringify(storeNormalizada));
       }
       if (settings.data.home) {
         localStorage.setItem("homeConteudo", JSON.stringify({ ...homeConteudoPadrao, ...settings.data.home }));
@@ -370,6 +374,25 @@ function substituirMarcasAntigas(valor) {
   return marcasAntigas.reduce(function (texto, marca) {
     return texto.split(marca).join(lojaConfig.nome);
   }, valor);
+}
+
+function normalizarConfigLoja(config) {
+  const normalizada = { ...lojaConfig, ...(config || {}) };
+  const endereco = String(normalizada.endereco || "");
+
+  normalizada.endereco = endereco
+    .replace(
+      /CENTRO II - R\. Campos Sáles, 293 - Vila Ferroviaria, Mafra - SC, 89300-094/gi,
+      lojaConfig.endereco
+    )
+    .replace(/Campos Sáles/g, "Campos Sales")
+    .replace(/Vila Ferroviaria/g, "Vila Ferroviária");
+
+  if (normalizada.horario === "Segunda a sábado, das 8h às 18h") {
+    normalizada.horario = lojaConfig.horario;
+  }
+
+  return normalizada;
 }
 
 function criarLinkWhatsApp(mensagem) {
@@ -796,10 +819,7 @@ function carregarConfigLoja() {
   const configuracoesApi = window.siteDataCache.settings;
 
   if (configuracoesApi && configuracoesApi.store) {
-    const configApi = {
-      ...lojaConfig,
-      ...configuracoesApi.store,
-    };
+    const configApi = normalizarConfigLoja(configuracoesApi.store);
 
     localStorage.setItem("lojaConfig", JSON.stringify(configApi));
     return configApi;
@@ -818,23 +838,23 @@ function carregarConfigLoja() {
         localStorage.setItem("lojaConfig", JSON.stringify(salva));
       }
 
-      return {
-        ...lojaConfig,
-        ...salva,
-      };
+      const configSalva = normalizarConfigLoja(salva);
+      localStorage.setItem("lojaConfig", JSON.stringify(configSalva));
+
+      return configSalva;
     }
   } catch (error) {
     localStorage.removeItem("lojaConfig");
   }
 
-  return lojaConfig;
+  return normalizarConfigLoja(lojaConfig);
 }
 
 function salvarConfigLoja(config) {
-  const atualizada = {
+  const atualizada = normalizarConfigLoja({
     ...carregarConfigLoja(),
     ...config,
-  };
+  });
 
   localStorage.setItem("lojaConfig", JSON.stringify(atualizada));
   salvarConfiguracoesApi({ store: atualizada });

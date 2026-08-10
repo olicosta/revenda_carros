@@ -21,6 +21,16 @@ function valorCampoFinanciamento(id, fallback) {
   return campo && campo.value.trim() ? campo.value.trim() : fallback;
 }
 
+function mensagemInteresseFinanciamento(dados) {
+  const template =
+    (carregarConfigLoja().mensagemFinanciamentoInteresse ||
+      lojaConfig.mensagemFinanciamentoInteresse);
+
+  return template.replace(/\{(\w+)\}/g, function (_, chave) {
+    return dados[chave] !== undefined ? dados[chave] : "";
+  });
+}
+
 preencherSelectVeiculos(selectVeiculoFinanciamento);
 
 if (selectVeiculoFinanciamento) {
@@ -48,23 +58,15 @@ if (formFinanciamentoInteresse) {
       window.location.origin +
       window.location.pathname.replace("financiamento.html", "financiamento-dados.html");
 
-    const mensagem =
-      "Olá, tenho interesse em financiamento:\n\n" +
-      "Nome: " +
-      valorCampoFinanciamento("fin-nome", "Não informado") +
-      "\nWhatsApp: " +
-      valorCampoFinanciamento("fin-telefone", "Não informado") +
-      "\nVeículo: " +
-      valorCampoFinanciamento("fin-veiculo", "Ainda não escolhi") +
-      "\nEntrada aproximada: " +
-      valorCampoFinanciamento("fin-entrada", "A definir") +
-      "\nTem carro para troca: " +
-      valorCampoFinanciamento("fin-tem-troca", "Não") +
-      "\nCarro na troca: " +
-      valorCampoFinanciamento("fin-carro-troca", "Não informado") +
-      "\n\nApós o primeiro contato, podem me enviar o link completo para preencher os dados da simulação.\n" +
-      "Link completo da loja: " +
-      linkCompleto;
+    const mensagem = mensagemInteresseFinanciamento({
+      nome: valorCampoFinanciamento("fin-nome", "Não informado"),
+      whatsapp: valorCampoFinanciamento("fin-telefone", "Não informado"),
+      veiculo: valorCampoFinanciamento("fin-veiculo", "Ainda não escolhi"),
+      entrada: valorCampoFinanciamento("fin-entrada", "A definir"),
+      temTroca: valorCampoFinanciamento("fin-tem-troca", "Não"),
+      carroTroca: valorCampoFinanciamento("fin-carro-troca", "Não informado"),
+      linkCompleto: linkCompleto,
+    });
 
     window.open(criarLinkWhatsApp(mensagem), "_blank", "noopener");
   });

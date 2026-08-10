@@ -8,7 +8,7 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260805-localizacao-simples" />
+    <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260805-veiculo-progressivo" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
@@ -78,6 +78,12 @@
               <svg viewBox="0 0 24 24"><path d="M12 3v18" /><path d="M16 7.5c0-1.4-1.8-2.5-4-2.5s-4 1.1-4 2.5 1.8 2.5 4 2.5 4 1.1 4 2.5-1.8 2.5-4 2.5-4-1.1-4-2.5" /></svg>
             </span>
             <span class="admin-tab-label">Financeiro</span>
+          </button>
+          <button type="button" class="admin-tab" data-admin-tab="financiamento" aria-label="Financiamento" title="Financiamento">
+            <span class="admin-tab-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 7h16v10H4z" /><path d="M7 11h5" /><path d="M7 14h3" /><path d="M15 14l2 2 3-4" /></svg>
+            </span>
+            <span class="admin-tab-label">Financiamento</span>
           </button>
           <button type="button" class="admin-tab" data-admin-tab="clientes" aria-label="Clientes" title="Clientes">
             <span class="admin-tab-icon" aria-hidden="true">
@@ -913,16 +919,7 @@
               </p>
             </div>
 
-            <div class="financeiro-cabecalho-acoes">
-              <a href="financiamento-dados.html" class="btn-primary" target="_blank">
-                Formulário bancário
-              </a>
-              <button type="button" class="btn-cancelar btn-visivel" id="copiar-link-financiamento">
-                Copiar link
-              </button>
-            </div>
           </div>
-          <p class="admin-retorno" id="retorno-link-financiamento" aria-live="polite"></p>
 
           <div class="admin-form financeiro-controles financeiro-toolbar">
             <div class="financeiro-filtro">
@@ -2098,10 +2095,57 @@
             <div id="arquivo-clientes" class="clientes-arquivo"></div>
           </section>
 
+        </div>
+
+        <div class="admin-tab-panel" data-admin-panel="financiamento">
+          <div class="financeiro-cabecalho financiamento-admin-hero">
+            <div>
+              <span class="admin-eyebrow">Crédito</span>
+              <h2>Financiamento</h2>
+              <p>
+                Centralize o formulário bancário, a mensagem de interesse enviada pelo WhatsApp
+                e as solicitações recebidas pelo site.
+              </p>
+            </div>
+
+            <div class="financeiro-cabecalho-acoes">
+              <a href="financiamento-dados.html" class="btn-primary" target="_blank" rel="noopener">
+                Formulário bancário
+              </a>
+              <button type="button" class="btn-cancelar btn-visivel" id="copiar-link-financiamento">
+                Copiar link
+              </button>
+            </div>
+          </div>
+          <p class="admin-retorno" id="retorno-link-financiamento" aria-live="polite"></p>
+
+          <section class="admin-form financiamento-mensagem-card">
+            <div class="financeiro-relatorio-topo">
+              <div>
+                <span class="admin-eyebrow">Mensagem do WhatsApp</span>
+                <h3>Botão “Enviar interesse pelo WhatsApp”</h3>
+              </div>
+              <p>Use variáveis para personalizar o texto sem alterar código.</p>
+            </div>
+            <form id="form-mensagem-financiamento" class="admin-form compacto">
+              <textarea
+                id="loja-mensagem-financiamento"
+                rows="8"
+                placeholder="Mensagem enviada quando o cliente envia interesse em financiamento"
+              ></textarea>
+              <p class="admin-ajuda">
+                Variáveis disponíveis: {nome}, {whatsapp}, {veiculo}, {entrada}, {temTroca}, {carroTroca}, {linkCompleto}.
+              </p>
+              <div class="admin-form-acoes">
+                <button type="submit" class="btn-primary">Salvar mensagem</button>
+              </div>
+            </form>
+          </section>
+
           <section class="financeiro-relatorio">
             <div class="financeiro-relatorio-topo">
               <div>
-                <span class="admin-eyebrow">Crédito</span>
+                <span class="admin-eyebrow">Solicitações</span>
                 <h3>Solicitações de financiamento</h3>
               </div>
               <p>Analise propostas, confira documentos e atualize o cliente.</p>
@@ -2530,12 +2574,12 @@
       </div>
     </div>
 
-    <script src="/js/config.js?v=20260805-veiculo-progressivo"></script>
+    <script src="/js/config.js?v=20260810-sobre-cache"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260805-veiculo-progressivo"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260805-financiamento-admin"></script>
   </body>
 </html>
 

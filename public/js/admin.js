@@ -14,6 +14,7 @@ const buscaOpcionaisVeiculo = document.getElementById("opcionais-busca");
 const opcionaisCheckVeiculo = document.querySelectorAll(".opcional-check");
 const formLoja = document.getElementById("form-loja");
 const formMensagemWhatsapp = document.getElementById("form-mensagem-whatsapp");
+const formMensagemFinanciamento = document.getElementById("form-mensagem-financiamento");
 const inputLogoLoja = document.getElementById("loja-logo-file");
 const previewLogoLoja = document.getElementById("loja-logo-preview");
 const buscaAdminCarros = document.getElementById("busca-admin-carros");
@@ -2509,7 +2510,7 @@ function abasPermitidasPerfil(perfil) {
   }
 
   if (perfil === "financeiro") {
-    return ["resumo", "financeiro", "vendedores", "relatorios", "sistema"];
+    return ["resumo", "financeiro", "financiamento", "vendedores", "relatorios", "sistema"];
   }
 
   if (perfil === "estoque") {
@@ -2528,6 +2529,7 @@ function abasPermitidasPerfil(perfil) {
     "depoimentos",
     "parcerias",
     "financeiro",
+    "financiamento",
     "vendedores",
     "clientes",
     "relatorios",
@@ -2608,6 +2610,10 @@ function carregarFormularioLoja() {
   document.getElementById("loja-email").value = config.email;
   document.getElementById("loja-sobre").value = config.sobre;
   document.getElementById("loja-mensagem-veiculo").value = config.mensagemVeiculo;
+  const mensagemFinanciamentoCampo = document.getElementById("loja-mensagem-financiamento");
+  if (mensagemFinanciamentoCampo) {
+    mensagemFinanciamentoCampo.value = config.mensagemFinanciamentoInteresse;
+  }
   previewLogoLoja.src = config.logo;
   previewLogoLoja.style.display = "block";
   logoLojaBase64 = "";
@@ -7624,6 +7630,21 @@ formMensagemWhatsapp.addEventListener("submit", function (e) {
 
   carregarFormularioLoja();
 });
+
+if (formMensagemFinanciamento) {
+  formMensagemFinanciamento.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    salvarConfigLoja({
+      mensagemFinanciamentoInteresse: document
+        .getElementById("loja-mensagem-financiamento")
+        .value.trim(),
+    });
+
+    carregarFormularioLoja();
+    alert("Mensagem de financiamento salva com sucesso.");
+  });
+}
 
 btnCancelar.addEventListener("click", limparFormulario);
 
