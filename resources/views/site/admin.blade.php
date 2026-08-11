@@ -2480,8 +2480,6 @@
       </div>
     </section>
 
-    @include('site.partials.footer')
-
     <div class="admin-modal" id="modal-venda" aria-hidden="true">
       <div class="admin-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-venda-titulo">
         <div class="admin-modal-header">
