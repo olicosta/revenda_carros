@@ -14,22 +14,6 @@ const carroDestaque =
   }) ||
   carrosDisponiveisHome[0];
 
-function iconeWhatsAppCard() {
-  return (
-    '<svg class="card-action-svg card-action-svg-whatsapp" aria-hidden="true" viewBox="0 0 32 32" focusable="false">' +
-    '<path d="M16.03 4.5c-6.25 0-11.34 5.08-11.34 11.33 0 2 .52 3.94 1.52 5.65L4.6 27.5l6.16-1.57a11.28 11.28 0 0 0 5.27 1.29c6.25 0 11.33-5.08 11.33-11.34S22.28 4.5 16.03 4.5Zm0 20.78c-1.67 0-3.29-.44-4.71-1.28l-.34-.2-3.65.93.97-3.56-.22-.37a9.4 9.4 0 0 1-1.45-4.97 9.42 9.42 0 1 1 9.4 9.45Zm5.18-7.06c-.28-.14-1.67-.82-1.93-.91-.26-.1-.45-.14-.64.14-.19.28-.73.91-.9 1.1-.16.19-.33.21-.61.07-.28-.14-1.19-.44-2.27-1.4-.84-.75-1.41-1.68-1.57-1.96-.16-.28-.02-.43.12-.57.13-.12.28-.33.42-.49.14-.16.19-.28.28-.47.09-.19.05-.35-.02-.49-.07-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.49h-.55c-.19 0-.49.07-.75.35-.26.28-.98.96-.98 2.34s1 2.71 1.14 2.9c.14.19 1.97 3.01 4.77 4.22.67.29 1.19.46 1.59.59.67.21 1.28.18 1.76.11.54-.08 1.67-.68 1.9-1.34.23-.66.23-1.22.16-1.34-.07-.12-.26-.19-.54-.33Z"/>' +
-    "</svg>"
-  );
-}
-
-function iconeDetalhesCard() {
-  return (
-    '<svg class="card-action-svg card-action-svg-detail" aria-hidden="true" viewBox="0 0 24 24" focusable="false">' +
-    '<path d="M12 5.25c5.05 0 8.35 4.28 9.42 5.88.35.53.35 1.21 0 1.74-1.07 1.6-4.37 5.88-9.42 5.88s-8.35-4.28-9.42-5.88a1.55 1.55 0 0 1 0-1.74C3.65 9.53 6.95 5.25 12 5.25Zm0 2C7.98 7.25 5.2 10.6 4.29 12c.91 1.4 3.69 4.75 7.71 4.75s6.8-3.35 7.71-4.75c-.91-1.4-3.69-4.75-7.71-4.75Zm0 2.05A2.7 2.7 0 1 1 12 14.7a2.7 2.7 0 0 1 0-5.4Z"/>' +
-    "</svg>"
-  );
-}
-
 function montarIndicadoresOfertas(indiceAtual, total) {
   if (total <= 1) return "";
 
@@ -43,14 +27,13 @@ function montarIndicadoresOfertas(indiceAtual, total) {
       (i === indiceAtual ? "ativo" : "") +
       '" data-oferta-indice="' +
       i +
-      '"></button>';
+      '" onclick="event.stopPropagation()"></button>';
   }
 
   return html + "</div>";
 }
 
 function htmlOfertaDestaque(carro, indice, total) {
-  const mensagem = mensagemVeiculo(carro);
   const idDestaque = Number(carro.id) || 0;
   const totalOfertas = Number(total) || 1;
   const indiceAtual = Number(indice) || 0;
@@ -61,12 +44,24 @@ function htmlOfertaDestaque(carro, indice, total) {
     '<div class="showcase-topline"><span>Ofertas</span><strong>' +
     escaparHTML(textoContador) +
     "</strong></div>" +
-    '<div class="showcase-img"><img src="' +
+    '<div class="showcase-img card-clicavel" role="link" tabindex="0" aria-label="Ver detalhes de ' +
+    escaparAtributo(carro.nome) +
+    '" onclick="abrirDetalhesCarro(' +
+    idDestaque +
+    ')" onkeydown="if(event.key === \'Enter\') abrirDetalhesCarro(' +
+    idDestaque +
+    ')"><img src="' +
     escaparAtributo(carro.imagem) +
     '" alt="' +
     escaparAtributo(carro.nome) +
     '" decoding="async" fetchpriority="high"></div>' +
-    '<div class="showcase-card">' +
+    '<div class="showcase-card card-clicavel" role="link" tabindex="0" aria-label="Ver detalhes de ' +
+    escaparAtributo(carro.nome) +
+    '" onclick="abrirDetalhesCarro(' +
+    idDestaque +
+    ')" onkeydown="if(event.key === \'Enter\') abrirDetalhesCarro(' +
+    idDestaque +
+    ')">' +
     '<span class="showcase-badge">Oferta em destaque</span>' +
     "<h3>" +
     escaparHTML(carro.nome) +
@@ -77,12 +72,6 @@ function htmlOfertaDestaque(carro, indice, total) {
     '<div class="showcase-price"><span>Preço anunciado</span><strong>' +
     escaparHTML(carro.preco) +
     "</strong></div>" +
-    '<div class="showcase-actions"><a href="detalhes.html?id=' +
-    idDestaque +
-    '" class="btn-primary">Ver oferta</a>' +
-    '<a href="' +
-    escaparAtributo(criarLinkWhatsApp(mensagem)) +
-    '" class="btn-whatsapp destaque-whats" target="_blank" rel="noopener">WhatsApp</a></div>' +
     montarIndicadoresOfertas(indiceAtual, totalOfertas) +
     "</div>"
   );
@@ -224,7 +213,11 @@ if (homeVeiculosGrid) {
       const idCarro = Number(carro.id) || 0;
 
       return (
-        '<article class="carro-card card-clicavel" onclick="abrirDetalhesCarro(' +
+        '<article class="carro-card card-clicavel" tabindex="0" role="link" aria-label="Ver detalhes de ' +
+        escaparAtributo(carro.nome) +
+        '" onclick="abrirDetalhesCarro(' +
+        idCarro +
+        ')" onkeydown="if(event.key === \'Enter\') abrirDetalhesCarro(' +
         idCarro +
         ')">' +
         '<div class="carro-img-box">' +
@@ -256,20 +249,6 @@ if (homeVeiculosGrid) {
         "<strong>" +
         escaparHTML(carro.preco) +
         "</strong>" +
-        '<div class="carro-acoes">' +
-        '<a href="detalhes.html?id=' +
-        idCarro +
-        '" class="btn-primary card-action-icon" title="Ver detalhes" aria-label="Ver detalhes" onclick="event.stopPropagation()">' +
-        iconeDetalhesCard() +
-        '<span class="card-action-label">Ver detalhes</span>' +
-        "</a>" +
-        '<a href="' +
-        escaparAtributo(criarLinkWhatsApp(mensagemVeiculo(carro))) +
-        '" class="btn-whatsapp card-action-icon" target="_blank" rel="noopener" title="Falar pelo WhatsApp" aria-label="Falar pelo WhatsApp" onclick="event.stopPropagation()">' +
-        iconeWhatsAppCard() +
-        '<span class="card-action-label">WhatsApp</span>' +
-        "</a>" +
-        "</div>" +
         "</div>" +
         "</article>"
       );

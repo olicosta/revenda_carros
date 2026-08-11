@@ -349,9 +349,9 @@ body {
 }
 
 .hero-showcase .showcase-card {
-    padding: 18px 22px 20px;
+    padding: 18px 22px 18px;
     color: var(--home-ink);
-    min-height: 292px;
+    min-height: 224px;
     display: flex;
     flex-direction: column;
 }
@@ -397,7 +397,7 @@ body {
     align-items: end;
     justify-content: space-between;
     gap: 16px;
-    margin: 14px 0 16px;
+    margin: 14px 0 0;
     padding-top: 14px;
     border-top: 1px solid #e6eaf0;
     min-height: 70px;
@@ -421,21 +421,6 @@ body {
     line-height: 1;
 }
 
-.showcase-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: auto;
-}
-
-.showcase-actions .btn-primary,
-.showcase-actions .btn-whatsapp {
-    min-height: 50px;
-    margin: 0;
-    border-radius: 13px;
-    font-size: 18px;
-}
-
 .showcase-indicadores {
     display: flex;
     align-items: center;
@@ -443,6 +428,17 @@ body {
     gap: 7px;
     margin-top: 14px;
     min-height: 10px;
+}
+
+.showcase-img.card-clicavel,
+.showcase-card.card-clicavel {
+    cursor: pointer;
+}
+
+.showcase-img.card-clicavel:focus-visible,
+.showcase-card.card-clicavel:focus-visible {
+    outline: 3px solid rgba(212, 175, 55, 0.9);
+    outline-offset: 4px;
 }
 
 .showcase-indicadores button {
@@ -725,17 +721,14 @@ body {
         font-size: 16px;
     }
 
-    .hero-buttons,
-    .showcase-actions {
+    .hero-buttons {
         grid-template-columns: 1fr;
         display: grid;
     }
 
     .hero-buttons .btn-primary,
     .hero-buttons .btn-secondary,
-    .hero-buttons .btn-outline,
-    .showcase-actions .btn-primary,
-    .showcase-actions .btn-whatsapp {
+    .hero-buttons .btn-outline {
         width: 100%;
     }
 
@@ -773,16 +766,6 @@ body {
 
     .showcase-price strong {
         font-size: 28px;
-    }
-
-    .showcase-actions {
-        gap: 9px;
-    }
-
-    .showcase-actions .btn-primary,
-    .showcase-actions .btn-whatsapp {
-        min-height: 48px;
-        font-size: 16px;
     }
 
     .hero-servicos {
@@ -938,11 +921,6 @@ body {
         padding: 18px;
     }
 
-    .showcase-actions .btn-primary,
-    .showcase-actions .btn-whatsapp {
-        min-height: 46px;
-        padding: 9px 12px;
-    }
 }
 
 @media (max-height: 700px) and (min-width: 981px) {
@@ -1004,8 +982,7 @@ body {
 .home-veiculos .btn-primary,
 .contato-modern .btn-primary,
 .localizacao-info .btn-primary,
-.carro-acoes a,
-.showcase-actions a {
+.carro-acoes a {
     font-size: 16px;
     font-weight: 900;
     line-height: 1.2;
@@ -1036,7 +1013,6 @@ body {
     color: #fff;
 }
 
-.showcase-actions .btn-primary,
 .home-veiculos .btn-primary,
 .localizacao-info .btn-primary {
     border-color: var(--home-graphite);
@@ -1045,7 +1021,6 @@ body {
     box-shadow: 0 14px 30px rgba(32, 33, 36, 0.18);
 }
 
-.showcase-actions .btn-primary:hover,
 .home-veiculos .btn-primary:hover,
 .localizacao-info .btn-primary:hover {
     background: linear-gradient(135deg, #343538, #505256);

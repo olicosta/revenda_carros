@@ -9,8 +9,8 @@
       content="3M Veículos: veículos selecionados, financiamento com parceiros e atendimento rápido pelo WhatsApp."
     />
     <title>3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260729-contato-centralizado" />
+    <link rel="stylesheet" href="/css/style.css?v=20260811-home-cards-limpos" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20260811-home-cards-limpos" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
@@ -124,16 +124,6 @@
             <div class="showcase-price">
               <span>Preço anunciado</span>
               <strong>Consulte</strong>
-            </div>
-            <div class="showcase-actions">
-              <a href="carros.html" class="btn-primary">Ver estoque</a>
-              <a
-                href="https://wa.me/554796207774"
-                class="btn-whatsapp destaque-whats"
-                target="_blank"
-                rel="noopener"
-                data-whatsapp-link
-              >WhatsApp</a>
             </div>
           </div>
         </div>
@@ -278,7 +268,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260810-motos-cadastro"></script>
-    <script data-site-script data-src="/js/home.js?v=20260805-foto-sem-legenda"></script>
+    <script data-site-script data-src="/js/home.js?v=20260811-home-sem-acoes"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
 </html>

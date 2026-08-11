@@ -1835,6 +1835,36 @@ body.sistema-modal-aberto {
   gap: clamp(18px, 2vw, 24px);
 }
 
+.home-veiculos-grid .carro-info {
+  display: grid;
+  gap: 8px;
+}
+
+.home-veiculos-grid .selos-comerciais {
+  margin-bottom: 2px;
+}
+
+.home-veiculos-grid .carro-info h3,
+.home-veiculos-grid .carro-info p,
+.home-veiculos-grid .carro-info strong {
+  margin: 0;
+}
+
+.home-veiculos-grid .carro-info .carro-meta {
+  margin-top: 2px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(var(--secondary-rgb), 0.08);
+  color: #475569;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.home-veiculos-grid .carro-info strong {
+  margin-top: 6px;
+  line-height: 1;
+}
+
 .catalogo-resumo {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
