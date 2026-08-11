@@ -432,25 +432,47 @@
     }
 
     .carro-info {
-        padding: 16px;
+        display: grid;
+        gap: 8px;
+        padding: 14px 16px 18px;
+    }
+
+    .carro-card .selos-comerciais {
+        margin-bottom: 2px;
     }
 
     .carro-card .carro-info h3 {
+        margin: 0;
         font-size: 22px;
         letter-spacing: -0.02em;
     }
 
     .carro-card .carro-info p {
+        margin: 0;
         font-size: 14px;
     }
 
+    .carro-card .carro-info .carro-meta {
+        display: flex;
+        align-items: center;
+        min-height: 32px;
+        margin: 2px 0 0;
+        padding-top: 8px;
+        border-top: 1px solid rgba(var(--secondary-rgb), 0.08);
+        color: #475569;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1.25;
+    }
+
     .carro-card .carro-info strong {
-        margin-top: 2px;
+        margin: 8px 0 0;
         font-size: 26px;
+        line-height: 1;
     }
 
     .carro-acoes {
-        display: grid;
+        display: none;
         grid-template-columns: repeat(2, 48px);
         justify-content: center;
         align-items: center;
@@ -531,7 +553,7 @@
 }
 
 @media (max-width: 360px) {
-    .carro-acoes {
-        grid-template-columns: repeat(2, 46px);
+    .carro-card .carro-info {
+        padding-inline: 14px;
     }
 }
