@@ -10,7 +10,7 @@
     />
     <title>3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260811-home-cards-limpos" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260811-home-cards-limpos" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20260811-hero-sem-selo" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
@@ -57,7 +57,6 @@
     <section class="hero hero-modern">
       <div class="container hero-grid">
         <div class="hero-text">
-          <span class="badge" data-home="heroBadge">3M Veículos</span>
           <h1 data-home="heroTitulo">
             Seu próximo carro, sem complicação
           </h1>
