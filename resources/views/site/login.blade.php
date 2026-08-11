@@ -77,7 +77,7 @@
       </section>
     </main>
 
-    <script src="/js/config.js?v=20260811-loader-paralelo"></script>
+    <script src="/js/config.js?v=20260811-marcas-motos"></script>
     <script>
       document.querySelector("[data-submit-once]")?.addEventListener("submit", function () {
         const botao = this.querySelector('button[type="submit"]');

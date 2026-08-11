@@ -262,7 +262,7 @@
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260811-loader-paralelo"></script>
+    <script src="/js/config.js?v=20260811-marcas-motos"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>

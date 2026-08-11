@@ -104,7 +104,7 @@
 
     @include('site.partials.whatsapp-floating')
 
-    <script src="/js/config.js?v=20260811-loader-paralelo"></script>
+    <script src="/js/config.js?v=20260811-marcas-motos"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>
 </html>
