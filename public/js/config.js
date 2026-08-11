@@ -1313,22 +1313,44 @@ function inicializarBuscaCep() {
   });
 }
 
+function carregarScriptDinamico(scriptOriginal) {
+  return new Promise(function (resolve, reject) {
+    const script = document.createElement("script");
+    script.src = scriptOriginal.dataset.src;
+    script.async = false;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+function scriptBaseDoSite(scriptOriginal) {
+  const src = scriptOriginal.dataset.src || "";
+
+  return (
+    src.includes("/js/carros.js") ||
+    src.includes("/js/depoimentos.js") ||
+    src.includes("/js/parcerias.js") ||
+    src.includes("/js/storage.js")
+  );
+}
+
 function carregarScriptsDaPagina() {
   const scripts = Array.from(
     document.querySelectorAll("script[data-site-script]")
   );
+  const scriptsBase = scripts.filter(scriptBaseDoSite);
+  const scriptsPagina = scripts.filter(function (scriptOriginal) {
+    return !scriptBaseDoSite(scriptOriginal);
+  });
 
-  return scripts.reduce(function (fila, scriptOriginal) {
-    return fila.then(function () {
-      return new Promise(function (resolve, reject) {
-        const script = document.createElement("script");
-        script.src = scriptOriginal.dataset.src;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.body.appendChild(script);
+  return Promise.all(scriptsBase.map(carregarScriptDinamico)).then(function () {
+    return scriptsPagina.reduce(function (fila, scriptOriginal) {
+      return fila.then(function () {
+        return carregarScriptDinamico(scriptOriginal);
       });
-    });
-  }, Promise.resolve());
+    }, Promise.resolve());
+  });
 }
 
 function inicializarSite() {

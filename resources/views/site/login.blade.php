@@ -77,7 +77,7 @@
       </section>
     </main>
 
-    <script src="/js/config.js?v=20260810-sobre-cache"></script>
+    <script src="/js/config.js?v=20260811-loader-paralelo"></script>
     <script>
       document.querySelector("[data-submit-once]")?.addEventListener("submit", function () {
         const botao = this.querySelector('button[type="submit"]');
