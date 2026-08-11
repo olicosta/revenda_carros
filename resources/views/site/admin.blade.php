@@ -2664,7 +2664,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260810-motos-cadastro"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260810-saidas-compactas"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260811-saida-sempre-aberta"></script>
   </body>
 </html>
 

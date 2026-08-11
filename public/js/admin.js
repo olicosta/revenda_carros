@@ -532,10 +532,6 @@ const cadastrosRecolhiveis = [
     label: "Cadastrar nova parceria",
     titleId: "parceria-form-titulo",
   },
-  {
-    formId: "form-saida-financeira",
-    label: "Cadastrar nova saída",
-  },
 ];
 
 function configurarCadastrosRecolhiveis() {
@@ -8109,7 +8105,6 @@ if (formSaidaFinanceira) {
     }
     formSaidaFinanceira.reset();
     document.getElementById("saida-data").value = new Date().toISOString().slice(0, 10);
-    fecharCadastroAdmin("form-saida-financeira");
     renderizarFinanceiro();
   });
 }
