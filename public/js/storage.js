@@ -10,7 +10,9 @@
       return respostaApi.data.map(normalizarCarro);
     }
 
-    // Se o banco estiver vazio, preserva o estoque salvo no navegador.
+    localStorage.removeItem("carros");
+    snapshotCarrosPersistidos = [];
+    return [];
   }
 
   try {
