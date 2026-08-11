@@ -10537,6 +10537,10 @@ body.admin-page .admin-tab[data-admin-tab="financeiro"] {
   order: 40 !important;
 }
 
+body.admin-page .admin-tab[data-admin-tab="financiamento"] {
+  order: 45 !important;
+}
+
 body.admin-page .admin-tab[data-admin-tab="instagram"] {
   order: 50 !important;
 }
