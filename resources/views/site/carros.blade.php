@@ -225,7 +225,7 @@
 
     <script src="/js/config.js?v=20260810-sobre-cache"></script>
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260810-motos-cadastro"></script>
     <script data-site-script data-src="/js/catalogo.js?v=20260729-card-acoes"></script>
     <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
   </body>

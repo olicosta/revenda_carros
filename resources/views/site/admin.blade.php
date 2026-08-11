@@ -8,8 +8,8 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
-    <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260805-veiculo-progressivo" />
+    <link rel="stylesheet" href="/css/style.css?v=20260810-saidas-compactas" />
+    <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260810-financeiro-veiculo-cards" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
   <body class="admin-page">
@@ -505,6 +505,7 @@
               <option value="Hatch">Hatch</option>
               <option value="Sedan">Sedan</option>
               <option value="SUV">SUV</option>
+              <option value="Moto">Moto</option>
               <option value="Pickup">Pickup</option>
               <option value="Utilitario">Utilitário</option>
               <option value="Esportivo">Esportivo</option>
@@ -624,36 +625,120 @@
 
           <details class="veiculo-form-section" data-sensitive-section>
             <summary>Financeiro do veículo</summary>
-            <div class="form-grid">
-            <input type="text" id="preco-compra" placeholder="Preço de compra" />
-            <input type="text" id="custo-documental" placeholder="Custo documental" />
-            <input type="text" id="custo-transporte" placeholder="Custo de transporte" />
-            <input type="text" id="custo-manutencao" placeholder="Custo de manutenção" />
-            <input type="text" id="custo-estetica" placeholder="Custo de estética" />
-            <input type="text" id="custo-preparacao" placeholder="Custo de preparação" />
-            <input type="text" id="custo-despachante" placeholder="Custo despachante" />
-            <input type="text" id="outros-custos" placeholder="Outros custos" />
-            <input type="text" id="valor-fipe" placeholder="Valor FIPE" />
-            <input type="date" id="data-fipe" title="Data consulta FIPE" />
-            <input type="text" id="preco-sugerido" placeholder="Preço sugerido" />
-            <input type="text" id="preco-minimo" placeholder="Preço mínimo autorizado" />
-            <input type="text" id="desconto-maximo" placeholder="Desconto máximo permitido" />
-            <input type="text" id="comissao-percentual" placeholder="Taxa comissão vendedor (%)" />
-            <input type="text" id="comissao" placeholder="Comissão vendedor R$" />
-            <input type="text" id="taxas" placeholder="Taxas" />
-            <input type="text" id="valor-venda" placeholder="Preço de venda" />
-            <select id="aceita-troca"><option value="">Aceita troca?</option><option>Sim</option><option>Não</option></select>
-            <select id="aceita-financiamento"><option value="">Aceita financiamento?</option><option>Sim</option><option>Não</option></select>
-            <input type="date" id="data-venda" title="Data da venda" />
-            <select id="vendedor-venda">
-              <option value="">Vendedor da venda</option>
-            </select>
+            <div class="financeiro-veiculo-grid">
+              <label class="financeiro-veiculo-campo">
+                <span>Compra</span>
+                <input type="text" id="preco-compra" placeholder="R$ 0" />
+                <small>Valor pago na aquisição.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Documentação</span>
+                <input type="text" id="custo-documental" placeholder="R$ 0" />
+                <small>Transferência, laudo e taxas documentais.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Transporte</span>
+                <input type="text" id="custo-transporte" placeholder="R$ 0" />
+                <small>Guincho, frete ou deslocamento.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Manutenção</span>
+                <input type="text" id="custo-manutencao" placeholder="R$ 0" />
+                <small>Peças, mecânica e revisão.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Estética</span>
+                <input type="text" id="custo-estetica" placeholder="R$ 0" />
+                <small>Polimento, higienização e acabamento.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Preparação</span>
+                <input type="text" id="custo-preparacao" placeholder="R$ 0" />
+                <small>Custo geral antes do anúncio.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Despachante</span>
+                <input type="text" id="custo-despachante" placeholder="R$ 0" />
+                <small>Serviços de regularização.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Outros custos</span>
+                <input type="text" id="outros-custos" placeholder="R$ 0" />
+                <small>Despesas extras vinculadas.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>FIPE</span>
+                <input type="text" id="valor-fipe" placeholder="R$ 0" />
+                <small>Referência consultada.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Data FIPE</span>
+                <input type="date" id="data-fipe" title="Data consulta FIPE" />
+                <small>Quando a referência foi conferida.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Preço sugerido</span>
+                <input type="text" id="preco-sugerido" placeholder="R$ 0" />
+                <small>Valor ideal para anunciar.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Preço mínimo</span>
+                <input type="text" id="preco-minimo" placeholder="R$ 0" />
+                <small>Limite autorizado para negociação.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Desconto máximo</span>
+                <input type="text" id="desconto-maximo" placeholder="R$ 0" />
+                <small>Margem máxima para desconto.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Comissão (%)</span>
+                <input type="text" id="comissao-percentual" placeholder="Ex: 1,5" />
+                <small>Percentual usado no cálculo.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Comissão R$</span>
+                <input type="text" id="comissao" placeholder="R$ 0" />
+                <small>Valor calculado ou informado.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Taxas</span>
+                <input type="text" id="taxas" placeholder="R$ 0" />
+                <small>Custos comerciais e bancários.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Venda final</span>
+                <input type="text" id="valor-venda" placeholder="R$ 0" />
+                <small>Preço efetivo de venda.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Aceita troca?</span>
+                <select id="aceita-troca"><option value="">Selecione</option><option>Sim</option><option>Não</option></select>
+                <small>Indica se entra veículo no negócio.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Aceita financiamento?</span>
+                <select id="aceita-financiamento"><option value="">Selecione</option><option>Sim</option><option>Não</option></select>
+                <small>Mostra se pode negociar via banco.</small>
+              </label>
+              <label class="financeiro-veiculo-campo">
+                <span>Data da venda</span>
+                <input type="date" id="data-venda" title="Data da venda" />
+                <small>Preencha quando concluir a venda.</small>
+              </label>
+              <label class="financeiro-veiculo-campo financeiro-veiculo-campo-amplo">
+                <span>Vendedor da venda</span>
+                <select id="vendedor-venda">
+                  <option value="">Selecione o vendedor</option>
+                </select>
+                <small>Usado para comissão e relatório.</small>
+              </label>
 
-          <div class="lucro-form-card">
-            <span>Lucro obtido</span>
-            <strong id="lucro-formulario">R$ 0</strong>
-            <small>Preço de venda - compra - preparação - comissão do vendedor - taxas</small>
-          </div>
+              <div class="lucro-form-card">
+                <span>Lucro obtido</span>
+                <strong id="lucro-formulario">R$ 0</strong>
+                <small>Venda final - compra - custos - comissão - taxas.</small>
+              </div>
             </div>
           </details>
 
@@ -2578,8 +2663,8 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260628-depoimentos-foto"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260805-financiamento-admin"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260810-motos-cadastro"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260810-saidas-compactas"></script>
   </body>
 </html>
 

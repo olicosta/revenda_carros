@@ -502,6 +502,66 @@ body.admin-page .veiculo-form-section[open] summary {
   margin-bottom: 16px;
 }
 
+body.admin-page .financeiro-veiculo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+body.admin-page .financeiro-veiculo-campo {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+}
+
+body.admin-page .financeiro-veiculo-campo span {
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.admin-page .financeiro-veiculo-campo input,
+body.admin-page .financeiro-veiculo-campo select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(203, 213, 225, 0.95);
+  border-radius: 11px;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+body.admin-page .financeiro-veiculo-campo input:focus,
+body.admin-page .financeiro-veiculo-campo select:focus {
+  border-color: #2563eb;
+  outline: 3px solid rgba(37, 99, 235, 0.14);
+}
+
+body.admin-page .financeiro-veiculo-campo small {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+body.admin-page .financeiro-veiculo-campo-amplo,
+body.admin-page .financeiro-veiculo-grid .lucro-form-card {
+  grid-column: span 2;
+}
+
+body.admin-page .financeiro-veiculo-grid .lucro-form-card {
+  margin: 0;
+  min-height: 100%;
+}
+
 body.admin-page .campo-condicional[hidden],
 body.admin-page [data-sensitive-section][hidden] {
   display: none !important;
@@ -552,6 +612,10 @@ body.admin-page .veiculo-card-pendencias {
   body.admin-page .opcionais-categorias {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  body.admin-page .financeiro-veiculo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -567,5 +631,14 @@ body.admin-page .veiculo-card-pendencias {
   body.admin-page .veiculo-form-section {
     padding: 14px;
     border-radius: 14px;
+  }
+
+  body.admin-page .financeiro-veiculo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.admin-page .financeiro-veiculo-campo-amplo,
+  body.admin-page .financeiro-veiculo-grid .lucro-form-card {
+    grid-column: auto;
   }
 }

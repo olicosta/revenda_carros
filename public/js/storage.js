@@ -453,6 +453,7 @@ function normalizarCarro(carro) {
   const partesNome = nome.split(" ");
   const marca = carro.marca || partesNome[0] || "";
   const modelo = carro.modelo || partesNome.slice(1).join(" ") || nome;
+  const tipo = carro.tipo || "Outros";
 
   return {
     ...carro,
@@ -462,7 +463,7 @@ function normalizarCarro(carro) {
     cambio: normalizarCambio(carro.cambio),
     combustivel: carro.combustivel || "-",
     cor: carro.cor || "-",
-    tipo: carro.tipo || "Outros",
+    tipo: tipo,
     status: normalizarStatus(carro.status),
     portas: carro.portas || "-",
     placaFinal: carro.placaFinal || "-",
@@ -488,7 +489,9 @@ function normalizarCarro(carro) {
     destaque: carro.destaque !== undefined ? Boolean(carro.destaque) : Boolean(carro.oferta),
     descricao:
       carro.descricao ||
-      "Veículo revisado, com procedência e pronto para negociação.",
+      (tipo === "Moto"
+        ? "Moto revisada, com procedência e pronta para negociação."
+        : "Veículo revisado, com procedência e pronto para negociação."),
     opcionais: Array.isArray(carro.opcionais) ? carro.opcionais : [],
     galeria:
       Array.isArray(carro.galeria) && carro.galeria.length > 0

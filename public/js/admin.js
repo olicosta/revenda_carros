@@ -3024,6 +3024,12 @@ function montarPreviaCadastro() {
   };
 }
 
+function descricaoPadraoPorTipo(tipo) {
+  return tipo === "Moto"
+    ? "Moto revisada, com procedência e pronta para negociação."
+    : "Veículo revisado, com procedência e pronto para negociação.";
+}
+
 function montarCarro(idExistente) {
   const marca = selectMarca.value.trim();
   const modelo = campoValor("modelo");
@@ -3154,7 +3160,7 @@ function montarCarro(idExistente) {
     destaque: document.getElementById("destaque").checked,
     descricao:
       campoValor("descricao") ||
-      "Veículo revisado, com procedência e pronto para negociação.",
+      descricaoPadraoPorTipo(campoValor("tipo")),
     opcionais: listaOpcionaisSelecionados(),
     preco: formatarPreco(campoValor("preco")),
     imagem: imagemPrincipal,
@@ -4944,33 +4950,31 @@ function renderizarFinanceiro() {
         })
         .map(function (saida) {
           const idSaida = Number(saida.id) || 0;
+          const responsavel = saida.responsavel
+            ? "Responsável: " + saida.responsavel
+            : "";
 
           return (
             '<article class="admin-item admin-item-saida">' +
-            '<div class="saida-data">' +
+            '<div class="saida-resumo">' +
+            '<div class="saida-resumo-topo">' +
+            '<div><span class="saida-data-compacta">' +
             formatarDataBR(saida.data) +
-            "</div>" +
-            "<div>" +
-            "<h4>" +
+            "</span><h4>" +
             escaparHTML(saida.descricao) +
-            "</h4>" +
+            "</h4></div>" +
+            '<strong class="financeiro-lucro-negativo">' +
+            formatarMoeda(saida.valor) +
+            "</strong></div>" +
             '<div class="financeiro-item-meta">' +
             "<span>" +
             escaparHTML(saida.categoria) +
-            "</span>" +
-            "<span>" +
+            "</span><span>" +
             escaparHTML(saida.pagamento || "Não informado") +
             "</span>" +
-            (saida.responsavel
-              ? "<span>Responsável: " + escaparHTML(saida.responsavel) + "</span>"
-              : "") +
+            (responsavel ? "<span>" + escaparHTML(responsavel) + "</span>" : "") +
             "</div>" +
-            (saida.observacao
-              ? "<p>" + escaparHTML(saida.observacao) + "</p>"
-              : "") +
-            '<strong class="financeiro-lucro-negativo">Saída: ' +
-            formatarMoeda(saida.valor) +
-            "</strong>" +
+            (saida.observacao ? "<p>" + escaparHTML(saida.observacao) + "</p>" : "") +
             "</div>" +
             '<div class="admin-acoes">' +
             '<button type="button" class="btn-excluir" onclick="excluirSaidaFinanceira(' +

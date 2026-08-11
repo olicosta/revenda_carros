@@ -277,7 +277,7 @@
     <script data-site-script data-src="/js/carros.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
-    <script data-site-script data-src="/js/storage.js?v=20260721-sem-favoritos"></script>
+    <script data-site-script data-src="/js/storage.js?v=20260810-motos-cadastro"></script>
     <script data-site-script data-src="/js/home.js?v=20260805-foto-sem-legenda"></script>
     <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
   </body>
