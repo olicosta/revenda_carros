@@ -416,3 +416,46 @@
         width: 100%;
     }
 }
+
+@media (max-width: 760px) {
+    .detalhe-vantagens {
+        padding: 14px;
+    }
+
+    .detalhe-vantagens-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+
+    .detalhe-vantagens-grid article {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 4px 12px;
+        align-items: center;
+        padding: 12px;
+    }
+
+    .detalhe-vantagens-grid span {
+        grid-row: 1 / span 2;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+    }
+
+    .detalhe-vantagens-grid strong,
+    .detalhe-vantagens-grid small {
+        min-width: 0;
+        overflow-wrap: normal;
+        word-break: normal;
+        hyphens: none;
+    }
+
+    .detalhe-vantagens-grid strong {
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .detalhe-vantagens-grid small {
+        font-size: 13px;
+        line-height: 1.35;
+    }
+}
