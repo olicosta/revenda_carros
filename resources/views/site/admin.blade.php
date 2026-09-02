@@ -1071,16 +1071,16 @@
 
             <section class="financeiro-grafico-card">
               <div class="financeiro-grafico-info">
-                <span class="admin-eyebrow">Composição do período</span>
-                <h3>Distribuição financeira</h3>
-                <p id="fin-grafico-resumo">Receitas, custos, saídas e valores pendentes no período.</p>
+                <span class="admin-eyebrow">Visão executiva</span>
+                <h3>Composição financeira</h3>
+                <p id="fin-grafico-resumo">Estoque anunciado, caixa, pendências e saídas em uma leitura única.</p>
               </div>
               <div class="financeiro-grafico-conteudo">
                 <div
                   class="financeiro-pizza"
                   id="fin-grafico-pizza"
                   role="img"
-                  aria-label="Gráfico de pizza da composição financeira"
+                  aria-label="Resumo visual da composição financeira"
                 >
                   <span id="fin-grafico-centro">R$ 0</span>
                 </div>

@@ -3756,83 +3756,105 @@ function alterarStatusCarro(id, status) {
 function renderizarGraficoFinanceiro(dados) {
   if (!graficoPizzaFinanceiro || !graficoLegendaFinanceiro) return;
 
+  const estoque = Math.max(0, Number(dados.estoque) || 0);
+  const veiculosEstoque = Math.max(0, Number(dados.veiculosEstoque) || 0);
   const itens = [
     {
-      nome: "Receita recebida",
-      valor: Math.max(0, Number(dados.caixaRecebido) || 0),
-      cor: "#2563eb",
+      nome: "Estoque anunciado",
+      detalhe: veiculosEstoque
+        ? veiculosEstoque + " veículo(s) disponíveis"
+        : "Veículos disponíveis para venda",
+      valor: estoque,
+      cor: "#0f766e",
+      classe: "financeiro-barra-estoque",
     },
     {
-      nome: "Trocas",
+      nome: "Entrada em caixa",
+      detalhe: "Recebido no período selecionado",
+      valor: Math.max(0, Number(dados.caixaRecebido) || 0),
+      cor: "#2563eb",
+      classe: "financeiro-barra-caixa",
+    },
+    {
+      nome: "Saldo a receber",
+      detalhe: "Valores em aberto de vendas e contas",
+      valor: Math.max(0, Number(dados.aReceber) || 0),
+      cor: "#d97706",
+      classe: "financeiro-barra-receber",
+    },
+    {
+      nome: "Veículos na troca",
+      detalhe: "Valor negociado como parte de pagamento",
       valor: Math.max(0, Number(dados.trocas) || 0),
       cor: "#f97316",
+      classe: "financeiro-barra-troca",
     },
     {
       nome: "Saídas",
+      detalhe: "Despesas e contas pagas no período",
       valor: Math.max(0, Number(dados.saidas) || 0),
       cor: "#ef4444",
-    },
-    {
-      nome: "A receber",
-      valor: Math.max(0, Number(dados.aReceber) || 0),
-      cor: "#eab308",
+      classe: "financeiro-barra-saida",
     },
   ];
   const total = itens.reduce(function (soma, item) {
     return soma + item.valor;
   }, 0);
+  const maiorValor = itens.reduce(function (maior, item) {
+    return Math.max(maior, item.valor);
+  }, 0);
 
   if (!total) {
-    graficoPizzaFinanceiro.style.background =
-      "conic-gradient(#e2e8f0 0deg 360deg)";
+    graficoPizzaFinanceiro.style.removeProperty("background");
     if (graficoCentroFinanceiro) graficoCentroFinanceiro.textContent = "R$ 0";
     if (graficoResumoFinanceiro) {
       graficoResumoFinanceiro.textContent =
-        "Sem movimentação suficiente para montar o gráfico deste período.";
+        "Sem valores suficientes para montar a composição financeira deste período.";
     }
     graficoLegendaFinanceiro.innerHTML =
       '<p class="sem-resultados">Sem dados financeiros no período.</p>';
     return;
   }
 
-  let anguloAtual = 0;
-  const fatias = itens
-    .filter(function (item) {
-      return item.valor > 0;
-    })
-    .map(function (item) {
-      const graus = (item.valor / total) * 360;
-      const fatia =
-        item.cor + " " + anguloAtual + "deg " + (anguloAtual + graus) + "deg";
-      anguloAtual += graus;
-      return fatia;
-    });
-
-  graficoPizzaFinanceiro.style.background =
-    "conic-gradient(" + fatias.join(", ") + ")";
+  graficoPizzaFinanceiro.style.removeProperty("background");
   if (graficoCentroFinanceiro) {
-    graficoCentroFinanceiro.textContent = formatarMoeda(total);
+    graficoCentroFinanceiro.innerHTML =
+      "<strong>" +
+      formatarMoeda(estoque || total) +
+      "</strong><small>" +
+      (estoque ? "em estoque anunciado" : "em composição financeira") +
+      "</small>";
   }
   if (graficoResumoFinanceiro) {
     graficoResumoFinanceiro.textContent =
-      "Total movimentado no gráfico: " + formatarMoeda(total) + ".";
+      "Estoque anunciado: " +
+      formatarMoeda(estoque) +
+      ". Resultado líquido do período: " +
+      formatarMoeda(Number(dados.resultado) || 0) +
+      ".";
   }
   graficoLegendaFinanceiro.innerHTML = itens
     .map(function (item) {
-      const percentual = total ? (item.valor / total) * 100 : 0;
+      const percentual = maiorValor
+        ? Math.max(3, (item.valor / maiorValor) * 100)
+        : 0;
 
       return (
-        '<div class="financeiro-legenda-item">' +
-        '<span style="--legenda-cor:' +
+        '<article class="financeiro-legenda-item ' +
+        escaparHTML(item.classe) +
+        '" style="--legenda-cor:' +
         item.cor +
-        '"></span>' +
-        "<div><strong>" +
+        '">' +
+        '<div class="financeiro-legenda-topo"><div><strong>' +
         escaparHTML(item.nome) +
         "</strong><small>" +
+        escaparHTML(item.detalhe) +
+        "</small></div><b>" +
         formatarMoeda(item.valor) +
-        " · " +
-        formatarPercentual(percentual) +
-        "%</small></div></div>"
+        '</b></div><div class="financeiro-barra-trilho" aria-hidden="true">' +
+        '<i style="width:' +
+        percentual.toFixed(2) +
+        '%"></i></div></article>'
       );
     })
     .join("");
@@ -4255,6 +4277,27 @@ function aplicarResumoFinanceiroOperacional(resumo) {
   aplicarCorMetricaFinanceira("fin-total-vendido", "receitaVendida", cards.receita_vendas || 0);
   aplicarCorMetricaFinanceira("fin-lucro", "lucroBruto", cards.lucro_bruto || 0);
   aplicarCorMetricaFinanceira("fin-saidas", "saidas", cards.saidas_periodo || 0);
+  aplicarCorMetricaFinanceira("fin-total-estoque", "estoqueAnunciado", cards.capital_estoque || 0);
+  aplicarCorMetricaFinanceira("fin-ticket", "ticketMedio", cards.ticket_medio || 0);
+  aplicarCorMetricaFinanceira("fin-caixa-recebido", "entradaCaixa", cards.entradas_periodo || 0);
+  aplicarCorMetricaFinanceira("fin-total-trocas", "valorTrocas", cards.valor_trocas || 0);
+  aplicarCorMetricaFinanceira("fin-saldo-receber", "saldoReceber", cards.contas_a_receber || 0);
+
+  atualizarDashboardTexto("fin-total-trocas", formatarMoeda(cards.valor_trocas || 0));
+  atualizarDashboardTexto(
+    "fin-trocas-qtd",
+    (cards.quantidade_trocas || 0) + " troca(s) no período"
+  );
+
+  renderizarGraficoFinanceiro({
+    estoque: cards.capital_estoque || 0,
+    caixaRecebido: cards.entradas_periodo || 0,
+    trocas: cards.valor_trocas || 0,
+    saidas: cards.saidas_periodo || 0,
+    aReceber: cards.contas_a_receber || 0,
+    resultado: cards.resultado_liquido || 0,
+    veiculosEstoque: cards.veiculos_estoque || 0,
+  });
 
   if (listaCaixaFinanceiro && Array.isArray(resumo.account_balances)) {
     listaCaixaFinanceiro.innerHTML = resumo.account_balances
@@ -4834,10 +4877,13 @@ function renderizarFinanceiro() {
   aplicarCorMetricaFinanceira("fin-total-trocas", "valorTrocas", totalTrocas);
   aplicarCorMetricaFinanceira("fin-saldo-receber", "saldoReceber", totalSaldoReceber);
   renderizarGraficoFinanceiro({
+    estoque: totalEstoque,
     caixaRecebido: totalCaixaRecebido,
     trocas: totalTrocas,
     saidas: totalSaidas,
     aReceber: totalSaldoReceber,
+    resultado: resultadoLiquido,
+    veiculosEstoque: disponiveis.length,
   });
   carregarResumoFinanceiroOperacional();
   carregarFinanceiroOperacional();

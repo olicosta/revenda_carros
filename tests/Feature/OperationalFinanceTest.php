@@ -104,7 +104,9 @@ class OperationalFinanceTest extends TestCase
         $response->assertOk()
             ->assertJsonPath('data.cards.entradas_periodo', 80000)
             ->assertJsonPath('data.cards.receita_vendas', 80000)
-            ->assertJsonPath('data.cards.lucro_bruto', 24000);
+            ->assertJsonPath('data.cards.lucro_bruto', 24000)
+            ->assertJsonPath('data.cards.valor_trocas', 20000)
+            ->assertJsonPath('data.cards.quantidade_trocas', 1);
     }
 
     public function test_finance_summary_uses_announced_stock_value_for_available_vehicles(): void

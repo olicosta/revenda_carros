@@ -68,6 +68,8 @@ class FinanceDataController extends Controller
         $vehicleResults = $sales->map(fn ($sale) => $this->vehicleResultForSale($sale));
         $grossProfit = $vehicleResults->sum('gross_result');
         $netResult = $income - $expenses;
+        $tradeValue = $sales->sum(fn ($sale) => (float) $sale->trade_value);
+        $tradeCount = $sales->filter(fn ($sale) => (float) $sale->trade_value > 0)->count();
 
         return response()->json([
             'data' => [
@@ -87,6 +89,8 @@ class FinanceDataController extends Controller
                     'capital_estoque' => round($announcedStock, 2),
                     'capital_investido_estoque' => round($stockInvestment, 2),
                     'veiculos_estoque' => $availableVehicles->count(),
+                    'valor_trocas' => round($tradeValue, 2),
+                    'quantidade_trocas' => $tradeCount,
                     'ticket_medio' => round((float) $averageTicket, 2),
                     'margem_media' => round($this->averageMargin($vehicleResults), 2),
                     'dias_medios_estoque' => round($this->averageStockDays($availableVehicles), 1),
