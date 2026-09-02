@@ -8,7 +8,7 @@
     <meta name="admin-user-id" content="{{ auth()->id() }}" />
     <meta name="admin-role" content="{{ auth()->user()->role ?? 'gestor' }}" />
     <title>Painel Admin - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260811-menu-financiamento" />
+    <link rel="stylesheet" href="/css/style.css?v=20260902-financeiro-composicao" />
     <link rel="stylesheet" href="/css/admin-dashboard.css?v=20260810-financeiro-veiculo-cards" />
     <link rel="stylesheet" href="/css/admin-menu.css?v=20260729-menu-icon-center" />
   </head>
@@ -2662,7 +2662,7 @@
     <script data-site-script data-src="/js/depoimentos.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260811-auditoria-cache"></script>
-    <script data-site-script data-src="/js/admin.js?v=20260811-saida-sempre-aberta"></script>
+    <script data-site-script data-src="/js/admin.js?v=20260902-financeiro-composicao"></script>
   </body>
 </html>
 
