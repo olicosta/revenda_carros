@@ -5,35 +5,25 @@
     overflow: hidden;
     padding: clamp(58px, 8vw, 104px) 0;
     background:
-        linear-gradient(145deg, rgba(var(--accent-rgb), 0.18) 0 22%, transparent 22% 100%),
-        linear-gradient(24deg, transparent 0 58%, rgba(var(--gold-rgb), 0.2) 58% 60%, transparent 60% 100%),
-        linear-gradient(118deg, rgba(var(--primary-rgb), 0.98) 0%, rgba(var(--secondary-rgb), 0.98) 46%, rgba(14, 63, 115, 0.94) 100%);
+        linear-gradient(135deg, rgba(var(--gold-rgb), 0.14), transparent 34%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 58%, #eef2f7 100%);
     background-position: center;
     background-size: cover;
-    color: #fff;
+    color: var(--text);
 }
 
 .finance-premium-hero::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: auto 0 0;
+    height: 1px;
     background:
-        linear-gradient(112deg, transparent 0 12%, rgba(255, 255, 255, 0.06) 12% 12.4%, transparent 12.4% 100%),
-        linear-gradient(128deg, transparent 0 64%, rgba(var(--gold-rgb), 0.18) 64% 65.2%, transparent 65.2% 100%),
-        linear-gradient(90deg, rgba(var(--success-rgb), 0.1), transparent 38%, rgba(var(--accent-rgb), 0.13));
+        linear-gradient(90deg, transparent, rgba(var(--gold-rgb), 0.62), rgba(var(--secondary-rgb), 0.18), transparent);
     pointer-events: none;
 }
 
 .finance-premium-hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    background-size: 76px 76px;
-    opacity: 0.22;
-    pointer-events: none;
+    content: none;
 }
 
 .finance-premium-hero .container {
@@ -49,8 +39,8 @@
     gap: 8px;
     padding: 10px 16px;
     border-radius: 999px;
-    background: rgba(var(--gold-rgb), 0.16);
-    color: #fde68a;
+    background: rgba(var(--gold-rgb), 0.18);
+    color: #8a6400;
     font-size: 12px;
     font-weight: 900;
     letter-spacing: 0.1em;
@@ -69,7 +59,7 @@
 .finance-premium-hero h1 {
     max-width: 840px;
     margin-top: 22px;
-    color: #fff;
+    color: var(--primary);
     font-size: clamp(42px, 5vw, 76px);
     line-height: 0.98;
     letter-spacing: -0.06em;
@@ -78,14 +68,14 @@
 
 .finance-premium-hero .finance-hero-copy p {
     max-width: 760px;
-    color: rgba(255, 255, 255, 0.84);
+    color: #475569;
     font-size: clamp(18px, 1.4vw, 23px);
     line-height: 1.55;
 }
 
 .finance-premium-hero .btn-secondary {
-    border-color: rgba(255, 255, 255, 0.55);
-    color: #fff;
+    border-color: rgba(var(--primary-rgb), 0.42);
+    color: var(--primary);
 }
 
 .finance-trust-row {
@@ -100,10 +90,10 @@
     align-items: center;
     gap: 8px;
     padding: 9px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(var(--secondary-rgb), 0.12);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.07);
-    color: rgba(255, 255, 255, 0.84);
+    background: #ffffff;
+    color: #334155;
     font-size: 13px;
     font-weight: 900;
     backdrop-filter: blur(10px);
@@ -122,26 +112,26 @@
 }
 
 .finance-status-card {
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 28px;
+    border: 1px solid rgba(var(--secondary-rgb), 0.14);
+    border-radius: 22px;
     background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
-    color: #fff;
-    box-shadow: 0 28px 78px rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(18px);
+        linear-gradient(145deg, rgba(var(--gold-rgb), 0.08), transparent 40%),
+        #ffffff;
+    color: var(--text);
+    box-shadow: 0 18px 44px rgba(var(--secondary-rgb), 0.1);
 }
 
 .finance-status-card strong {
     display: block;
     margin: 16px 0 10px;
-    color: #fff;
+    color: var(--primary);
     font-size: clamp(26px, 2vw, 34px);
     line-height: 1.08;
     letter-spacing: -0.04em;
 }
 
 .finance-status-card p {
-    color: rgba(255, 255, 255, 0.78);
+    color: #475569;
     line-height: 1.65;
 }
 
