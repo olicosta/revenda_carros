@@ -243,9 +243,7 @@
   .nav nav.site-nav a.ativo,
   .nav nav[data-site-nav] a.ativo,
   .nav nav.site-nav a:hover,
-  .nav nav[data-site-nav] a:hover,
-  .nav nav.site-nav a[href="admin.html"],
-  .nav nav[data-site-nav] a[href="admin.html"] {
+  .nav nav[data-site-nav] a:hover {
     border-color: rgba(var(--gold-rgb), 0.55) !important;
     background: rgba(var(--gold-rgb), 0.18) !important;
     color: #ffffff !important;
@@ -255,9 +253,7 @@
   .nav nav.site-nav a.ativo::before,
   .nav nav[data-site-nav] a.ativo::before,
   .nav nav.site-nav a:hover::before,
-  .nav nav[data-site-nav] a:hover::before,
-  .nav nav.site-nav a[href="admin.html"]::before,
-  .nav nav[data-site-nav] a[href="admin.html"]::before {
+  .nav nav[data-site-nav] a:hover::before {
     background: var(--gold);
   }
 }

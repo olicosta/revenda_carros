@@ -40,7 +40,6 @@
           <a href="sobre.html">Sobre</a>
           <a href="financiamento.html">Financiamento</a>
           <a href="depoimentos.html">Depoimentos</a>
-          <a href="admin.html">Admin</a>
         </nav>
       </div>
     </header>
