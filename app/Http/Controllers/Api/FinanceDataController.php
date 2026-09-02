@@ -56,7 +56,10 @@ class FinanceDataController extends Controller
                 && ((float) $entry->open_amount) > 0)
             ->sum(fn (FinancialEntry $entry) => (float) $entry->open_amount);
 
-        $stockCapital = $availableVehicles->sum(
+        $announcedStock = $availableVehicles->sum(
+            fn (Vehicle $vehicle) => (float) $vehicle->sale_price
+        );
+        $stockInvestment = $availableVehicles->sum(
             fn (Vehicle $vehicle) => (float) $vehicle->purchase_price
                 + (float) $vehicle->preparation_cost
                 + (float) $vehicle->fees_cost
@@ -81,7 +84,8 @@ class FinanceDataController extends Controller
                     'lucro_bruto' => round($grossProfit, 2),
                     'resultado_liquido' => round($netResult, 2),
                     'fluxo_caixa_projetado' => round($received - $paidOut + $receivable - $payable, 2),
-                    'capital_estoque' => round($stockCapital, 2),
+                    'capital_estoque' => round($announcedStock, 2),
+                    'capital_investido_estoque' => round($stockInvestment, 2),
                     'veiculos_estoque' => $availableVehicles->count(),
                     'ticket_medio' => round((float) $averageTicket, 2),
                     'margem_media' => round($this->averageMargin($vehicleResults), 2),
@@ -441,17 +445,21 @@ class FinanceDataController extends Controller
         $discount = (float) ($validated['discount_amount'] ?? 0);
         $final = max(0, $original + $interest + $fine - $discount);
         $paid = min((float) ($validated['paid_amount'] ?? $entry?->paid_amount ?? 0), $final);
-        $status = $validated['status'] ?? $this->statusForAmounts(
+        $status = $this->statusForAmounts(
             $validated['direction'],
             $paid,
             $final,
             $validated['due_at']
         );
+        $settledAt = $paid >= $final && $final > 0
+            ? ($validated['settled_at'] ?? now()->toDateString())
+            : null;
 
         return [
             ...$validated,
             'competence_date' => $validated['competence_date'] ?? $validated['due_at'],
             'issued_at' => $validated['issued_at'] ?? now()->toDateString(),
+            'settled_at' => $settledAt,
             'interest_amount' => $interest,
             'fine_amount' => $fine,
             'discount_amount' => $discount,

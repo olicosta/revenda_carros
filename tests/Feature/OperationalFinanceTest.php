@@ -107,6 +107,37 @@ class OperationalFinanceTest extends TestCase
             ->assertJsonPath('data.cards.lucro_bruto', 24000);
     }
 
+    public function test_finance_summary_uses_announced_stock_value_for_available_vehicles(): void
+    {
+        $user = User::factory()->create(['role' => 'financeiro']);
+
+        Vehicle::query()->create([
+            'name' => 'Fiat Pulse',
+            'purchase_price' => 0,
+            'sale_price' => 91000,
+            'status' => 'Disponível',
+        ]);
+        Vehicle::query()->create([
+            'name' => 'Honda Civic',
+            'purchase_price' => 0,
+            'sale_price' => 129900,
+            'status' => 'Disponível',
+        ]);
+        Vehicle::query()->create([
+            'name' => 'Toyota Corolla vendido',
+            'purchase_price' => 70000,
+            'sale_price' => 135000,
+            'status' => 'Vendido',
+        ]);
+
+        $this->actingAs($user)
+            ->getJson('/api/finance/summary?month='.now()->format('Y-m'))
+            ->assertOk()
+            ->assertJsonPath('data.cards.capital_estoque', 220900)
+            ->assertJsonPath('data.cards.capital_investido_estoque', 0)
+            ->assertJsonPath('data.cards.veiculos_estoque', 2);
+    }
+
     public function test_non_financial_user_cannot_store_financial_entry(): void
     {
         $user = User::factory()->create(['role' => 'marketing']);
@@ -144,6 +175,22 @@ class OperationalFinanceTest extends TestCase
             ->assertJsonPath('data.status', 'parcial')
             ->assertJsonPath('data.paid_amount', 300)
             ->assertJsonPath('data.open_amount', 700);
+    }
+
+    public function test_entry_status_follows_paid_amount_instead_of_manual_paid_status(): void
+    {
+        $user = User::factory()->create(['role' => 'financeiro']);
+
+        $this->actingAs($user)->postJson('/api/finance/entries', [
+            'direction' => 'receber',
+            'description' => 'Venda a receber',
+            'due_at' => now()->addDay()->toDateString(),
+            'original_amount' => 5000,
+            'paid_amount' => 0,
+            'status' => 'recebido',
+        ])->assertCreated()
+            ->assertJsonPath('data.status', 'pendente')
+            ->assertJsonPath('data.open_amount', 5000);
     }
 
     public function test_financial_account_and_report_endpoints_are_operational(): void
