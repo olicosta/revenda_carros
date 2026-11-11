@@ -6,6 +6,36 @@
     return;
   }
 
+  function obterPagina(caminho) {
+    const partes = caminho.split("/").filter(Boolean);
+    return (partes.pop() || "index").replace(/\.html$/, "");
+  }
+
+  function obterSecao(pagina) {
+    const secoes = {
+      veiculos: "carros",
+      detalhes: "carros",
+    };
+
+    return secoes[pagina] || pagina;
+  }
+
+  const secaoAtual = obterSecao(obterPagina(window.location.pathname));
+
+  nav.querySelectorAll("a[href]").forEach(function (link) {
+    const destino = new URL(link.getAttribute("href"), window.location.href);
+    const secaoDestino = obterSecao(obterPagina(destino.pathname));
+    const ativo = secaoDestino === secaoAtual;
+
+    link.classList.toggle("ativo", ativo);
+
+    if (ativo) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+
   function fecharMenu() {
     document.body.classList.remove("menu-mobile-aberto");
     toggle.setAttribute("aria-expanded", "false");

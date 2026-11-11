@@ -10,7 +10,7 @@
     />
     <title>Depoimentos - 3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
-    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
+    <link rel="stylesheet" href="/css/site-menu.css?v=20261110-header-fundo-grafite" />
   </head>
   <body>
     <header class="topo">
@@ -95,7 +95,7 @@
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260811-auditoria-cache"></script>
     <script data-site-script data-src="/js/home.js?v=20260805-foto-sem-legenda"></script>
-    <script src="/js/site-menu.js?v=20260623-menu-publico-1"></script>
+    <script src="/js/site-menu.js?v=20261110-header-unificado"></script>
   </body>
 </html>
 

@@ -10,8 +10,8 @@
     />
     <title>3M Veículos</title>
     <link rel="stylesheet" href="/css/style.css?v=20260811-home-cards-limpos" />
-    <link rel="stylesheet" href="/css/home-premium.css?v=20260811-hero-sem-selo" />
-    <link rel="stylesheet" href="/css/site-menu.css?v=20260729-menu-icon-align" />
+    <link rel="stylesheet" href="/css/home-premium.css?v=20261110-sem-destaque-mobile" />
+    <link rel="stylesheet" href="/css/site-menu.css?v=20261110-header-fundo-grafite" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link
       rel="preload"
@@ -267,7 +267,7 @@
     <script data-site-script data-src="/js/parcerias.js?v=20260618-performance"></script>
     <script data-site-script data-src="/js/storage.js?v=20260811-auditoria-cache"></script>
     <script data-site-script data-src="/js/home.js?v=20260811-home-sem-acoes"></script>
-    <script src="/js/site-menu.js?v=20260623-mobile-menu-1"></script>
+    <script src="/js/site-menu.js?v=20261110-header-unificado"></script>
   </body>
 </html>
 
