@@ -9,7 +9,7 @@
       content="Catálogo de veículos 3M Veículos com filtros por marca, câmbio, preço e ordenação."
     />
     <title>Veículos - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
+    <link rel="stylesheet" href="/css/style.css?v=20261111-credito-mv" />
     <link rel="stylesheet" href="/css/catalogo-mobile.css?v=20260811-card-info-mobile" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20261110-header-fundo-grafite" />
   </head>

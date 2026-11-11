@@ -6,7 +6,7 @@
     @include('site.partials.pwa')
     <meta name="description" content="Política de Privacidade da 3M Veículos." />
     <title>Política de Privacidade - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
+    <link rel="stylesheet" href="/css/style.css?v=20261111-credito-mv" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20261110-header-fundo-grafite" />
   </head>
   <body>

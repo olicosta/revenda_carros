@@ -9,7 +9,7 @@
       content="Detalhes do veículo selecionado na 3M Veículos."
     />
     <title>Detalhes do Veículo - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260811-detalhe-vantagens-mobile" />
+    <link rel="stylesheet" href="/css/style.css?v=20261111-credito-mv" />
     <link rel="stylesheet" href="/css/detalhes-premium.css?v=20260811-vantagens-mobile-fix" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20261110-header-fundo-grafite" />
   </head>

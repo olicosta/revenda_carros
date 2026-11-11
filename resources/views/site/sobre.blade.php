@@ -9,7 +9,7 @@
       content="Conheça a 3M Veículos, endereço, horário e canais de atendimento."
     />
     <title>Sobre - 3M Veículos</title>
-    <link rel="stylesheet" href="/css/style.css?v=20260810-footer-sobre-cache" />
+    <link rel="stylesheet" href="/css/style.css?v=20261111-credito-mv" />
     <link rel="stylesheet" href="/css/site-menu.css?v=20261110-header-fundo-grafite" />
   </head>
   <body>

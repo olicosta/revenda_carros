@@ -34,5 +34,26 @@
     </nav>
 
     <small class="site-footer-copy">© 2026 <span data-loja-nome>3M Veículos</span></small>
+
+    <div class="site-footer-developer">
+      <span class="site-footer-developer-label">Desenvolvido por</span>
+      <a
+        class="site-footer-developer-link"
+        href="https://wa.me/5547999914074?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%203M%20Ve%C3%ADculos%20e%20gostaria%20de%20conhecer%20seus%20servi%C3%A7os."
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Falar com a MV Tecnologia pelo WhatsApp"
+      >
+        <img
+          class="site-footer-developer-logo"
+          src="/img/mv-tecnologia.png"
+          width="120"
+          height="80"
+          loading="lazy"
+          decoding="async"
+          alt="MV Tecnologia — soluções digitais e inovação"
+        />
+      </a>
+    </div>
   </div>
 </footer>
